@@ -73,12 +73,15 @@
                         <span>{{data.depName}}{{data.areaName}}</span>
                     </div>
                 </el-tree>
-                <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,1)">
-                    <p>{{item.userName}}</p>
-                    <span>{{item.lastCalledTime}}</span>
-                    <span>{{item.nextContactTime}}</span>
-                    <span>{{item.depName}}{{item.areaName}}</span>
+                <div id="book">
+                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,1)">
+                        <p>{{item.userName}}</p>
+                        <span>{{item.lastCalledTime}}</span>
+                        <span>{{item.nextContactTime}}</span>
+                        <span>{{item.depName}}{{item.areaName}}</span>
+                    </div>
                 </div>
+                
             </div>
             <ul class="foot" @click="see=true">
                 <li class="grey"><i class="el-icon-plus"></i>新增呼叫计划</li>
@@ -231,7 +234,7 @@
                         <div class="grey" :style="{'margin-left':'45%'}" v-if="history.historyDto.details[0].nextContactTime"><p :style="{'float':'left'}">下次联系时间：</p><el-button type="info" size="mini" :style="{'background':'#f4f4f4','border-color':'#f4f4f4','color':'#7496F2','float':'left'}" round>{{history.historyDto.details[0].nextContactTime}}</el-button></div>
                     </div>
                 </div>
-                <div class="tag">
+                <div class="tag" v-if="history.summaryDto.tags.length>0">
                     <el-button type="info" size="mini" v-for="item in history.summaryDto.tags[0].taglist" :key="item" :style="{'background':'#7496F2','border-color':'#fff'}" round>{{item}}</el-button>
                 </div>
                 <div class="note" v-if="history.historyDto">
@@ -377,6 +380,7 @@
         min-height: 60vh;
         box-sizing: border-box;
         padding: 0 6px;
+        max-height: 80vh;
     }
     .aside .tit{
         padding-top: 8px;
@@ -594,6 +598,27 @@
         top:50%;
         transform:translate3D(-50%,-50%,0)
     }
+    #book{
+        max-height:70vh;
+        overflow-y:auto;
+    }
+    #book::-webkit-scrollbar-track
+    {
+        background-color: #F5F5F5;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
+    }
+    /*定义滚动条高宽及背景*/
+    #book::-webkit-scrollbar
+    {
+        width: 4px;
+        background-color: rgba(153, 153, 153, 0.8);
+    }
+    /*定义滚动条*/
+    #book::-webkit-scrollbar-thumb
+    {
+        background-color: #8b8b8b;
+        border-radius: 1px;
+    }
 </style>
 <style>
 .staff .el-tree-node{
@@ -738,11 +763,10 @@ export default {
     },
     mounted() {
         window.onbeforeunload = function(){
-            
             this.disconnect();
         };
         //缩小导航菜单
-        this.$emit("close");
+        //this.$emit("close");
         this.TaskList_init({});
         this.call_init(this.hasGetUserMedia());
         this.connect();
@@ -754,7 +778,6 @@ export default {
             this.ua.stop();
         }
         this.disconnect();
-        this.$emit("open");
     },
     methods:{
         test(){
@@ -1040,7 +1063,7 @@ export default {
         },
         //获取客户详情
         detail_init(item,type){
-            console.log(this.TaskBySeat_data,this.TaskBySeat_data,this.DialPlanIntroWithPage_data,this.$refs.tree.getCheckedKeys())
+            console.log(item)
             this.show=false;
             this.time_next='';
             this.call_auto_init=false;
@@ -1089,7 +1112,6 @@ export default {
                     }else{
                         this.note='';
                     }
-                    console.log(res.data);
                     this.history=res.data;
                 }
             });
@@ -1232,7 +1254,6 @@ export default {
                         }
                     })
                     this.history_detail=res.data.info.details;
-                    console.log(res.data.info.details);
                 }
             });
         },
@@ -1263,11 +1284,13 @@ export default {
                             if(i<(items.children.length-1)&&i!=-1){
                                 if(_this.worker_state!='1'){
                                     _this.TaskBySeat_data[index].children.splice(i,1);
+                                    console.log('当前：',items.children[i])
                                     _this.detail_init(items.children[i],1);
                                 }else if(_this.worker_state=='1'){
+                                    console.log('当前：',items.children[i+1])
                                     _this.detail_init(items.children[i+1],1);
                                 }
-                                _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
+                                // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
                                 if(_this.call_auto=='true'){
                                     _this.call_state=5;
                                     _this.call_auto_init=true;
@@ -1303,7 +1326,7 @@ export default {
                                 }else if(_this.worker_state=='1'){
                                     _this.detail_init(items.children[i+1],2);
                                 }
-                                _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
+                                // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
                                 if(_this.call_auto=='true'){
                                     _this.call_state=5;
                                     _this.call_auto_init=true;
@@ -1329,19 +1352,33 @@ export default {
                                 }
                             }
                         });
-                        if(this.booklist.length>0){
+                        if(this.booklist.length>0&&this.booklist[0].taskClientId!='string'){
+                            console.log(this.booklist,this.booklist.length)
+                            let i=this.booklist.indexOf(_this.active_data);
                             this.booklist.map((items,index)=>{
-                                if(items==_this.active_data&&index!=(_this.booklist.length-1)){
-                                    if(_this.worker_state!='1'){
+                                if(i==index&&i!=(_this.booklist.length-1)){
+                                    if(_this.time_next==''){
                                         _this.booklist.splice(index,1);
-                                        _this.detail_init(_this.booklist[index],2);
-                                    }else if(_this.worker_state=='1'){
-                                        _this.detail_init(_this.booklist[index+1],2);
+                                        _this.detail_init(_this.booklist[index],1);
+                                    }else if(_this.time_next!=''){
+                                        _this.detail_init(_this.booklist[index+1],1);
                                     }
-                                }else if(items==_this.active_data&&index==(_this.booklist.length-1)){
-                                    //console.log('bug')
-                                    _this.booklist.splice(index,1);
-                                    _this.call_hidden=true;
+                                    if(_this.call_auto=='true'){
+                                        _this.call_state=5;
+                                        _this.call_auto_init=true;
+                                        _this.call_timer=setTimeout(function(){
+                                            _this.call_state=0;
+                                            _this.startCallTimeOut();
+                                        },_this.call_remin*1000)
+                                    }
+                                }else if(i==index&&i==(_this.booklist.length-1)){
+                                    console.log('到底了');
+                                    if(_this.time_next==''){
+                                        _this.booklist.splice(index,1);
+                                        _this.call_hidden=true;
+                                    }else if(_this.time_next!=''){
+                                        _this.call_hidden=true;
+                                    }
                                 }
                             });
                         }
@@ -1383,7 +1420,6 @@ export default {
                     }
                     _this.$ajax.post(_this.$preix+'/new/seatWorkbench/seatDirectCall',data)
                     .then( (res) => {
-                        console.log(res.data);
                         if(res.data.code == 200){
                             _this.callIccSessionId = res.data.info.sessionId;
                             _this.call_error=setTimeout(function(){

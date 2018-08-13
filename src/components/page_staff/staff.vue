@@ -17,9 +17,7 @@
           </el-dropdown>
         </div>
         <div class="notify nav2">
-          <el-badge :value="notify">
-            <i class="el-icon-menu"></i>
-          </el-badge>
+          <notify></notify>
         </div>
       </el-row>
     </el-header>
@@ -35,13 +33,13 @@
               text-color="#fff"
               active-text-color="#ffd04b">
               <router-link :to="{path:'/staff/index'}">
-                <el-menu-item index="1" class="el-submenu__title">
+                <el-menu-item index="1" class="el-submenu__title" @click="open">
                   <i class="el-icon-index"></i>
                   <span slot="title">首页&#12288;&#12288;&#12288;&#12288;</span>
                 </el-menu-item>
               </router-link>
               <router-link :to="{path:'/staff/stage'}">
-                <el-menu-item index="2" class="el-submenu__title">
+                <el-menu-item index="2" class="el-submenu__title" @click="close">
                   <i class="el-icon-worker"></i>
                   <span slot="title">工作台&#12288;&#12288;&#12288;</span>
                 </el-menu-item>
@@ -53,10 +51,10 @@
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/staff/follow'}">
-                    <el-menu-item class="item" index="2-1">外呼任务跟踪</el-menu-item>
+                    <el-menu-item class="item" index="2-1" @click="open">外呼任务跟踪</el-menu-item>
                   </router-link>
                   <router-link :to="{path:'/staff/call_count'}">
-                    <el-menu-item class="item" index="2-2">呼叫情况统计</el-menu-item>
+                    <el-menu-item class="item" index="2-2" @click="open">呼叫情况统计</el-menu-item>
                   </router-link>
                 </el-menu-item-group>
               </el-submenu>
@@ -67,16 +65,15 @@
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/staff/worker'}">
-                    <el-menu-item class="item" index="4-1">账号设置</el-menu-item>
+                    <el-menu-item class="item" index="4-1" @click="open">账号设置</el-menu-item>
                   </router-link>
                   <router-link :to="{path:'/staff/label'}">
-                    <el-menu-item class="item" index="4-2">线路设置</el-menu-item>
+                    <el-menu-item class="item" index="4-2" @click="open">线路设置</el-menu-item>
                   </router-link>
                 </el-menu-item-group>
               </el-submenu>
             </el-menu>
           </el-col>
-          <i class="el-icon-d-arrow-right" @click="open"></i>
         </el-row>
       </el-aside>
       <el-main>
@@ -187,7 +184,7 @@ a {
 
 <script>
 import md5 from '../js/md5.js'
-import selec from '../component/select.vue';
+import notify from '../component/notify.vue';
 export default {
 	name: 'staff',
 	data() {
@@ -197,7 +194,8 @@ export default {
 			isCollapse: false,
 			identity:null,
 		};
-	},
+  },
+  components:{notify},
 	methods: {
 		handleOpen(key, keyPath) {
 			//console.log(key, keyPath);
@@ -239,6 +237,7 @@ export default {
     }
   },
   mounted(){
+    console.log(12131);
     this.identity=this.getCookie('loginName');
     // var data={
     //     'name':'qy1003','password':md5.md5('qy1003'),'password2':'123456'

@@ -28,6 +28,7 @@ Vue.prototype.$ajax = axios;
 //   }
 //   return res;
 // })
+
 Vue.use(ElementUI);
 Vue.use(VueClipboard);
 /* eslint-disable no-new */

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="part1">
+        <div class="nav">
             <router-link :to="{path:'./follow'}">
                 外呼任务跟踪
             </router-link>
@@ -9,7 +9,7 @@
         </div>
         <div class="part2">
             <div class="part2_tit">
-                <el-input placeholder="按任务名称搜索" prefix-icon="el-icon-search" v-model="search" class="search" size="mini">
+                <el-input placeholder="按客户姓名或手机号码搜索" prefix-icon="el-icon-search" v-model="search" class="search" size="mini">
                 </el-input>
                 <el-button type="info" class="button" :style="{float:'left'}" @click="mission_search">搜索</el-button>
             </div>
@@ -122,6 +122,14 @@
 <style scoped>
     .container{
         position: relative;
+    }
+    .nav{
+        line-height: 30px;
+        text-align: left;
+        background-color: #fff;
+        padding: 0 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
     }
     .part1{
         text-align: left;

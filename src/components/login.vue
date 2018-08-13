@@ -161,7 +161,9 @@ export default {
             if(this.formName.checked){
                 this.setCookie(self.formName.userName,self.formName.userPassWord,7);
             }
-            
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + 7);
+            document.cookie="loginName=" + encodeURIComponent(self.formName.userName)+"; expires="+exdate.toGMTString();
             // if(!isRegisterUserName(self.formName.userName)) {
             //     //self.msgErrorShow("请输入正确账号");
             //     console.log(1);
@@ -210,7 +212,7 @@ export default {
         setCookie(c_value, p_value, expiredays){
             var exdate = new Date();
             exdate.setDate(exdate.getDate() + expiredays);
-            document.cookie="loginName=" + encodeURIComponent(c_value)+"; expires="+exdate.toGMTString();
+            document.cookie="userName=" + encodeURIComponent(c_value)+"; expires="+exdate.toGMTString();
             document.cookie="password=" + encodeURIComponent(p_value)+"; expires="+exdate.toGMTString();;
         },
         getCookie(c_name){
@@ -252,7 +254,7 @@ export default {
     },
     mounted(){
         this.varify_img_change();
-        this.formName.userName=this.getCookie('loginName');
+        this.formName.userName=this.getCookie('userName');
         if(this.loginShow){
             this.formName.userPassWord=this.getCookie('password');
         }
