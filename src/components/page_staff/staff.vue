@@ -9,7 +9,9 @@
             {{identity}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>{{identity}}</el-dropdown-item>
+              <router-link :to="{path:'/staff/userInfo'}">
+                <el-dropdown-item>{{identity}}</el-dropdown-item>
+              </router-link>
               <el-dropdown-item @click.native="test">
                   登出
               </el-dropdown-item>
@@ -239,12 +241,12 @@ export default {
   mounted(){
     console.log(12131);
     this.identity=this.getCookie('loginName');
-    // var data={
-    //     'name':'qy1003','password':md5.md5('qy1003'),'password2':'123456'
-    // };
-    // this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
-    //     data
-    // )
+    var data={
+        'name':'qy1003','password':md5.md5('qy1003'),'password2':'123456'
+    };
+    this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
+        data
+    )
   }
 };
 </script>

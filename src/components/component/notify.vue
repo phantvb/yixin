@@ -44,11 +44,9 @@ export default {
             }
         },
         handlecommand(command){
-            console.log(command);
             this.$ajax.post(this.$preix+'/new/notify/mark-msg-readed').then(res=>{
                 if(res.data.code==200){
-                    console.log(1);
-                    this.notify==0;
+                    this.notify=0;
                 }
             })
         },

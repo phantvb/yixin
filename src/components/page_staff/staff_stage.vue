@@ -47,7 +47,7 @@
             </div>
             <div class="con">
                 <p v-if="TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
-                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" @scroll.native="test($event)" ref="tree" node-key="id">
+                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" ref="tree" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1)">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
@@ -132,12 +132,13 @@
                         </div>
                     </div>
                     <br><br>
-                    <div class="father2">
-                        <!-- <p class="black" :style="{'font-weight':'700'}">{{name}}</p> -->
-                        <el-tooltip class="item" effect="dark"  placement="right">
+                    <div class="father">
+                        <p class="black" :style="{'font-weight':'700'}">{{name}}</p>
+                        <!-- <el-tooltip class="item" effect="dark"  placement="right" @click.native="test" v-show="name_change">
                             <div slot="content" :style="{'min-width':'200px'}">{{name}}</div>
                             <p class="black" :style="{'font-weight':'700'}">{{name}}</p>
-                        </el-tooltip>
+                        </el-tooltip> -->
+                        <!-- <input type="text" v-model="name" @blur="upSeat" v-show="!name_change"> -->
                         <input type="text" v-model="name" @blur="upSeat">
                     </div>
                     <p class="black">{{phone}}</p>
@@ -662,6 +663,7 @@ export default {
     name:'Staff_stage',
     data:function(){
         return {
+            name_change:true,
             show:false,
             see:false,
             search:'',
@@ -781,8 +783,8 @@ export default {
     },
     methods:{
         test(){
-            if(this.call_auto=='true'){
-            }
+            this.name_change=false;
+            console.log('test');
         },
         uaInit:function (workbenchRst) {
             var _this=this;
@@ -1053,6 +1055,7 @@ export default {
         },
         //初始化预约列表
         BookedList_init(data){
+            this.call_auto=false;
             this.$ajax.post(this.$preix+'/new/seatWorkbench/queryBookedTaskListBySeat',data)
             .then( (res) => {
                 if(res.status==200){
@@ -1063,7 +1066,8 @@ export default {
         },
         //获取客户详情
         detail_init(item,type){
-            console.log(item)
+            console.log(item);
+            this.tags=[];
             this.show=false;
             this.time_next='';
             this.call_auto_init=false;
@@ -1127,20 +1131,21 @@ export default {
                         let obj={};
                         let id=res.data.rows[i].taskId;
                         obj.id=res.data.rows[i].taskId;
-                        obj.label=res.data.rows[i].taskName;
+                        obj.label=res.data.rows[i].taskName+'('+res.data.rows[i].processingNum+')';
                         var param = {};
                         param.taskId = res.data.rows[i].taskId;
                         data?param.nameOrNumber=data.nameOrNumber:'';
                         this.$ajax.post(this.$preix+'/new/seatWorkbench/queryProcClientWithTaskBySeat',param
                         ).then( res=>{
-                            if(res.data.code==200){
+                            if(res.data.code==200&&res.data.rows[0]!=null){
                                 res.data.rows.map(item=>{item.label=item.userName;item.taskId=id;item.id=item.taskClientId});
                                 //res.data.rows.map(item=>item.taskId=id);
                                 obj.children=res.data.rows;
+                                arr.push(obj);
                             }
-                            arr.push(obj);
                         });
                     }
+                    console.log(arr);
                     _this.TaskBySeat_data=arr;
                 }
             })
@@ -1154,7 +1159,7 @@ export default {
                     let _this=this;
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
-                        obj.label=res.data.rows[i].name;
+                        obj.label=res.data.rows[i].name+'('+res.data.rows[i].numberTotal+')';
                         obj.id=res.data.rows[i].id;
                         obj.dialplanId=res.data.rows[i].id;
                         var param = {};
@@ -1162,14 +1167,14 @@ export default {
                         data?param.nameOrNumber=data.nameOrNumber:'';
                         this.$ajax.post(this.$preix+'/new/seatWorkbench/queryTaskListByDialPlan',param
                         ).then( res=>{
-                            if(res.data.code==200){
+                            if(res.data.code==200&&res.data.rows[0]!=null){
                                 res.data.rows.map(item=>{
                                     item.label=item.userName;
                                     item.id=item.id;
                                 });
                                 obj.children=res.data.rows;
+                                arr.push(obj);
                             }
-                            arr.push(obj);
                         });
                     }
                     _this.DialPlanIntroWithPage_data=arr;
@@ -1265,6 +1270,7 @@ export default {
         update(){
             if(this.callIccSessionId){
                 let data={'desc':this.note,'nextContactTime':this.time_next,'taskId':this.taskId,'taskClientId':this.taskClientId,'userResult':this.worker_state,'taskListId':this.id,'sessionId':this.callIccSessionId}
+                console.log(this.tags);
                 for(let i=0;i<this.tags.length;i++){
                     if(this.tags[i]!=null||this.tags[i]!=undefined){
                         var str='customTag'+(i+1);
@@ -1424,7 +1430,12 @@ export default {
                             _this.callIccSessionId = res.data.info.sessionId;
                             _this.call_error=setTimeout(function(){
                                 if(_this.call_state==1){
-                                    alert('通话异常，已为你重置本次通话');
+                                    this.$message({
+                                        showClose: true,
+                                        message: '通话异常，已为你重置本次通话',
+                                        type: 'warning'
+                                    });
+                                    //alert('通话异常，已为你重置本次通话');
                                     _this.callIccSessionId=null;
                                     _this.call_state=0;
                                 }
@@ -1453,11 +1464,15 @@ export default {
         },
         //修改基本信息
         upSeat(){
-            console.log(this.partnerAccountId)
+            this.name_change=true;
             var data={"desc" : this.think,"id" : this.left.taskClientId,"userCompany" : this.company,"userEmail" : this.email,"userGender" : this.sex,"userJob" : this.job,"userName" : this.name,"partnerAccountId":this.partnerAccountId}
             this.$ajax.post(this.$preix+'/new/seatWorkbench/updateCallTaskClient',data).then(res=>{
                 if(res.data.code==200){
-                    console.log(res);
+                    this.$message({
+                    showClose: true,
+                    message: '修改成功',
+                    type: 'success'
+                });
                 }
             })
         },

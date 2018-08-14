@@ -247,7 +247,7 @@ export default {
                 console.log(res.data.info)
             }
         });
-        this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat'
+        this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat',[]
         ).then( res=>{
             if(res.data.code==200){
                 _this.mission_init(res.data.info);

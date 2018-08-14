@@ -18,6 +18,7 @@ import staff_call_count from '@/components/page_staff/staff_call_count'
 import operation from '@/components/page_operation/operation'
 import operation_manager from '@/components/page_operation/operation_manager'
 import operation_staff from '@/components/page_operation/operation_staff'
+import userInfo from '@/components/user_info'
 
 import test from '@/components/test'
 Vue.use(Router)
@@ -40,6 +41,7 @@ export default new Router({
       {path:'call_count',component:call_count},
       {path:'call_detail',component:call_detail},
       {path:'label',component:label},
+      {path:'userInfo',component:userInfo}
     ]
   }, {
     path: '/staff',
@@ -49,14 +51,16 @@ export default new Router({
       {path:'stage',component:staff_stage},
       {path:'follow',component:staff_follow},
       {path:'detail',component:staff_detail},
-      {path:'call_count',component:staff_call_count}
+      {path:'call_count',component:staff_call_count},
+      {path:'userInfo',component:userInfo}
     ]
   }, {
     path: '/operation',
     component: operation,
     children:[
       {path:'manager',component:operation_manager},
-      {path:'staff',component:operation_staff}
+      {path:'staff',component:operation_staff},
+      {path:'userInfo',component:userInfo}
     ]
   }, {
     path: '/test',
