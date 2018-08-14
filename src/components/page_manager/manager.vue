@@ -9,7 +9,9 @@
             {{identity}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>{{identity}}</el-dropdown-item>
+              <router-link :to="{path:'/manager/userInfo'}">
+                <el-dropdown-item>{{identity}}</el-dropdown-item>
+              </router-link>
               <el-dropdown-item @click.native="test">
                   登出
               </el-dropdown-item>

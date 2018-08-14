@@ -11,7 +11,7 @@
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
                 <el-checkbox-group v-model="checkedlist" :min="0" :max="4" class="ul" :style="{'text-align':'left','padding':'0 8px','background-color':'#FBFBFB','overflow-x': 'hidden'}" @change="show_mission">
-                    <el-checkbox v-for="(item,index) in position" :label="item.taskId" :key="item.taskId" class="li" :checked="index<4">{{item.taskName}}</el-checkbox>
+                    <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li" :checked="item.check">{{item.taskName}}</el-checkbox>
                 </el-checkbox-group>
             </div>
         </div>
@@ -109,31 +109,6 @@
         font-size: 14px;
         color: #666;
     }
-    .ul{
-        width: 150px;
-        height: 164px;
-        overflow-y: scroll;
-    }
-    .ul .li{
-        margin: 5px 0;
-    }
-    .ul::-webkit-scrollbar-track
-    {
-        background-color: #F5F5F5;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
-    }
-    /*定义滚动条高宽及背景*/
-    .ul::-webkit-scrollbar
-    {
-    width: 3px;
-        background-color: rgba(153, 153, 153, 0.8);
-    }
-    /*定义滚动条*/
-    .ul::-webkit-scrollbar-thumb
-    {
-    background-color: #8b8b8b;
-    border-radius: 1px;
-    }
     .part2_tit{
         margin: 0 0 10px;
         overflow: hidden;
@@ -189,7 +164,8 @@ export default {
             page_count:1,
             pageNum:1,
             orderWay:null,
-            orderField:null
+            orderField:null,
+            indexlist:[]
         }
     },
 
@@ -260,24 +236,18 @@ export default {
         },
         show_mission(){
             //选择展示任务
-            this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList',
+            this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat',
                 this.checkedlist
             ).then((res)=>{
-                this.missoin_init(res.data.info);
+                if(res.data.code==200){
+                    this.missoin_init(res.data.info);
+                }
             })
         },
         //关闭弹窗
         reset:function(){
             this.assign=false;
             this.leading=false;
-        },
-        show_mission(){
-            //选择展示任务
-            this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat',
-                this.checkedlist
-            ).then((res)=>{
-                this.missoin_init(res.data.info);
-            })
         },
         //排序搜索
         sort_change({column, prop, order} ){
@@ -331,18 +301,31 @@ export default {
         }
     },
     mounted:function(){
-        //左侧饼图数据
-        this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat')
-        .then( (res) => {
-            if(res.data.code==200){
-                this.missoin_init(res.data.info);
-            }
-        });
+        var _this=this;
         //右侧任务多选列表
-        this.$ajax.post(this.$preix+'/new/calltask/queryTaskIntroOnWallBySeat',{"pageNum" : 1,"pageSize" : 10})
+        this.$ajax.post(this.$preix+'/new/calltask/queryTaskIntroOnWallBySeat',{"pageNum" : 1,"pageSize" : 100})
         .then( (res) => {
             if(res.data.code==200){
                 this.position=res.data.rows;
+                //左侧饼图数据
+                console.log(this.position);
+                this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat')
+                .then( (res) => {
+                    if(res.data.code==200){
+                        var arr=[];
+                        res.data.info.map(item=>{
+                            arr.push(item.taskId);
+                        })
+                        _this.position.map(item=>{
+                            console.log(arr,item.taskId);
+                            _this.$set(item,'check',arr.indexOf(item.taskId)!=-1);
+                            //item.check=arr.indexOf(item.taskId)!=-1;
+                        })
+                        _this.missoin_init(res.data.info);
+                    }
+                });
+                this.position[0].check=true;
+                this.position[1].check=true;
             }
         });
         //下方任务列表

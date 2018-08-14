@@ -139,7 +139,7 @@ export default {
                 this.worker.all=res.data.info.companySituationDto.seatNum;
             }
         });
-        this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList'
+        this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList',[]
         ).then( res=>{
             if(res.data.code==200){
                 this.mission_init(res.data.info)

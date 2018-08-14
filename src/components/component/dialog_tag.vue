@@ -24,8 +24,8 @@
             </el-form-item>
             <el-form-item label="坐席填写小结时是否必选"  class="tit">
                 <div>
-                    <el-radio v-model="form.radio" label="0" size="mini">是</el-radio>
-                    <el-radio v-model="form.radio" label="1" size="mini" checked>否</el-radio>
+                    <el-radio v-model="form.radio" :label=1 size="mini">是</el-radio>
+                    <el-radio v-model="form.radio" :label=0 size="mini" checked>否</el-radio>
                 </div>
             </el-form-item>
         </el-form>
@@ -84,7 +84,7 @@ export default {
                 tag_list:[],
                 tag_default:'',
                 id:'',
-                radio:'1'
+                radio:null
            },
            rules: {
                 tag_name: [
@@ -108,6 +108,7 @@ export default {
                 this.form.tag_list=this.data.tags;
                 this.form.tag_default=this.data.tagDefaultValue;
                 this.form.id=this.data.id;
+                this.form.radio=this.data.mandatory;
             }else{
                 this.form.tag_name='';
                 this.form.tag_list=[];
@@ -134,9 +135,6 @@ export default {
             if(e.keyCode==8){
                 this.form.tag_list.splice(index,1);
             }
-        },
-        test:function(){
-
         },
         save_tag:function(formName){
             var _this=this;
