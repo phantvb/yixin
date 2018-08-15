@@ -43,7 +43,7 @@
                     <p class="grey">总呼叫时长(min)</p>
                 </li>
                 <li>
-                    <p class="black">{{infos.calledDuration?Math.ceil(infos.calledDuration/infos.callTalkedTotal):0}}</p>
+                    <p class="black">{{infos.callTalkedDurationTotal?Math.ceil(infos.callTalkedDurationTotal/infos.callTalkedTotal):0}}</p>
                     <p class="grey">平均呼叫时长(s)</p>
                 </li>
             </ul>

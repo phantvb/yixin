@@ -22,19 +22,20 @@
                         <div class="loginForm">
                            <el-input type="password" placeholder="密码" suffix-icon="el-icon-view" v-model="formName.userPassWord"></el-input>  
                         </div>
-                        <div class="loginForm">
+                        <div v-if="verShow" class="loginForm">
                             <!-- 验证码输入框 -->
                             <div class="verify">
                                 <el-input placeholder="验证码" v-model="formName.flag"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img :src="varify_img" alt="" class="verifyImg" @click="varify_img_change">
+                            <img src="https://10.240.80.72:8443/icc-interface/new/verifyCode" alt="" class="verifyImg">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
+                           {{yzInfo}}
                         </div>
                         <div class="loginForms">
-                            <el-checkbox v-model="formName.checked">记住密码</el-checkbox>
+                            <el-checkbox @change="changeCheck()" v-model="formName.checked">记住密码</el-checkbox>
                             <span class="pass" @click="retrievePassword()">找回密码</span>
                         </div>
                         <!-- 登陆按钮 -->
@@ -48,10 +49,10 @@
                         <i class="el-icon-service iconLoing"></i>
                         找回密码
                     </div>
-                    <form @submit.prevent="loginEmials">
+                    <form @submit.prevent="loginEmils">
                         <!-- 邮箱 -->
                         <div class="loginForm">
-                           <el-input placeholder="请输入管理员注册邮箱号" suffix-icon="el-icon-view" v-model="formNames.emial"></el-input>  
+                           <el-input placeholder="请输入管理员注册邮箱号" suffix-icon="el-icon-view" v-model="formNames.emil"></el-input>  
                         </div>
                         <div class="loginForm">
                             <!-- 验证码输入框 -->
@@ -59,57 +60,18 @@
                                 <el-input placeholder="验证码" v-model="formNames.flags"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img src="" alt="" class="verifyImg">
+                            <img src="https://10.240.80.72:8443/icc-interface/new/verifyCode" alt="" class="verifyImg">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
+                           {{errInfo}}
                         </div>
                         <!-- 发送邮件按钮 -->
                         <div class="">
-                            <button type="submit" class="btnLoginSubmit">{{ loginEmial }}</button>
+                            <button type="submit" class="btnLoginSubmit">{{ loginEmil }}</button>
                         </div>
                     </form>
                     <div class="goLogin" @click="goLogin">
-                        <i class="el-icon-back"></i><span>前往登陆</span>
-                    </div>
-                </div>
-                <div v-if="resetPass" class="resetPassword">
-                    <div class="bigger">
-                        <i class="el-icon-service iconLoing"></i>
-                        重置密码
-                    </div>
-                    <form @submit.prevent="resetPassWord">
-                        <div v-if="zhuceEmial==''" class="verifyTexts">
-                           <!-- 此处为验证提示信息 -->
-                        </div>
-                        <div class="emialInfo">
-                            <span>注册邮箱：</span><span>{{zhuceEmial}}</span>
-                        </div>
-                        <!-- 新密码 -->
-                        <div class="loginForm">
-                           <el-input placeholder="请输入内容" suffix-icon="el-icon-view" v-model="formPass.newPassWord"></el-input>  
-                        </div>
-                        <!-- 二次确认密码 -->
-                        <div class="loginForm">
-                           <el-input placeholder="请输入内容" suffix-icon="el-icon-view" v-model="formPass.PassWord"></el-input>  
-                        </div>
-                        <div class="loginForm">
-                            <!-- 验证码输入框 -->
-                            <div class="verify">
-                                <el-input placeholder="请输入内容" v-model="formName.flag"></el-input>
-                            </div>
-                            <!-- 验证码图片 -->
-                            <img src="" alt="" class="verifyImg">
-                        </div>
-                        <div class="verifyText">
-                           <!-- 此处为验证提示信息 -->
-                        </div>
-                        <!-- 确定按钮 -->
-                        <div class="">
-                            <button type="submit" class="btnLoginSubmit">{{ loginRight }}</button>
-                        </div>
-                    </form>
-                    <div class="goLogin" @click="goLogins">
                         <i class="el-icon-back"></i><span>前往登陆</span>
                     </div>
                 </div>
@@ -119,17 +81,26 @@
             <!-- 这里是系统尾注 -->
             <span>浙江翼信科技有限公司©2013-2017  浙B2-20130234号</span>
         </div>
+        <!-- 找回密码发送成功提示弹窗 -->
+        <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+            <span>找回密码邮件已成功发送，请注意查收！</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">知道了</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import jm from './js/md5.js'
-import { isRegisterUserName,isPasswd } from "./js/validate.js";   // 验证函数
+import { Message } from 'element-ui' 	// 组件
+import base64encode from '../components/js/md5.js'
+import { isRegisterUserName,isPasswd,isEmail } from "./js/validate.js";   // 验证函数
 export default {
     name:'login',
     data(){
         return {
             state:1,
+            verShow:false,
             loginShow:true,
             passWord:false,
             resetPass:false,
@@ -139,8 +110,9 @@ export default {
                 checked: '',
                 flag: ''
             },
+            dialogVisible:false,
             formNames: {//表单中的参数
-                email:'',
+                emil:'',
                 flags: ''
             },
             formPass: {//表单中的参数
@@ -148,83 +120,135 @@ export default {
                 PassWord: ''
             },
             loginBtn:'登 录',
-            loginEmial:'发送邮件',
+            loginEmil:'发送邮件',
             loginRight:'确定',
-            zhuceEmial:'zhuweiwen@yixin.im',
-            varify_img:null
+            zhuceEmil:'zhuweiwen@yixin.im',
+            yzInfo:'',
+            errInfo:'',
+            passCunt:{
+                nub:0
+            }
         }
     },
+    created(){
+        // 判断登陆时是否显示验证码
+        this.getVer();
+        //判断之前是否有记住密码
+        this.getUserInfo();
+        //this.getUrl();
+    },
     methods: {
+        msgErrorShow(msg){
+            Message({
+                message: msg,
+                type: "error"
+            });
+        },
+        //判断之前是否有记住密码
+        getUserInfo(){
+            let UserInfo = JSON.parse(localStorage.getItem("userNamePass"));
+            console.log(UserInfo);
+            if(UserInfo){
+              this.formName.userName = UserInfo.name;
+              this.formName.userPassWord = UserInfo.passWord;
+              this.formName.checked = true;
+            }
+        },
+        //记住密码状态变化
+        changeCheck(){
+           if(this.formName.checked == true){
+              let userNamePass = {
+                  name:this.formName.userName,
+                  passWord:this.formName.userPassWord
+              }
+              window.localStorage.setItem("userNamePass",JSON.stringify(userNamePass));
+           }else{
+              window.localStorage.removeItem("userNamePass");
+           }
+        },
         //登陆
         loginSubmit(){
             var self = this;
-            if(this.formName.checked){
-                this.setCookie(self.formName.userName,self.formName.userPassWord,7);
-            }
-            var exdate = new Date();
-            exdate.setDate(exdate.getDate() + 7);
-            document.cookie="loginName=" + encodeURIComponent(self.formName.userName)+"; expires="+exdate.toGMTString();
-            // if(!isRegisterUserName(self.formName.userName)) {
-            //     //self.msgErrorShow("请输入正确账号");
-            //     console.log(1);
-			// 	return false;
-            // }
-            // if(!isPasswd(self.formName.userPassWord)) {
-            //     //self.msgErrorShow("请输入正确密码");
-			// 	return false;
-            // }
-            if(self.formName.flag.length!=4) {
-                //self.msgErrorShow("请输入正确验证码");
+            // alert('登陆')
+            if(self.formName.userName ==''){
+                this.yzInfo = '请输入登陆账号';
 				return false;
             }
-            self.loginBtn = "登录中...";
+            // if(!isRegisterUserName(self.formName.userName)) {
+            //     // self.msgErrorShow("请输入正确账号");
+            //     this.yzInfo = '请输入正确账号';
+			// 	return false;
+            // }
+            if(self.formName.userPassWord == ''){
+                this.yzInfo = '请输入登陆密码';
+				return false;
+            }
+            if(!isPasswd(self.formName.userPassWord)) {
+                // self.msgErrorShow("请输入正确密码");
+                this.yzInfo = '请输入正确密码';
+                this.passCunt.nub++;
+                if(this.passCunt.nub>=2){
+                   this.verShow = true;
+                   window.sessionStorage.setItem("passCunt",JSON.stringify(this.passCunt));
+                }else{
+                   this.verShow = false;
+                }
+				return false;
+            }
+            if(this.verShow == true){
+                if(self.formName.flag.length!=4) {
+                    // self.msgErrorShow("请输入正确验证码");
+                    this.yzInfo = '验证码错误，请重新输入';
+                    return false;
+                }
+            }
+            this.changeCheck();
+            this.loginBtn = "登录中...";
             let parameter = {
                 // "email" : "string",
                 "name" : this.formName.userName,
-                "password" : jm.md5(this.formName.userPassWord),
+                "password" : base64encode.md5(this.formName.userPassWord),
                 // "password2" : "string",
                 // "reqId" : "string",
                 // "token" : "string",
-                // "verifyCode" : "string"
+                "verifyCode" : this.formName.flag
             }
             this.$ajax.post(this.$preix+'/new/loginValidate',parameter)
-            .then( (res) => {
-                if(res.data.code==200){
-                    if(res.data.rows[0].type==1){
-                        this.$router.push({ path: '/operation/index',query:{userId:self.formName.userName}})
-                    }else if(res.data.rows[0].type==2){
-                        this.$router.push({ path: '/manager/index',query:{userId:self.formName.userName}})
-                    }else if(res.data.rows[0].type==3){
-                        this.$router.push({ path: '/staff/index',query:{userId:self.formName.userName}})
+                .then( (res) => {
+                    if(res.data.code==200){
+                        let loginName={"loginName" : this.formName.userName};
+                        window.sessionStorage.setItem("loginName",JSON.stringify(loginName));
+                        if(window.sessionStorage){
+                            let userInfoLst = res.data.rows;
+                            window.sessionStorage.setItem("userInfoLst",JSON.stringify(userInfoLst));
+                        }else{
+                            this.msgErrorShow("浏览器不支持本地存储功能，建议您使用chrome浏览器效果更佳！"); 
+                        }
+                        if(res.data.rows[0].type==1){
+                            this.$router.push({ path: '/operation/manager'})
+                        }else if(res.data.rows[0].type==2){
+                            this.$router.push({ path: '/manager/index'})
+                        }else{
+                            this.$router.push({ path: '/staff/index'})
+                        }
+                    }else{
+                       // 登录失败
+                       this.msgErrorShow(res.data.message);
+                       this.loginBtn = "登录";
+
                     }
-                }else{
-                    this.$message({
-                        showClose: true,
-                        message: res.data.message,
-                        type: 'warning'
-                    });
-                }
             })
         },
-        varify_img_change(){
-            this.varify_img=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
-        },
-        setCookie(c_value, p_value, expiredays){
-            var exdate = new Date();
-            exdate.setDate(exdate.getDate() + expiredays);
-            document.cookie="userName=" + encodeURIComponent(c_value)+"; expires="+exdate.toGMTString();
-            document.cookie="password=" + encodeURIComponent(p_value)+"; expires="+exdate.toGMTString();;
-        },
-        getCookie(c_name){
-            if (document.cookie.length > 0) {
-                var arrCookie=document.cookie.split("; ");
-                for(var i=0;i<arrCookie.length;i++){
-                    var arr=arrCookie[i].split("=");
-                    //找到名称为userId的cookie，并返回它的值
-                    if(c_name==arr[0]){
-                        return arr[1];
-                    }
-                }
+        //判断是否在登陆时显示验证码
+        getVer(){
+            let btnState = JSON.parse(sessionStorage.getItem('passCunt'));
+            console.log(btnState);
+            if(btnState){
+               if(btnState.nub>=2){
+                   this.verShow = true;
+               }else{
+                   this.verShow = false;
+               }
             }
         },
         //点击找回密码打开找回密码显示框
@@ -234,12 +258,35 @@ export default {
             this.passWord = true;
         },
         //发送邮件
-        loginEmials(){
-            
-        },
-        //重置密码确定按钮
-        resetPassWord(){
-
+        loginEmils(){
+            if(this.formNames.emil ==''){
+                this.errInfo = '请输入注册邮箱号';
+				return false;
+            }
+            if(!isEmail(this.formNames.emil)){
+                this.errInfo = '输入邮箱有误，请重新输入';
+				return false;
+            }
+            if(this.formNames.flags.length!=4) {
+                // self.msgErrorShow("验证码错误，请重新输入");
+                this.errInfo = '验证码错误，请重新输入';
+                return false;
+            }
+            let parameter = {
+                "email" : this.formNames.emil,
+                "verifyCode" : this.formNames.flags
+            }
+            this.$ajax.post(this.$preix+'/new/forgetStep1',parameter)
+                .then( (res) => {
+                    if(res.data.code==200){
+                        console.log(res);
+                        this.dialogVisible = true;
+                        // this.msgErrorShow(res.data.message);
+                    }else{
+                       // 发送失败
+                       this.msgErrorShow(res.data.message);
+                    }
+            })
         },
         // 从找回密码前往登陆
         goLogin(){
@@ -250,13 +297,6 @@ export default {
         goLogins(){
             this.resetPass = false;
             this.loginShow = true;
-        }
-    },
-    mounted(){
-        this.varify_img_change();
-        this.formName.userName=this.getCookie('userName');
-        if(this.loginShow){
-            this.formName.userPassWord=this.getCookie('password');
         }
     }
 }
@@ -338,7 +378,7 @@ export default {
 }
 /* login 验证码图片样式 */
 .verifyImg{
-    border:1px solid red;
+    /* border:1px solid red; */
     width: 30%;
     height: 80%;
 }
@@ -374,7 +414,7 @@ export default {
    padding: 40px;
 }
 /* 获取到的邮箱信息样式 */
-.emialInfo{
+.emilInfo{
    text-align: left;
    line-height: 30px;
    font-size: 14px;

@@ -12,9 +12,11 @@
               <router-link :to="{path:'/staff/userInfo'}">
                 <el-dropdown-item>{{identity}}</el-dropdown-item>
               </router-link>
-              <el-dropdown-item @click.native="test">
-                  登出
-              </el-dropdown-item>
+              <router-link :to="{path:'/login'}">
+                <el-dropdown-item>
+                    登出
+                </el-dropdown-item>
+              </router-link>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -66,12 +68,12 @@
                   <span>设置&#12288;&#12288;&#12288;&#12288;</span>
                 </template>
                 <el-menu-item-group>
-                  <router-link :to="{path:'/staff/worker'}">
+                  <router-link :to="{path:'/staff/userInfo'}">
                     <el-menu-item class="item" index="4-1" @click="open">账号设置</el-menu-item>
                   </router-link>
-                  <router-link :to="{path:'/staff/label'}">
+                  <!-- <router-link :to="{path:'/staff/label'}">
                     <el-menu-item class="item" index="4-2" @click="open">线路设置</el-menu-item>
-                  </router-link>
+                  </router-link> -->
                 </el-menu-item-group>
               </el-submenu>
             </el-menu>
@@ -239,14 +241,14 @@ export default {
     }
   },
   mounted(){
-    console.log(12131);
-    this.identity=this.getCookie('loginName');
-    var data={
-        'name':'qy1003','password':md5.md5('qy1003'),'password2':'123456'
-    };
-    this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
-        data
-    )
+    let UserInfo = JSON.parse(window.sessionStorage.getItem("loginName"));
+    this.identity=UserInfo.loginName;
+    // var data={
+    //     'name':'qy1003','password':md5.md5('qy1003'),'password2':'123456'
+    // };
+    // this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
+    //     data
+    // )
   }
 };
 </script>

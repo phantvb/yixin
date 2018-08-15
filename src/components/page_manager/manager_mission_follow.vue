@@ -30,6 +30,7 @@
                 <el-button type="primary" class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">可见状态</p>
+                    <p class="black" :class="{see_active:see_state==''}" @click="see_change('')">全部</p>
                     <p class="black" :class="{see_active:see_state=='1'}" @click="see_change('1')">所有人可见</p>
                     <p class="black" :class="{see_active:see_state=='0'}" @click="see_change('0')">仅管理员可见</p>
                 </div>
@@ -43,8 +44,9 @@
                 <el-button type="primary" plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="grey">筛选条件</p>
-                    <el-tag type="info" class="tag">{{see_state=='0'?'所有人可见':'仅管理员可见'}}</el-tag>
-                
+                    <el-tag type="info" class="tag" v-show="see_state=='1'">所有人可见</el-tag>
+                    <el-tag type="info" class="tag" v-show="see_state=='0'">仅管理员可见</el-tag>
+                    <el-tag type="info" class="tag" v-show="see_state==''">可见状态：全部</el-tag>
                     <el-tag type="info" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
                 </div>
             </div>
@@ -146,31 +148,6 @@
         font-size: 14px;
         color: #666;
     }
-    .ul{
-        width: 150px;
-        height: 164px;
-        overflow-y: scroll;
-    }
-    .ul .li{
-        margin: 5px 0;
-    }
-    .ul::-webkit-scrollbar-track
-    {
-        background-color: #F5F5F5;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
-    }
-    /*定义滚动条高宽及背景*/
-    .ul::-webkit-scrollbar
-    {
-    width: 3px;
-        background-color: rgba(153, 153, 153, 0.8);
-    }
-    /*定义滚动条*/
-    .ul::-webkit-scrollbar-thumb
-    {
-    background-color: #8b8b8b;
-    border-radius: 1px;
-    }
     .part2_tit{
         margin: 0 0 10px;
         overflow: hidden;
@@ -223,7 +200,7 @@ export default {
             checkedlist:[],
             search:'',
             search_state:false,
-            see_state:'1',
+            see_state:'',
             search_date:[],
             leading:false,
             assign:false,

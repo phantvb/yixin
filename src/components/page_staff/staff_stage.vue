@@ -12,7 +12,7 @@
             </div>
         </div>
         <!-- 自定义右键菜单 -->
-        <div v-show="contextmenu.state" class="contextmenu" :style="{'position':'absolute','left':contextmenu.left+'px','top':contextmenu.top+'px','z-index':'3','width':'150px','line-height':'30px','background':'#fff','border':'1px solid #ccc','border-radio':'3px','box-shadow':'0px 0px 4px #ccc','cursor':'pointer'}" @click="remove">移除该呼叫任务</div>
+        <div v-show="contextmenu.state" class="contextmenu" :style="{'position':'absolute','left':contextmenu.left+'px','top':contextmenu.top+'px','z-index':'3','width':'150px','line-height':'30px','background':'#fff','border':'1px solid #ccc','border-radio':'3px','box-shadow':'0px 0px 4px #ccc','cursor':'pointer'}" @click="remove">移除该项</div>
         <div class="aside">
             <div class="mask" :style="{'width':'100%','height':'100%'}" v-show="call_state!=0">
                 <div :style="{'width':'50%','height':'100%'}"></div>
@@ -46,7 +46,7 @@
                 </ul>
             </div>
             <div class="con">
-                <p v-if="TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
+                <p v-if="task_state==0&&TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
                 <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" ref="tree" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1)">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
@@ -226,7 +226,7 @@
                     <p class="black tit" :style="{'float':'left'}">历史通话记录&#12288;<span class='grey'>总联系{{history.historyDto?history.historyDto.totalContactNum:0}}次，有效联系{{history.historyDto?history.historyDto.effectiveContactNum:0}}次</span></p>
                 <p class="grey curson" :style="{'float':'right'}" @click="enter(history.summaryDto)">查看更多<i class="el-icon-d-arrow-right"></i></p>
                 </div>
-                <p class="grey" id="talk" v-if="history.historyDto">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;{{history.historyDto.details[0].shortName}} <span class="black">{{history.historyDto.details[0].callReaultString}}</span> {{history.historyDto.details[0].callDuration}}</p>
+                <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;{{history.historyDto.details[0].shortName}} <span class="black">{{history.historyDto.details[0].callReaultString}}</span> {{history.historyDto.details[0].callDuration}}</p>
                 <div v-if="history.historyDto">
                     <div class="state">
                         <p class="grey">客户状态</p>
@@ -235,8 +235,8 @@
                         <div class="grey" :style="{'margin-left':'45%'}" v-if="history.historyDto.details[0].nextContactTime"><p :style="{'float':'left'}">下次联系时间：</p><el-button type="info" size="mini" :style="{'background':'#f4f4f4','border-color':'#f4f4f4','color':'#7496F2','float':'left'}" round>{{history.historyDto.details[0].nextContactTime}}</el-button></div>
                     </div>
                 </div>
-                <div class="tag" v-if="history.summaryDto.tags.length>0">
-                    <el-button type="info" size="mini" v-for="item in history.summaryDto.tags[0].taglist" :key="item" :style="{'background':'#7496F2','border-color':'#fff'}" round>{{item}}</el-button>
+                <div class="tag" v-if="history.summaryDto.tags.length>0&&history.summaryDto.tags.taglist!=[]">
+                    <el-button type="info" size="mini" v-for="item in history.summaryDto.tags.taglist" :key="item" :style="{'background':'#7496F2','border-color':'#fff'}" round>{{item}}</el-button>
                 </div>
                 <div class="note" v-if="history.historyDto">
                     <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">详情备注</p>
@@ -739,6 +739,8 @@ export default {
             online_state:1,
             left:{taskClientId:null,
             taskListId:null,taskId:null},
+            right:{taskClientId:null,
+            taskListId:null,taskId:null},
             ua:null,
             from_name:null,
             timer:'00:00:00',
@@ -1066,7 +1068,8 @@ export default {
         },
         //获取客户详情
         detail_init(item,type){
-            console.log(item);
+            console.log(item,type);
+            var _this=this;
             this.tags=[];
             this.show=false;
             this.time_next='';
@@ -1080,6 +1083,8 @@ export default {
             }
             this.call_hidden=false;
             this.active_data=item;
+            this.right.taskListId=item.id;
+            this.right.taskId=item.taskId;
             this.left.taskClientId=item.taskClientId;
             if(type==1){
                 this.left.taskListId=null;
@@ -1107,8 +1112,14 @@ export default {
             .then( (res) => {
                 if(res.status==200){
                     if(res.data.summaryDto.tags!=undefined){
+                        res.data.summaryDto.tags.taglist=[];
                         for(var i=0;i<res.data.summaryDto.tags.length;i++){
                             res.data.summaryDto.tags[i].taglist=res.data.summaryDto.tags[i].tagValue.split(';');
+                            res.data.summaryDto.tags[i].lastTagValue?res.data.summaryDto.tags.taglist=res.data.summaryDto.tags.taglist.concat(res.data.summaryDto.tags[i].lastTagValue.split(';')):'';
+                            res.data.summaryDto.tags[i].tagDefaultValue?res.data.summaryDto.tags[i].value=res.data.summaryDto.tags[i].tagDefaultValue:'';
+                            res.data.summaryDto.tags[i].lastTagValue?res.data.summaryDto.tags[i].value=res.data.summaryDto.tags[i].lastTagValue:'';
+                            // res.data.summaryDto.tags[i].tagDefaultValue?_this.tags[i].value=res.data.summaryDto.tags[i].tagDefaultValue:'';
+                            // res.data.summaryDto.tags[i].lastTagValue?_this.tags[i].value=res.data.summaryDto.tags[i].lastTagValue:'';
                         }
                     }
                     if(res.data.historyDto&&res.data.historyDto.details[0].desc!=undefined){
@@ -1268,13 +1279,23 @@ export default {
         },
         //提交小结
         update(){
-            if(this.callIccSessionId){
-                let data={'desc':this.note,'nextContactTime':this.time_next,'taskId':this.taskId,'taskClientId':this.taskClientId,'userResult':this.worker_state,'taskListId':this.id,'sessionId':this.callIccSessionId}
-                console.log(this.tags);
-                for(let i=0;i<this.tags.length;i++){
-                    if(this.tags[i]!=null||this.tags[i]!=undefined){
+            if(this.callIccSessionId&&this.call_state==4){
+                let data={'desc':this.note,'nextContactTime':this.time_next,'taskId':this.right.taskId,'taskClientId':this.left.taskClientId,'userResult':this.worker_state,'taskListId':this.right.taskListId,'sessionId':this.callIccSessionId}
+                // for(let i=0;i<this.tags.length;i++){
+                //     if(this.tags[i]!=null||this.tags[i]!=undefined){
+                //         var str='customTag'+(i+1);
+                //         data[str]=this.tags[i].value;
+                //     }
+                // }
+                for(let i=0;i<this.history.summaryDto.tags.length;i++){
+                    if(this.history.summaryDto.tags[i]!=null||this.history.summaryDto.tags[i]!=undefined){
                         var str='customTag'+(i+1);
-                        data[str]=this.tags[i].value;
+                        data[str]=this.history.summaryDto.tags[i].value;
+                    }
+                }
+                for (let key in data){
+                    if(data[key]==''||data[key]==null){
+                        delete data[key];
                     }
                 }
                 var _this=this;
@@ -1292,9 +1313,13 @@ export default {
                                     _this.TaskBySeat_data[index].children.splice(i,1);
                                     console.log('当前：',items.children[i])
                                     _this.detail_init(items.children[i],1);
-                                }else if(_this.worker_state=='1'){
+                                }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     console.log('当前：',items.children[i+1])
                                     _this.detail_init(items.children[i+1],1);
+                                }else if(_this.worker_state=='1'&&_this.time_next!=''){
+                                    _this.TaskBySeat_data[index].children.splice(i,1);
+                                    console.log('当前：',items.children[i])
+                                    _this.detail_init(items.children[i],1);
                                 }
                                 // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
                                 if(_this.call_auto=='true'){
@@ -1310,16 +1335,20 @@ export default {
                                 _this.call_hidden=true;
                                 if(_this.worker_state!='1'){
                                     _this.TaskBySeat_data.splice(index,1);
-                                }else if(_this.worker_state=='1'){
+                                }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     return;
+                                }else{
+                                    _this.TaskBySeat_data.splice(index,1);
                                 }
                             }else if(i==(items.children.length-1)&&items.children.length>1){
                                 console.log('到底了')
                                 _this.call_hidden=true;
                                 if(_this.worker_state!='1'){
                                     _this.TaskBySeat_data[index].children.splice(i,1);
-                                }else if(_this.worker_state=='1'){
+                                }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     return;
+                                }else{
+                                    _this.TaskBySeat_data[index].children.splice(i,1);
                                 }
                             }
                         })
@@ -1329,8 +1358,11 @@ export default {
                                 if(_this.worker_state!='1'){
                                     _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
                                     _this.detail_init(items.children[i],2);
-                                }else if(_this.worker_state=='1'){
+                                }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     _this.detail_init(items.children[i+1],2);
+                                }else{
+                                    _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
+                                    _this.detail_init(items.children[i],2);
                                 }
                                 // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
                                 if(_this.call_auto=='true'){
@@ -1345,16 +1377,20 @@ export default {
                                 _this.call_hidden=true;
                                 if(_this.worker_state!='1'){
                                     _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }else if(_this.worker_state=='1'){
+                                }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     return;
+                                }else{
+                                    _this.DialPlanIntroWithPage_data.splice(index,1);
                                 }
                             }else if(i==(items.children.length-1)&&items.children.length>1){
                                 console.log('到底了')
                                 _this.call_hidden=true;
                                 if(_this.worker_state!='1'){
                                     _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
-                                }else if(_this.worker_state=='1'){
+                                }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     return;
+                                }else{
+                                    _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
                                 }
                             }
                         });
@@ -1430,7 +1466,7 @@ export default {
                             _this.callIccSessionId = res.data.info.sessionId;
                             _this.call_error=setTimeout(function(){
                                 if(_this.call_state==1){
-                                    this.$message({
+                                    _this.$message({
                                         showClose: true,
                                         message: '通话异常，已为你重置本次通话',
                                         type: 'warning'

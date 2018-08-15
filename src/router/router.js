@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/login'
+import resetLogin from '@/components/resetLogin'
 import manager from '@/components/page_manager/manager'
 import manager_index from '@/components/page_manager/manager_index'
 import mission_follow from '@/components/page_manager/manager_mission_follow'
@@ -30,6 +31,9 @@ export default new Router({
   },{
     path: '/login',
     component: login
+  },{
+    path: '/resetLogin',
+    component: resetLogin
   }, {
     path: '/manager',
     component: manager,
