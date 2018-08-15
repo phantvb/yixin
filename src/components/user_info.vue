@@ -1,31 +1,51 @@
 <template>
   <div class="container">
     <div class="nav">帐号信息设置</div>
-    <div class="head">
-      <div class="mes3">
-        <div class="mes">
-          <div class="grey">帐号名称：
-            <div class="father">
-              <span class="black">{{loginName}}</span>
-            </div>
-          </div>
-          <div class="grey">帐号类型：
-            <div class="father">
-              <span class="black" v-show="type==0">超级管理员</span>
-              <span class="black" v-show="type==1">运维管理员</span>
-              <span class="black" v-show="type==2">企业管理员</span>
-              <span class="black" v-show="type==3">坐席</span>
-            </div>
-          </div>
-          <div class="grey">密码：
-            <div class="">
-              <span class="black">******</span>
-              <el-button type="text" @click="dialogVisible = true">修改</el-button>
+    <el-form ref="form" :model="form" label-width="80px">
+      <el-form-item label="帐号名称">
+        <span class="black">{{loginName}}</span>
+      </el-form-item>
+      <el-form-item label="帐号类型">
+        <span class="black" v-show="type==0">超级管理员</span>
+        <span class="black" v-show="type==1">运维管理员</span>
+        <span class="black" v-show="type==2">企业管理员</span>
+        <span class="black" v-show="type==3">坐席</span>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">立即创建</el-button>
+        <el-button>取消</el-button>
+      </el-form-item>
+    </el-form>
+    <!--<div class="part1">
+      <div class="part1_show">
+
+        <div class="head">
+          <div class="mes3">
+            <div class="mes">
+              <div class="grey">帐号名称：
+                <div class="father">
+                  <span class="black">{{loginName}}</span>
+                </div>
+              </div>
+              <div class="grey">帐号类型：
+                <div class="father">
+                  <span class="black" v-show="type==0">超级管理员</span>
+                  <span class="black" v-show="type==1">运维管理员</span>
+                  <span class="black" v-show="type==2">企业管理员</span>
+                  <span class="black" v-show="type==3">坐席</span>
+                </div>
+              </div>
+              <div class="grey">密码：
+                <div class="">
+                  <span class="black">******</span>
+                  <el-button type="text" @click="dialogVisible = true">修改</el-button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
     <el-dialog
       title="修改密码"
       :visible.sync="dialogVisible"
@@ -49,6 +69,16 @@
     </el-dialog>
   </div>
 </template>
+<style scoped>
+  .nav{
+    line-height: 30px;
+    text-align: left;
+    background-color: #fff;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+</style>
 <script>
   export default {
     name:'userInfo',

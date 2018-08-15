@@ -11,6 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+<<<<<<< HEAD
       // '/data': {
       // target: ': 'http://192.168.0.121:8090/data', //设 //设置你调用的接口域名和端口号 别忘了加http
       // secure: false, // 如果是https接口，需要配置这个参数
@@ -19,6 +20,8 @@ module.exports = {
       // '^/data': ''
       // },
       // },
+=======
+>>>>>>> df490cceed55dc67f625c1dee9d1c2c00007c3ba
     },
 
     // Various Dev Server settings
