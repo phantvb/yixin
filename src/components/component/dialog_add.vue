@@ -5,7 +5,7 @@
             <div class="part2">
                 <div class="part2_tit">
                     <el-input
-                        placeholder="按任务名称搜索"
+                        placeholder="按客户姓名精确搜索"
                         prefix-icon="el-icon-search"
                         v-model="search" class="search" size="mini">
                     </el-input>
@@ -34,7 +34,7 @@
                     </div>
                     <div>
                         <p class="grey">客户标签&#12288;&#12288;</p>
-                        <el-dropdown :hide-on-click="false" v-for="(item,index) in tag_data" :key="index"  @command="handleCommand">
+                        <el-dropdown :style="{'margin':'0px 6px'}" v-for="(item,index) in tag_data" :key="index"  @command="handleCommand">
                             <span class="el-dropdown-link">
                                 {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
                             </span>
@@ -208,13 +208,16 @@ export default {
             let taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
             let userResults=this.custom_state.map((item)=>this.custom_list[item].key);
             let callResults=this.call_state.map((item)=>this.call_list[item].key);
+            //let tags=this.tags.map((item)=>tags.push(item.value));
+            
             var data={'userResults':userResults,'nameOrNumber':this.search,'taskIds':taskIds,'callResults':callResults,'whetherCalledToday':this.link_list[this.link_state].key,"requireTotalCount" : true,'pageNum':this.pageNum};
-            // for(let i=0;i<this.tags.length;i++){
-            //     if(this.tags[i]!=null||this.tags[i]!=undefined){
-            //         var str='customTag'+(i+1);
-            //         data[str]=this.tags[i].value;
-            //     }
-            // }
+            console.log(this.tags);
+            for(let i=0;i<this.tags.length;i++){
+                if(this.tags[i]!=null||this.tags[i]!=undefined){
+                    var str='customTag'+(i+1);
+                    data[str]=this.tags[i].value;
+                }
+            }
             //删除空属性
             for (let key in data){
                 if(data[key]==''){
@@ -330,7 +333,9 @@ export default {
             })
         },
         handleCommand(command) {
+            console.log(command);
             this.tags[command.index]={'value':command.value};
+            this.missoin_search();
         }
     },
     inject:['reload']

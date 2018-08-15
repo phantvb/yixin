@@ -25,7 +25,10 @@
                         <p class="grey" v-if="item.userResultStr">客户状态&#12288;<span class="black">{{item.userResultStr}}</span></p>
                         <p class="grey" :style="{'float':'right'}">下次联系时间&#12288;<span class="black">{{item.nextContactTime?item.nextContactTime:'无'}}</span></p>
                         <p class="grey" v-if="item.desc">详情备注&#12288;<span class="black">{{item.desc}}</span></p>
-                        <el-button type="info" size="mini" v-for="(_item,index) in item.taglist" :key="index">{{_item}}</el-button>
+                        <div>
+                            <el-button type="primary" size="mini" v-for="(_item,index) in item.taglist" :key="index">{{_item}}</el-button>
+                        </div>
+                        
                         <p class="grey" :style="{'width':'100%'}" v-if="item.recordFilePath">通话录音&#12288;
                             <a-player :music="{
                             src: baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session

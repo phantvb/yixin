@@ -99,7 +99,6 @@
                         <el-form-item label="用户类型" prop="type">
                             <el-select v-model="Form.type" placeholder="请选择用户类型">
                                 <el-option label="企业管理员" value="2"></el-option>
-                                <el-option label="运维管理员" value="1"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="坐席账号前缀" prop="seatAccountPrefix">
@@ -308,7 +307,8 @@ export default {
                     { required: true, message: '请选择用户类型', trigger: 'change' }
                 ],
                 seatAccountPrefix: [
-                    { required: true, message: '请输入坐席账号前缀', trigger: 'blur' }
+                    { required: true, message: '请输入坐席账号前缀', trigger: 'blur' },
+                    { min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur' }
                 ],
                 numOfSeat: [
                     { type: 'number', required: true, message: '请输入可配坐席数量', trigger: 'blur' }
@@ -335,6 +335,7 @@ export default {
         search_change:function(value){
             this.search_state=value;
             this.findSeat();
+            
         },
         close(){
             this.dialog_show=false;
@@ -455,7 +456,11 @@ export default {
                         if(res.data.code==200){
                             _this.reload()
                         }else{
-                            alert(res.data.message)
+                            this.$message({
+                                showClose: true,
+                                message: res.data.message,
+                                type: 'warning'
+                            });
                         }
                     })
                 } else {

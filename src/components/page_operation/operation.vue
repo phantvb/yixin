@@ -12,9 +12,11 @@
               <router-link :to="{path:'/operation/userInfo'}">
                 <el-dropdown-item>{{identity}}</el-dropdown-item>
               </router-link>
-              <el-dropdown-item @click.native="test">
-                  登出
-              </el-dropdown-item>
+              <router-link :to="{path:'/login'}">
+                <el-dropdown-item>
+                    登出
+                </el-dropdown-item>
+              </router-link>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -61,7 +63,7 @@
                   <span>设置&#12288;&#12288;&#12288;&#12288;</span>
                 </template>
                 <el-menu-item-group>
-                  <router-link :to="{path:'/manager/worker'}">
+                  <router-link :to="{path:'/manager/userInfo'}">
                     <el-menu-item index="3-1">个人信息&#12288;&#12288;</el-menu-item>
                   </router-link>
                 </el-menu-item-group>
@@ -169,7 +171,8 @@ a{
 
 <script>
 import notify from '../component/notify.vue';
-import jm from '../js/md5.js'
+import jm from '../js/md5.js';
+//import soc from '../js/common.js';
 export default {
 	name: 'operation',
 	data() {
@@ -206,13 +209,14 @@ export default {
     }
   },
   mounted(){
-    this.identity=this.getCookie('loginName');
-    var data={
-      'name':'yw1','password':jm.md5('yw1'),'password2':'123456'
-    };
-    /*this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
-      data
-    )*/
+    let UserInfo = JSON.parse(window.sessionStorage.getItem("loginName"));
+    this.identity=UserInfo.loginName;
+    // var data={
+    //   'name':'yw1','password':jm.md5('yw1'),'password2':'123456'
+    // };
+    // this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
+    //   data
+    // )
   },
 	provide(){
     return {

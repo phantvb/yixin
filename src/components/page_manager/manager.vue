@@ -12,9 +12,11 @@
               <router-link :to="{path:'/manager/userInfo'}">
                 <el-dropdown-item>{{identity}}</el-dropdown-item>
               </router-link>
-              <el-dropdown-item @click.native="test">
-                  登出
-              </el-dropdown-item>
+              <router-link :to="{path:'/login'}">
+                <el-dropdown-item>
+                    登出
+                </el-dropdown-item>
+              </router-link>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -74,12 +76,12 @@
                   <span>设置&#12288;&#12288;&#12288;&#12288;</span>
                 </template>
                 <el-menu-item-group>
-                  <router-link :to="{path:'/manager/worker'}">
+                  <router-link :to="{path:'/manager/userInfo'}">
                     <el-menu-item class="item" index="4-1">账号设置</el-menu-item>
                   </router-link>
-                  <router-link :to="{path:'/manager/label'}">
+                  <!-- <router-link :to="{path:'/manager/label'}">
                     <el-menu-item class="item" index="4-2">系统设置</el-menu-item>
-                  </router-link>
+                  </router-link> -->
                 </el-menu-item-group>
               </el-submenu>
             </el-menu>
@@ -183,7 +185,8 @@ a{
 
 <script>
 import notify from '../component/notify.vue';
-import md5 from '../js/md5.js'
+import md5 from '../js/md5.js';
+import soc from '../js/common.js'
 export default {
 	name: 'manager',
 	data() {
@@ -201,7 +204,6 @@ export default {
 		handleClose(key, keyPath) {
 			console.log(key, keyPath);
     },
-    
     reload(){
       this.alive=false;
       this.$nextTick(function(){
@@ -222,34 +224,6 @@ export default {
                 }
             }
         }
-    },
-    connect:function () {
-        var _this=this;
-        // websocket的连接地址，此值等于WebSocketMessageBrokerConfigurer中registry.addEndpoint("/icc/websocket").withSockJS()配置的地址
-        var socket = new SockJS(this.$preix+'/ws/icc/websocket');
-        this.stompClient = Stomp.over(socket);
-        this.stompClient.connect({}, function(frame) {
-            console.log('Connected: ' + frame);
-            _this.stompClient.subscribe(
-                '/user/topic/ws',
-                function(respnose){
-                    _this.showResponse(JSON.parse(respnose.body));
-                }
-            );
-        });
-    },
-    disconnect:function () {
-        if (this.stompClient != null) {
-            this.stompClient.disconnect();
-            
-        console.log('关闭websocket')
-        }
-        console.log("Disconnected");
-    },
-    showResponse:function (result) {
-        if(result.msgType){
-            this.notify++;
-        }
     }
   },
 	provide(){
@@ -258,14 +232,15 @@ export default {
     }
   },
   mounted(){
-    this.identity=this.getCookie('loginName');
+    console.log(window.sessionStorage);
+    let UserInfo = JSON.parse(window.sessionStorage.getItem("loginName"));
+    this.identity=UserInfo.loginName;
     // var data={
     //     'name':'qy1','password':md5.md5('224139'),'password2':'123456'
     // };
     // this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
     //     data
     // );
-    this.connect();
   }
 };
 </script>

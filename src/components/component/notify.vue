@@ -50,13 +50,43 @@ export default {
                 }
             })
         },
+        connect () {
+            var _this=this;
+            // websocket的连接地址，此值等于WebSocketMessageBrokerConfigurer中registry.addEndpoint("/icc/websocket").withSockJS()配置的地址
+            var socket = new SockJS(this.$preix+'/ws/icc/websocket');
+            this.stompClient = Stomp.over(socket);
+            this.stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+                _this.stompClient.subscribe(
+                    '/user/topic/ws',
+                    function(respnose){
+                        console.log(this);
+                        _this.showResponse(JSON.parse(respnose.body));
+                    }
+                );
+            });
+        },
+        disconnect () {
+            if (this.stompClient != null) {
+                this.stompClient.disconnect();
+                
+            console.log('关闭websocket')
+            }
+            console.log("Disconnected");
+        },
+        showResponse:function (result) {
+            if(result.msgType){
+                this.notify++;
+            }
+        }
     },
     mounted(){
         this.$ajax.post(this.$preix+'/new/notify/query-unread-msg-num').then(res=>{
             if(res.data.code==200){
                 this.notify=res.data.info;
             }
-        })
+        });
+        this.connect();
     }
 }
 </script>
