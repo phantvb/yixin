@@ -11,41 +11,13 @@
         <span class="black" v-show="type==2">企业管理员</span>
         <span class="black" v-show="type==3">坐席</span>
       </el-form-item>
+      <el-form-item label="密码">
+        <span class="black">******</span>
+      </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button type="primary" icon="el-icon-edit" @click="dialogVisible = true"></el-button>
       </el-form-item>
     </el-form>
-    <!--<div class="part1">
-      <div class="part1_show">
-
-        <div class="head">
-          <div class="mes3">
-            <div class="mes">
-              <div class="grey">帐号名称：
-                <div class="father">
-                  <span class="black">{{loginName}}</span>
-                </div>
-              </div>
-              <div class="grey">帐号类型：
-                <div class="father">
-                  <span class="black" v-show="type==0">超级管理员</span>
-                  <span class="black" v-show="type==1">运维管理员</span>
-                  <span class="black" v-show="type==2">企业管理员</span>
-                  <span class="black" v-show="type==3">坐席</span>
-                </div>
-              </div>
-              <div class="grey">密码：
-                <div class="">
-                  <span class="black">******</span>
-                  <el-button type="text" @click="dialogVisible = true">修改</el-button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>-->
     <el-dialog
       title="修改密码"
       :visible.sync="dialogVisible"
@@ -53,18 +25,18 @@
       :before-close="handleClose">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="原密码">
-          <el-input v-model="form.oldPassword"></el-input>
+          <el-input type="password" v-model="form.oldPassword" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="新密码">
-          <el-input v-model="form.password"></el-input>
+          <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="再次输入新密码">
-          <el-input v-model="form.password2"></el-input>
+          <el-input type="password" v-model="form.password2" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="updateAccountPassword()">确 定</el-button>
+    <el-button type="primary" @click="updateAccountPassword()">确认修改</el-button>
   </span>
     </el-dialog>
   </div>
