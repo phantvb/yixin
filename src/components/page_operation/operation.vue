@@ -211,7 +211,6 @@ export default {
   mounted(){
     let UserInfo = JSON.parse(window.sessionStorage.getItem("loginName"));
     this.identity=UserInfo.loginName;
-    this.connect();
     // var data={
     //   'name':'yw1','password':jm.md5('yw1'),'password2':'123456'
     // };
