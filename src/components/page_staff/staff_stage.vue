@@ -1287,9 +1287,10 @@ export default {
                 //         data[str]=this.tags[i].value;
                 //     }
                 // }
+                console.log(this.history.summaryDto.tags);
                 for(let i=0;i<this.history.summaryDto.tags.length;i++){
                     if(this.history.summaryDto.tags[i]!=null||this.history.summaryDto.tags[i]!=undefined){
-                        var str='customTag'+(i+1);
+                        var str='customTag'+this.history.summaryDto.tags[i].tagOrder;
                         data[str]=this.history.summaryDto.tags[i].value;
                     }
                 }
