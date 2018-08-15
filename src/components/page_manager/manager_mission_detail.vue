@@ -59,7 +59,7 @@
                 <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
                 <el-table-column label="客户状态" class-name="line5" :show-overflow-tooltip=true min-width="80">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.userResult==0">预留</span>
+                        <span v-if="scope.row.userResult==0"></span>
                         <span v-if="scope.row.userResult==1">继续跟进</span>
                         <span v-if="scope.row.userResult==2">发展成功</span>
                         <span v-if="scope.row.userResult==3">发展失败</span>

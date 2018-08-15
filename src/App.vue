@@ -8,13 +8,13 @@ export default {
   name: "App",
   mounted(){
     window.onload=function(){
-      var scale=document.body.scrollWidth/1200*64;
-      scale=(scale>64?64:scale);
+      var scale=64+(document.body.scrollWidth-1200)/360;
+      scale=(scale>72?72:scale);
       document.documentElement.style.fontSize=scale+'px';
     };
     window.onresize=function(){
-      var scale=document.body.scrollWidth/1200*64;
-      scale=(scale>64?64:scale);
+      var scale=64+(document.body.scrollWidth-1200)/360;
+      scale=(scale>72?72:scale);
       document.documentElement.style.fontSize=scale+'px';
     };
   }

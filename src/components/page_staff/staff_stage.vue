@@ -1485,7 +1485,7 @@ export default {
                     console.log("在本次呼叫完成并提交联系小结前，请勿执行其他操作！");
                 }
             }).catch(function(error) {
-                this.$message({
+                _this.$message({
                     showClose: true,
                     message: '麦克风无权限',
                     type: 'warning'

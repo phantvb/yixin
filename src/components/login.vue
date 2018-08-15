@@ -216,7 +216,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/loginValidate',parameter)
                 .then( (res) => {
                     if(res.data.code==200){
-                        let loginName={"loginName" : this.formName.userName};
+                        let loginName={"loginName" : res.data.rows[0].shortName};
                         window.sessionStorage.setItem("loginName",JSON.stringify(loginName));
                         if(window.sessionStorage){
                             let userInfoLst = res.data.rows;
@@ -235,7 +235,6 @@ export default {
                        // 登录失败
                        this.msgErrorShow(res.data.message);
                        this.loginBtn = "登录";
-
                     }
             })
         },
