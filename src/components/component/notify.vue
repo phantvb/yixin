@@ -1,17 +1,66 @@
 <template>
-    <el-dropdown trigger="click" class="id1" placement="top-end" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
-        <div>
-            <el-badge :value="notify" :max="99" v-show="notify>0">
-            <i class="el-icon-menu"></i>
-            </el-badge>
-            <i class="el-icon-menu"  v-show="notify==0"></i>
+    <div>
+        <div class="title nav2 drop">
+          <el-dropdown trigger="click" @command='handleloginout'>
+            <span class="el-dropdown-link">
+              {{identity}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <router-link :to="{path:'/manager/userInfo'}">
+                <el-dropdown-item>{{identity}}</el-dropdown-item>
+              </router-link>
+              <el-dropdown-item command="loginout">
+                  登出
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
-        <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command='item' v-for="item in notifylist" :key="item.mesId" v-html="item.content"></el-dropdown-item>
-        </el-dropdown-menu>
-    </el-dropdown>
+        <div class="notify nav2">
+          <!-- <el-badge :value="notify" @click.native="notify_show=!notify_show">
+            <i class="el-icon-menu"></i>
+          </el-badge>
+          <div class="notify_mes" >
+
+          </div> -->
+            <el-dropdown trigger="click" class="id1" placement="top-end" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
+                <div @click="notify=0">
+                    <el-badge :value="notify" :max="99" v-show="notify>0">
+                    <i class="el-icon-menu"></i>
+                    </el-badge>
+                    <i class="el-icon-menu"  v-show="notify==0"></i>
+                </div>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command='item' v-for="item in notifylist" :key="item.mesId">
+                        <div v-html="item.content" :class="{unsee:item.status==0}" class="item"></div>
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </div>
+        
+    </div>
+    
 </template>
 <style scoped>
+/* .item{
+    min-width: 200px;
+} */
+.notify{
+  margin: 15px 0;
+  position: relative;
+}
+.title{
+  line-height: 53px;
+}
+.drop{
+  padding: 0 30px 0 18px;
+}
+.nav2{
+  width: auto;
+  float: right;
+}
+.unsee{
+    background-color: #f5f5f5;
+}
 .el-icon-menu:before {
     content: '';
     width: 20px;
@@ -29,6 +78,7 @@ export default {
     name:'notify',
     data() {
 		return {
+            identity:null,
             notifylist:[],
             notify:0
 		};
@@ -42,6 +92,13 @@ export default {
                     }
                 })
             }
+        },
+        handleloginout(){
+            this.$ajax.post(this.$preix+'/new/logout').then(res=>{
+                if(res.data.code==200){
+                    this.$router.push({ path: '/login'})
+                }
+            })
         },
         handlecommand(command){
             this.$ajax.post(this.$preix+'/new/notify/mark-msg-readed').then(res=>{
@@ -86,7 +143,12 @@ export default {
                 this.notify=res.data.info;
             }
         });
+        let UserInfo = JSON.parse(window.sessionStorage.getItem("loginName"));
+        this.identity=UserInfo.loginName;
         this.connect();
+    },
+    beforeDestroy(){
+        this.disconnect();
     }
 }
 </script>

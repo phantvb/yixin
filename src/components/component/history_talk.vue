@@ -4,15 +4,15 @@
         <div id="line" v-if="!head"></div>
         <div class="body" v-if="head">
             <div class="mes2">
-                <p>{{name}}</p>
-                <p>{{phone}}</p>
+                <p>{{taskMes.userName}}</p>
+                <p>{{taskMes.userNumber}}</p>
             </div>
             <div class="mes">
-                <p>性别：{{sex}}</p>
-                <p>职业：{{job}}</p>
-                <p>公司：{{company}}</p>
-                <p>邮箱：{{email}}</p>
-                <p>意向：{{think}}</p>
+                <p v-if="taskMes.userGender">性别：{{taskMes.userGender==0?'男':'女'}}</p>
+                <p v-if="taskMes.userJob">职业：{{taskMes.userJob}}</p>
+                <p v-if="taskMes.userCompany">公司：{{taskMes.userCompany}}</p>
+                <p v-if="taskMes.userEmail">邮箱：{{taskMes.userEmail}}</p>
+                <p v-if="taskMes.desc">意向：{{taskMes.desc}}</p>
             </div>
         </div>
         <div class="history">
@@ -25,7 +25,7 @@
                         <p class="grey" v-if="item.userResultStr">客户状态&#12288;<span class="black">{{item.userResultStr}}</span></p>
                         <p class="grey" :style="{'float':'right'}">下次联系时间&#12288;<span class="black">{{item.nextContactTime?item.nextContactTime:'无'}}</span></p>
                         <p class="grey" v-if="item.desc">详情备注&#12288;<span class="black">{{item.desc}}</span></p>
-                        <div>
+                        <div class="tag" v-if="item.taglist">
                             <el-button type="primary" size="mini" v-for="(_item,index) in item.taglist" :key="index">{{_item}}</el-button>
                         </div>
                         
@@ -51,6 +51,9 @@
     </div>
 </template>
 <style scoped>
+    .tag{
+        margin-top: 30px;
+    }
     #line{
         width: 100%;
         height: 1px;
@@ -187,7 +190,7 @@ export default {
     components: {
         'a-player': VueAplayer
     },
-    props:['head','details'],
+    props:['head','details','taskMes'],
     methods:{
         close(){
             this.$emit('close')

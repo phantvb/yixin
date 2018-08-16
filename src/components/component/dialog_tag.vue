@@ -9,7 +9,7 @@
                 <div class="textarea" @click="input_focus">
                     <div v-if="!form.tag_list"></div>
                     <div v-for="(item,index) in form.tag_list" :key="index" tabindex="2" @keyup="deletes($event,index)" @click.stop="test">{{item}}</div>
-                    <input type="text" id="tag"  @keyup="add($event)" v-model="form.tag_value" placeholder="请填写标签值，用回车分隔">
+                    <input type="text" id="tag"  @keyup="add($event)" v-model="form.tag_value" placeholder="请填写标签值，用回车分隔" @blur="addblur">
                 </div>
             </el-form-item>
             <el-form-item label="默认值"  class="tit">
@@ -130,6 +130,10 @@ export default {
             }else if(this.form.tag_value.length>10){
                 this.form.tag_value=this.form.tag_value.substring(0,10);
             }
+        },
+        addblur(){
+            this.form.tag_list.push(this.form.tag_value);
+            this.form.tag_value='';
         },
         deletes:function(e,index){
             if(e.keyCode==8){

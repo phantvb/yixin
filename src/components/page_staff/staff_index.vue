@@ -31,7 +31,7 @@
                 </li>
                 <li>
                     <p class="black">{{Math.ceil(todayCompleteDto.calledDuration/60)}}</p>
-                    <p class="grey">已呼时长(min)</p>
+                    <p class="grey">呼通时长(min)</p>
                 </li>
                 <li>
                     <p class="black">{{todayCompleteDto.successNum}}</p>

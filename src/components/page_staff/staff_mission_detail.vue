@@ -92,7 +92,7 @@
             </el-pagination>
         </div>
         <transition name="slide">
-            <history id="history" v-if="show" :head='true' :details='history_detail' @close="history_close"></history>
+            <history id="history" v-if="show" :head='true' :details='history_detail' @close="history_close" :taskMes="history_taskId"></history>
         </transition>
         
     </div>
@@ -131,30 +131,6 @@
         float: left;
         border-left: 1px solid #eee;
         box-sizing: border-box;
-    }
-    .ul{
-        height: 140px;
-        overflow-y: scroll
-    }
-    .ul .li{
-        margin: 5px 0;
-    }
-    .ul::-webkit-scrollbar-track
-    {
-        background-color: #F5F5F5;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
-    }
-    /*定义滚动条高宽及背景*/
-    .ul::-webkit-scrollbar
-    {
-    width: 3px;
-        background-color: rgba(153, 153, 153, 0.8);
-    }
-    /*定义滚动条*/
-    .ul::-webkit-scrollbar-thumb
-    {
-    background-color: #8b8b8b;
-    border-radius: 1px;
     }
     .part2_tit{
         margin: 20px 0;
@@ -256,7 +232,8 @@ export default {
             tags:[],
             pageNum:1,
             orderWay:null,
-            orderField:null
+            orderField:null,
+            history_taskId:null
         }
     },
     components:{history},
@@ -282,6 +259,12 @@ export default {
                 if(res.status==200){
                     this.show = true;
                     this.history_detail=res.data.info.details;
+                }
+            });
+            this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':row.taskClientId})
+            .then( (res) => {
+                if(res.data.code==200){
+                    this.history_taskId=res.data.info;
                 }
             });
         },

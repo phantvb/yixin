@@ -3,32 +3,7 @@
     <el-header>
       <el-row height="auto" class="header">
         <div class="nav title">猎客呼叫中心</div>
-        <div class="title nav2 drop">
-          <el-dropdown trigger="click">
-          <span class="el-dropdown-link">
-            {{identity}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-            <el-dropdown-menu slot="dropdown">
-              <router-link :to="{path:'/manager/userInfo'}">
-                <el-dropdown-item>{{identity}}</el-dropdown-item>
-              </router-link>
-              <router-link :to="{path:'/login'}">
-                <el-dropdown-item>
-                    登出
-                </el-dropdown-item>
-              </router-link>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-        <div class="notify nav2">
-          <!-- <el-badge :value="notify" @click.native="notify_show=!notify_show">
-            <i class="el-icon-menu"></i>
-          </el-badge>
-          <div class="notify_mes" >
-
-          </div> -->
-          <notify></notify>
-        </div>
+        <notify></notify>
       </el-row>
     </el-header>
     <el-container>
@@ -100,48 +75,6 @@
   width: 170px!important;
   min-width: 170px;
 }
-.el-icon-index:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/index.png');
-    background-size:18px 18px;
-}
-.el-icon-waihu:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/waihu.png');
-    background-size:18px 18px;
-}
-.el-icon-menu:before {
-    content: '';
-    width: 20px;
-    height: 20px;
-    margin: 0px 4px;
-    display: block;
-    background: url('../../../static/icon/menu.png');
-    background-size: 20px 20px;
-    transform: translateY(3px);
-}
-.el-icon-shezhi:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/shezhi.png');
-    background-size:18px 18px;
-}
-.el-icon-worker:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/worker.png');
-    background-size:18px 18px;
-}
 .tac {
 	width: 170px;
   height: 100vh;
@@ -155,20 +88,10 @@
   font-size: 20px;
   padding-bottom: 1px;
 }
-.header .drop{
-  padding: 0 30px 0 18px;
-}
-.header .nav2{
-  width: auto;
-  float: right;
-}
 .title{
   line-height: 53px;
 }
-.notify{
-  margin: 15px 0;
-  position: relative;
-}
+
 .hello{
   width: 100vw;
   min-width: 860px;
@@ -192,7 +115,6 @@ export default {
 	data() {
 		return {
       alive:true,
-      identity:null,
       stompClient:null
 		};
   },
@@ -211,7 +133,7 @@ export default {
       })
     },
     test(){
-      location.href=this.$preix+'/logout'
+      location.href=this.$preix+'/new/logout'
     },
     getCookie(c_name){
         if (document.cookie.length > 0) {
@@ -233,8 +155,7 @@ export default {
   },
   mounted(){
     console.log(window.sessionStorage);
-    let UserInfo = JSON.parse(window.sessionStorage.getItem("loginName"));
-    this.identity=UserInfo.loginName;
+    
     // var data={
     //     'name':'qy1','password':md5.md5('224139'),'password2':'123456'
     // };

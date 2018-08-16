@@ -33,10 +33,10 @@
                      <!-- :hide-on-click="false" -->
                     <el-dropdown v-for="(item,index) in data" :key="index"  @command="handleCommand">
                         <span class="el-dropdown-link">
-                            {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{tags[index]&&tags[index].value?tags[index].value:item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item}">{{_item}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item,'order':item.tagOrder}">{{_item}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -98,7 +98,7 @@
             </el-pagination>
         </div>
         <transition name="slide">
-            <history id="history" v-if="show" :head='true' :details='history_detail' @close="history_close"></history>
+            <history id="history" v-if="show" :head='true' :details='history_detail' @close="history_close" :taskMes="history_taskId"></history>
         </transition>
         <el-dialog title="分配客户" :visible.sync="assign" center>
             <div class="con">
@@ -161,30 +161,6 @@
         float: left;
         border-left: 1px solid #eee;
         box-sizing: border-box;
-    }
-    .ul{
-        height: 140px;
-        overflow-y: scroll
-    }
-    .ul .li{
-        margin: 5px 0;
-    }
-    .ul::-webkit-scrollbar-track
-    {
-        background-color: #F5F5F5;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
-    }
-    /*定义滚动条高宽及背景*/
-    .ul::-webkit-scrollbar
-    {
-    width: 3px;
-        background-color: rgba(153, 153, 153, 0.8);
-    }
-    /*定义滚动条*/
-    .ul::-webkit-scrollbar-thumb
-    {
-    background-color: #8b8b8b;
-    border-radius: 1px;
     }
     .part2_tit{
         margin: 20px 0;
@@ -291,7 +267,8 @@ export default {
             worker_fp:[],
             pageNum:1,
             orderWay:null,
-            orderField:null
+            orderField:null,
+            history_taskId:null
         }
     },
     components:{history},
@@ -349,6 +326,12 @@ export default {
                     this.show=true;
                 }
             });
+            this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':row.taskClientId})
+            .then( (res) => {
+                if(res.data.code==200){
+                    this.history_taskId=res.data.info;
+                }
+            });
         },
         //关闭历史记录
         history_close(){
@@ -381,7 +364,7 @@ export default {
             var data={'taskId':this.$route.query.id,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
-                    var str='customTag'+(i+1);
+                    var str='customTag'+this.tags[i].order;
                     data[str]=[this.tags[i].value];
                 }
             }
@@ -400,7 +383,7 @@ export default {
             var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
-                    var str='customTag'+(i+1);
+                    var str='customTag'+this.tags[i].order;
                     data[str]=[this.tags[i].value];
                 }
             }
@@ -418,7 +401,7 @@ export default {
             var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
-                    var str='customTag'+(i+1);
+                    var str='customTag'+this.tags[i].order;
                     data[str]=[this.tags[i].value];
                 }
             }
@@ -430,13 +413,15 @@ export default {
             this.mission_init(data);
         },
         handleCommand(command) {
+            console.log(command);
             if(this.tags[command.index]==undefined||this.tags[command.index].value==null){
-                this.tags[command.index]={'value':command.value};
+                this.tags[command.index].value=command.value;
             }else if(this.tags[command.index].value==command.value){
-                this.tags[command.index]={'value':null};
+                this.tags[command.index].value=null;
             }else{
-                this.tags[command.index]={'value':command.value};
+                this.tags[command.index].value=command.value;
             }
+            console.log(this.tags);
             this.mission_search();
         },
         //完成分配
@@ -469,7 +454,10 @@ export default {
             if(res.data.code==200){
                 for(let i=0;i<res.data.info.length;i++){
                     res.data.info[i].tags=res.data.info[i].tagValue.split(';');
+                    this.tags[i]={};
+                    this.tags[i].order=res.data.info[i].tagOrder;
                 }
+                console.log(this.tags);
                 this.data=res.data.info;
             }
         });

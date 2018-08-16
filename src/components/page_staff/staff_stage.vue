@@ -107,7 +107,7 @@
                                 <span>正在呼叫</span>
                             </div>
                             <i class="el-icon-more call_icon" @click="sipTerminate"></i>
-                            <i class="el-icon-service call_icon" @click="meteMicrophone"></i>
+                            <i :class="phone_use?'el-icon-service':'el-icon-unservice'" class="call_icon" @click="meteMicrophone"></i>
                         </div>
                         <div v-show="call_state==2">
                             <div class="call_state" :style="{'padding':'0 15px'}">
@@ -115,14 +115,14 @@
                                 <span>&nbsp;呼叫中&nbsp;</span>
                             </div>
                             <i class="el-icon-more call_icon" @click="sipTerminate"></i>
-                            <i class="el-icon-service call_icon" @click="meteMicrophone"></i>
+                            <i :class="phone_use?'el-icon-service':'el-icon-unservice'" class="call_icon" @click="meteMicrophone"></i>
                         </div>
                         <div v-show="call_state==3">
                             <div class="call_state" :style="{'padding':'0 15px'}">
                                 <span>&nbsp;通话中&nbsp;</span> <span :style="{'font-size':'12px'}">{{timestr}}</span>
                             </div>
                             <i class="el-icon-more call_icon" @click="sipTerminate"></i>
-                            <i class="el-icon-service call_icon" @click="meteMicrophone"></i>
+                            <i :class="phone_use?'el-icon-service':'el-icon-unservice'" class="call_icon" @click="meteMicrophone"></i>
                         </div>
                         <div v-show="call_state==4">
                             <div class="call_state" :style="{'padding':'0 15px'}">
@@ -246,7 +246,7 @@
         </div>
         <DialogAdd v-bind:see="see" @reset="reset"></DialogAdd>
         <transition name="slide">
-            <history id="history" v-if="show" :head='false' :details='history_detail' @close="history_close"></history>
+            <history id="history" v-if="show" :head='false' :details='history_detail' @close="history_close" :taskMes="history_taskId"></history>
         </transition>
         <div>
             <audio id="audioView" width="420px" height="320px" autoplay ></audio>
@@ -295,15 +295,6 @@
         padding: 10px 10px 0px;
         text-align:left;
     }
-    .mask{
-        position:absolute;
-        left:0;
-        top:0;
-        width:100vw;
-        height: 100vh;
-        z-index:99;
-        pointer-events: none;
-    }
     #mask{
         position: fixed;;
         left:0;
@@ -314,12 +305,6 @@
         z-index:99;
         pointer-events: all;
     }
-    #mask>div{
-        position:absolute;
-        left:50%;
-        top:50%;
-        transform:translate3d(-50%,-50%,0);
-    }
     #mask>div>p{
         font-size:16px;
         color: rgb(35,235,185);
@@ -328,18 +313,21 @@
         text-decoration: underline;
         color:#7496F2;
     }
+    .mask{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100vw;
+        height: 100vh;
+        z-index:99;
+        pointer-events: none;
+    }
     .mask div{
         position:absolute;
         left:0;
         top:0;
         width:100vw;
         height: 60px;
-        pointer-events: all;
-    }
-    .mask div{
-        position:absolute;
-        left:0;
-        top:0;
         pointer-events: all;
     }
     .custom-tree-node{
@@ -476,10 +464,10 @@
         font-size: 23px;
         line-height:45px;
         float: left;
-        margin:0;
+        margin:4px;
     }
     #call_icon{
-        margin:0 11px;
+        margin:11px;
     }
     .call_icon{
         font-size: 23px;
@@ -658,7 +646,7 @@ import jquery from  '../js/jquery.js'
 import sockjs from '../js/sockjs.js'
 import stomp from '../js/stomp.js'
 import jssip from '../js/jssip-3.0.27.js'
-import workbench from '../js/workbench.js'
+import md5 from '../js/md5.js'
 export default {
     name:'Staff_stage',
     data:function(){
@@ -759,7 +747,9 @@ export default {
             call_auto_init:false,
             call_timer:null,
             time_error:null,
-            call_hidden:true
+            call_hidden:true,
+            phone_use:true,
+            history_taskId:null
         }
     },
     components:{
@@ -1031,9 +1021,11 @@ export default {
             var muteObj = this.incomingSession.isMuted();
             if(muteObj.audio){
                 this.incomingSession.unmute();
+                this.phone_use=true;
                 console.log("已取消静音");
             }else{
                 this.incomingSession.mute();
+                this.phone_use=false;
                 console.log("已静音");
             }
         },
@@ -1062,6 +1054,9 @@ export default {
             .then( (res) => {
                 if(res.status==200){
                     this.task_state=1;
+                    res.data.rows.map(item=>{
+                        item.nextContactTime=md5.time_init(new Date(item.nextContactTime));
+                    })
                     this.booklist=res.data.rows;
                 }
             });
@@ -1096,6 +1091,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':item.taskClientId})
             .then( (res) => {
                 if(res.data.code==200){
+                    this.history_taskId=res.data.info;
                     this.name=res.data.info.userName?res.data.info.userName:'';
                     this.phone=res.data.info.userNumber?res.data.info.userNumber:'';
                     this.sex=res.data.info.userGender;
@@ -1263,9 +1259,11 @@ export default {
                 if(res.status==200){
                     res.data.info.details.map(item=>{
                         item.taglist=[];
-                        for(var i=0;i<item.tags.length;i++){
-                            if(item.tags[i].lastTagValue!=undefined){
-                                item.taglist=item.taglist.concat(item.tags[i].lastTagValue.split(';'));
+                        if(item.tags){
+                            for(var i=0;i<item.tags.length;i++){
+                                if(item.tags[i].lastTagValue!=undefined){
+                                    item.taglist=item.taglist.concat(item.tags[i].lastTagValue.split(';'));
+                                }
                             }
                         }
                     })
@@ -1479,6 +1477,12 @@ export default {
                             },8000)
                         }else{
                             console.log("退回开始呼叫");
+                            _this.$message({
+                                showClose: true,
+                                message: 'res.data.message',
+                                type: 'warning'
+                            });
+                            this.$message
                             _this.call_state=0;
                         }
                     });

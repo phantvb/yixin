@@ -23,18 +23,17 @@
         </div>
         <div  v-show="dialog_active==1&&leading_complete==0">
           <div v-loading="loading"></div>
-          <el-button type="info"  class="dialog_next" :disabled="leading_state">继续</el-button>
+          <el-button type="primary"  class="dialog_next" :disabled="leading_state">继续</el-button>
         </div>
         <div  v-show="dialog_active==1&&leading_complete==1">
           <div class="data_num">{{data_complete}}</div>
-          <el-button type="info"  class="dialog_next" @click="continueOperate">继续</el-button>
+          <el-button type="primary"  class="dialog_next" @click="dialog_active = 2">继续</el-button>
         </div>
         <div  v-show="dialog_active==2&&mission_edit==0">
           <div class="mission" :style="{margin:'5% 0'}">
             <p>任务名称</p>
-            <el-select id="taskName" v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' v-if="data==null"
-              @focus="queryCallTaskNameList" @keyup.native="queryCallTaskNameList">
-              <el-option v-for="item in mission_list" :key="item.id" :label="item.name" :value="item.name" @click.native="checkedTags(item.id)">
+            <el-select v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' v-if="data==null">
+              <el-option v-for="item in mission_list" :key="item.taskId" :label="item.taskName" :value="item.taskName">
               </el-option>
             </el-select>
             <el-select v-model="mission_value" size="mini" disabled v-if="data!=null">
@@ -47,11 +46,11 @@
               <el-checkbox :label="item.id" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}">{{item.tagName}}</el-checkbox>
             </el-checkbox-group>
           </div>
-          <el-button type="info"  class="dialog_next" @click="mission_confirm" :disabled="mission_value==''">确认信息</el-button>
+          <el-button type="primary"  class="dialog_next" @click="mission_confirm" :disabled="mission_value==''">确认信息</el-button>
         </div>
         <div  v-show="dialog_active==3">
           <div class="data_num"><i class="el-icon-success"></i>{{result[0]}}<br>{{result[1]}}</div>
-          <el-button type="info" class="dialog_next" @click="complete">完成</el-button>
+          <el-button type="primary" class="dialog_next" @click="complete">完成</el-button>
         </div>
       </el-dialog>
     </div>
@@ -174,6 +173,7 @@
           },
           //上传模板
             upfiles:function (e) {
+              var _this=this;
               this.dialog_active=1;
               let formdata = new FormData();
               formdata.append('file',event.target.files[0]);
@@ -189,7 +189,7 @@
                         type: 'warning'
                     });
                     setTimeout(function(){
-                      this.reload();
+                      _this.reload();
                     },1500)
                   }
               });
