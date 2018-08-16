@@ -27,13 +27,14 @@
         </div>
         <div  v-show="dialog_active==1&&leading_complete==1">
           <div class="data_num">{{data_complete}}</div>
-          <el-button type="info"  class="dialog_next" @click="dialog_active = 2">继续</el-button>
+          <el-button type="info"  class="dialog_next" @click="continueOperate">继续</el-button>
         </div>
         <div  v-show="dialog_active==2&&mission_edit==0">
           <div class="mission" :style="{margin:'5% 0'}">
             <p>任务名称</p>
-            <el-select v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' v-if="data==null">
-              <el-option v-for="item in mission_list" :key="item.taskId" :label="item.taskName" :value="item.taskName">
+            <el-select id="taskName" v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' v-if="data==null"
+              @focus="queryCallTaskNameList" @keyup.native="queryCallTaskNameList">
+              <el-option v-for="item in mission_list" :key="item.id" :label="item.name" :value="item.name" @click.native="checkedTags(item.id)">
               </el-option>
             </el-select>
             <el-select v-model="mission_value" size="mini" disabled v-if="data!=null">
@@ -42,8 +43,8 @@
           <br>
           <div class="mission" :style="{margin:'0 0 10%'}">
             <p>关联客户标签</p>
-            <el-checkbox-group v-model="tag" size="mini" name="mission_tag" @change="change">
-              <el-checkbox :label="item.tagName" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}" :value="item.taskId"></el-checkbox>
+            <el-checkbox-group v-model="tagIds" size="mini" name="mission_tag">
+              <el-checkbox :label="item.id" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}">{{item.tagName}}</el-checkbox>
             </el-checkbox-group>
           </div>
           <el-button type="info"  class="dialog_next" @click="mission_confirm" :disabled="mission_value==''">确认信息</el-button>
@@ -132,13 +133,45 @@
               mission_value:"",
               mission_list:[],
               taglist:[],
-              tag:[],
-              tagids:[],
+              tagIds:[],
               result:[]
             }
         },
         props:["leading","data"],
         methods:{
+          queryCallTaskNameList : function () {
+            var nameList = document.getElementById("taskName").value;
+            this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskNameList',{"nameLike": nameList})
+              .then( (res) => {
+                if(res.data.code==200 && res.data.rows){
+                  this.mission_list = res.data.rows;
+                }
+              });
+          },
+          continueOperate : function () {
+            this.dialog_active = 2;
+            if(this.data){
+              this.checkedTags(this.data.id);
+            }
+          },
+          //自动选中关联标签
+          checkedTags : function (taskId) {
+            this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskTagListByTask',{"id":taskId})
+              .then( (res) => {
+                if(res.data.code==200){
+                  var tags = res.data.info.tags;
+                  if(tags){
+                    this.tagIds = [];
+                    for(var i=0; i<tags.length; i++){
+                      var tag = tags[i];
+                      if(tag.linked){
+                        this.tagIds.push(tag.id);
+                      }
+                    }
+                  }
+                }
+              });
+          },
           //上传模板
             upfiles:function (e) {
               this.dialog_active=1;
@@ -163,7 +196,7 @@
             },
             //确认信息
             mission_confirm:function () {
-              this.$ajax.post(this.$preix+'/new/calltask/insertCallTask',{"taskTag":{"tagIds":this.tagids,"taskName":this.mission_value}})
+              this.$ajax.post(this.$preix+'/new/calltask/insertCallTask',{"taskTag":{"tagIds":this.tagIds,"taskName":this.mission_value}})
               .then( (res) => {
                   if(res.data.code==200){
                     this.result=res.data.info.split('</br>');
@@ -179,30 +212,13 @@
               this.leading_complete=0;
               this.mission_edit=0;
             },
-            change(item){
-              var arr=[];
-              for(let i=0;i<this.tag.length;i++){
-                var str=this.tag[i];
-                for(let j=0;j<this.taglist.length;j++){
-                  if(str==this.taglist[j].tagName){
-                    arr.push(this.taglist[j].id);
-                  }
-                }
-              }
-              this.tagids=arr;
-            },
             complete(){
               this.reload();
             },
             open(){
               //任务列表数据
               if(this.data==null){
-                this.$ajax.post(this.$preix+'/new/calltask/queryRightCallTaskList')
-                .then( (res) => {
-                    if(res.data.code==200){
-                        this.mission_list=res.data.rows;
-                    }
-                });
+                this.queryCallTaskNameList();
               }else{
                 this.mission_value=this.data.name;
               }
