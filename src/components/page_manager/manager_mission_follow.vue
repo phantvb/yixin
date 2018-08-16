@@ -1,7 +1,14 @@
 <template>
     <div class="container">
         <div class="nav">外呼任务跟踪</div>
-        <div class="part1">
+        <div :style="{'position':'relative'}">
+            <div v-show="blank" id="mask">
+                <div>
+                    <i class="el-icon-noMission"></i>
+                    <el-button type="primary"  class="button" @click="lead_in">导入客户</el-button>
+                </div>
+            </div>
+            <div class="part1">
             <div class="part1_show">
                 <div class="svg"></div>
                 <div class="svg"></div>
@@ -101,10 +108,30 @@
             <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
             </el-pagination>
         </div>
+        </div>
+        
         <assign v-bind:assign="assign" :total='p_assign' @reset="reset" :taskId="taskId"></assign>
     </div>
 </template>
 <style scoped>
+    .container{
+        position: relative;
+    }
+    #mask{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        height: 100%;
+        z-index:99;
+        background-color: #fff;
+        pointer-events: all;
+        box-sizing: border-box;
+        /* transform:translate3d(10px,10px,0); */
+    }
+    #mask .button{
+        display: block;
+    }
     .nav{
         line-height: 30px;
         text-align: left;
@@ -211,7 +238,8 @@ export default {
             pageNum:1,
             orderWay:null,
             orderField:null,
-            lead_data:null
+            lead_data:null,
+            blank:false
         }
     },
     components:{
@@ -395,6 +423,11 @@ export default {
         this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList')
         .then( (res) => {
             if(res.data.code==200){
+                var arr=[];
+                res.data.info.map(item=>{
+                    arr.push(item.taskId);
+                })
+                this.checkedlist=arr;
                 this.missoin_init(res.data.info);
             }
         });
@@ -411,6 +444,9 @@ export default {
             if(res.data.code==200){
                 this.page_count=res.data.totalCount;
                 this.tableData=res.data.rows;
+                if(res.data.rows.length<1){
+                    this.blank=true;
+                }
             }
         })
     }

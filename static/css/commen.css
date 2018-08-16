@@ -376,3 +376,105 @@ li{
 .aplayer-volume-bar-wrap{
   z-index: 9!important;
 }
+
+.el-icon-index:before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: url('../icon/index.png');
+  background-size:18px 18px;
+}
+.el-icon-waihu:before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: url('../icon/waihu.png');
+  background-size:18px 18px;
+}
+.el-icon-menu:before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  margin: 0px 4px;
+  display: block;
+  background: url('../icon/menu.png');
+  background-size: 20px 20px;
+  transform: translateY(3px);
+}
+.el-icon-shezhi:before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: url('../icon/shezhi.png');
+  background-size:18px 18px;
+}
+.el-icon-worker:before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: url('../icon/worker.png');
+  background-size:18px 18px;
+}
+.el-icon-phone:before {
+  content: '';
+  width: 23px;
+  height: 23px;
+  display: block;
+  background: url('../icon/phone.png');
+  background-size:23px 23px;
+}
+.el-icon-phone-outline:before {
+  content: '';
+  width: 23px;
+  height: 23px;
+  display: block;
+  background: url('../icon/phone_outline.png');
+  background-size:23px 23px;
+  margin-top: 8px;
+}
+.el-icon-more:before {
+  content: '';
+  width: 27px;
+  height: 27px;
+  display: block;
+  background: url('../icon/phone_end.png');
+  background-size:27px 27px;
+  margin-top: 9px;
+}
+.el-icon-service:before {
+  content: '';
+  width: 27px;
+  height: 27px;
+  display: block;
+  background: url('../icon/phone_use.png');
+  background-size:27px 27px;
+  margin-top: 9px;
+}
+.el-icon-unservice:before {
+  content: '';
+  width: 27px;
+  height: 27px;
+  display: block;
+  background: url('../icon/phone_unse.png');
+  background-size:27px 27px;
+  margin-top: 9px;
+}
+.el-icon-noMission:before {
+  content: '';
+  width: 64px;
+  height: 64px;
+  display: block;
+  background: url('../icon/no_mission.png');
+  background-size:64px 64px;
+}
+
+#mask>div{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate3d(-50%,-50%,0);
+}

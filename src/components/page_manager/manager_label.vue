@@ -74,7 +74,6 @@
     </div>
 </template>
 <style scoped>
-
     .summary{
         overflow: hidden;
         background-color: #fff;

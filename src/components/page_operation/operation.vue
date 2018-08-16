@@ -3,26 +3,7 @@
     <el-header>
       <el-row height="auto" class="header">
         <div class="nav title">猎客呼叫中心</div>
-        <div class="title nav2 drop">
-          <el-dropdown trigger="click">
-          <span class="el-dropdown-link">
-            {{identity}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-            <el-dropdown-menu slot="dropdown">
-              <router-link :to="{path:'/operation/userInfo'}">
-                <el-dropdown-item>{{identity}}</el-dropdown-item>
-              </router-link>
-              <router-link :to="{path:'/login'}">
-                <el-dropdown-item>
-                    登出
-                </el-dropdown-item>
-              </router-link>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-        <div class="notify nav2">
-          <notify></notify>
-        </div>
+        <notify></notify>
       </el-row>
     </el-header>
     <el-container>
@@ -84,48 +65,6 @@
   width: 170px!important;
   min-width: 170px;
 }
-.el-icon-index:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/index.png');
-    background-size:18px 18px;
-}
-.el-icon-waihu:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/waihu.png');
-    background-size:18px 18px;
-}
-.el-icon-menu:before {
-    content: '';
-    width: 20px;
-    height: 20px;
-    margin: 0px 4px;
-    display: block;
-    background: url('../../../static/icon/menu.png');
-    background-size: 20px 20px;
-    transform: translateY(3px);
-}
-.el-icon-shezhi:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/shezhi.png');
-    background-size:18px 18px;
-}
-.el-icon-worker:before {
-    content: '';
-    width: 18px;
-    height: 18px;
-    display: block;
-    background: url('../../../static/icon/worker.png');
-    background-size:18px 18px;
-}
 .tac {
 	width: 170px;
   height: 100vh;
@@ -142,27 +81,14 @@
   font-size: 20px;
   padding-bottom: 1px;
 }
-.header .drop{
-  padding: 0 30px 0 18px;
-}
-.header .nav2{
-  width: auto;
-  float: right;
-}
 .title{
   line-height: 53px;
-}
-.notify{
-  margin: 10px 0;
 }
 .hello{
   width: 100vw;
   min-width: 860px;
   overflow: auto;
   position: relative;
-}
-a{
-  text-decoration: none;
 }
 .content{
   background-color: #F2F4F5;

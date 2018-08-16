@@ -23,11 +23,11 @@
         </div>
         <div  v-show="dialog_active==1&&leading_complete==0">
           <div v-loading="loading"></div>
-          <el-button type="info"  class="dialog_next" :disabled="leading_state">继续</el-button>
+          <el-button type="primary"  class="dialog_next" :disabled="leading_state">继续</el-button>
         </div>
         <div  v-show="dialog_active==1&&leading_complete==1">
           <div class="data_num">{{data_complete}}</div>
-          <el-button type="info"  class="dialog_next" @click="dialog_active = 2">继续</el-button>
+          <el-button type="primary"  class="dialog_next" @click="dialog_active = 2">继续</el-button>
         </div>
         <div  v-show="dialog_active==2&&mission_edit==0">
           <div class="mission" :style="{margin:'5% 0'}">
@@ -43,14 +43,14 @@
           <div class="mission" :style="{margin:'0 0 10%'}">
             <p>关联客户标签</p>
             <el-checkbox-group v-model="tag" size="mini" name="mission_tag" @change="change">
-              <el-checkbox :label="item.tagName" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}" :value="item.taskId"></el-checkbox>
+              <el-checkbox :label="item.tagName" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}" :value="item.id"></el-checkbox>
             </el-checkbox-group>
           </div>
-          <el-button type="info"  class="dialog_next" @click="mission_confirm" :disabled="mission_value==''">确认信息</el-button>
+          <el-button type="primary"  class="dialog_next" @click="mission_confirm" :disabled="mission_value==''">确认信息</el-button>
         </div>
         <div  v-show="dialog_active==3">
           <div class="data_num"><i class="el-icon-success"></i>{{result[0]}}<br>{{result[1]}}</div>
-          <el-button type="info" class="dialog_next" @click="complete">完成</el-button>
+          <el-button type="primary" class="dialog_next" @click="complete">完成</el-button>
         </div>
       </el-dialog>
     </div>
@@ -75,7 +75,7 @@
     }
     .upfiles>div>p{
       padding: 10px 8px;
-      background-color: rgb(153,153,153);
+      background-color: #7496F2;
       color: #fff;
       -webkit-border-radius: 3px;
       -moz-border-radius: 3px;
@@ -141,6 +141,7 @@
         methods:{
           //上传模板
             upfiles:function (e) {
+              var _this=this;
               this.dialog_active=1;
               let formdata = new FormData();
               formdata.append('file',event.target.files[0]);
@@ -156,7 +157,7 @@
                         type: 'warning'
                     });
                     setTimeout(function(){
-                      this.reload();
+                      _this.reload();
                     },1500)
                   }
               });

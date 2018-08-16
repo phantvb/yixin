@@ -11,7 +11,7 @@
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
                 <el-checkbox-group v-model="checkedlist" :min="0" :max="4" class="ul" :style="{'text-align':'left','padding':'0 8px','background-color':'#FBFBFB','overflow-x': 'hidden'}" @change="show_mission">
-                    <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li" :checked="item.check">{{item.taskName}}</el-checkbox>
+                    <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li">{{item.taskName}}</el-checkbox>
                 </el-checkbox-group>
             </div>
         </div>
@@ -307,25 +307,18 @@ export default {
         .then( (res) => {
             if(res.data.code==200){
                 this.position=res.data.rows;
-                //左侧饼图数据
-                console.log(this.position);
-                this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat')
-                .then( (res) => {
-                    if(res.data.code==200){
-                        var arr=[];
-                        res.data.info.map(item=>{
-                            arr.push(item.taskId);
-                        })
-                        _this.position.map(item=>{
-                            console.log(arr,item.taskId);
-                            _this.$set(item,'check',arr.indexOf(item.taskId)!=-1);
-                            //item.check=arr.indexOf(item.taskId)!=-1;
-                        })
-                        _this.missoin_init(res.data.info);
-                    }
-                });
-                this.position[0].check=true;
-                this.position[1].check=true;
+            }
+        });
+        //左侧饼图数据
+        this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat')
+        .then( (res) => {
+            if(res.data.code==200){
+                var arr=[];
+                res.data.info.map(item=>{
+                    arr.push(item.taskId);
+                })
+                this.checkedlist=arr;
+                _this.missoin_init(res.data.info);
             }
         });
         //下方任务列表

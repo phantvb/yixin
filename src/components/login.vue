@@ -28,7 +28,7 @@
                                 <el-input placeholder="验证码" v-model="formName.flag"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img src="https://10.240.80.72:8443/icc-interface/new/verifyCode" alt="" class="verifyImg">
+                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChage">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
@@ -60,7 +60,7 @@
                                 <el-input placeholder="验证码" v-model="formNames.flags"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img src="https://10.240.80.72:8443/icc-interface/new/verifyCode" alt="" class="verifyImg">
+                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChage">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
@@ -127,7 +127,8 @@ export default {
             errInfo:'',
             passCunt:{
                 nub:0
-            }
+            },
+            verifyImg:null
         }
     },
     created(){
@@ -137,12 +138,18 @@ export default {
         this.getUserInfo();
         //this.getUrl();
     },
+    mounted(){
+        this.verifyImg=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
+    },
     methods: {
         msgErrorShow(msg){
             Message({
                 message: msg,
                 type: "error"
             });
+        },
+        verifyChage(){
+            this.verifyImg=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
         },
         //判断之前是否有记住密码
         getUserInfo(){
@@ -183,18 +190,18 @@ export default {
                 this.yzInfo = '请输入登陆密码';
 				return false;
             }
-            if(!isPasswd(self.formName.userPassWord)) {
-                // self.msgErrorShow("请输入正确密码");
-                this.yzInfo = '请输入正确密码';
-                this.passCunt.nub++;
-                if(this.passCunt.nub>=2){
-                   this.verShow = true;
-                   window.sessionStorage.setItem("passCunt",JSON.stringify(this.passCunt));
-                }else{
-                   this.verShow = false;
-                }
-				return false;
-            }
+            // if(!isPasswd(self.formName.userPassWord)) {
+            //     // self.msgErrorShow("请输入正确密码");
+            //     this.yzInfo = '请输入正确密码';
+            //     this.passCunt.nub++;
+            //     if(this.passCunt.nub>=2){
+            //        this.verShow = true;
+            //        window.sessionStorage.setItem("passCunt",JSON.stringify(this.passCunt));
+            //     }else{
+            //        this.verShow = false;
+            //     }
+			// 	return false;
+            // }
             if(this.verShow == true){
                 if(self.formName.flag.length!=4) {
                     // self.msgErrorShow("请输入正确验证码");
@@ -231,6 +238,18 @@ export default {
                         }else{
                             this.$router.push({ path: '/staff/index'})
                         }
+                    }else if(res.data.code==404){
+                       // 密码错误
+                       this.passCunt.nub++;
+                        if(this.passCunt.nub>=3){
+                            this.verShow = true;
+                            window.sessionStorage.setItem("passCunt",JSON.stringify(this.passCunt));
+                        }else{
+                            this.verShow = false;
+                        }
+                        return false;
+                       this.msgErrorShow(res.data.message);
+                       this.loginBtn = "登录";
                     }else{
                        // 登录失败
                        this.msgErrorShow(res.data.message);
@@ -255,6 +274,7 @@ export default {
             // alert("11")
             this.loginShow = false;
             this.passWord = true;
+            this.verifyChage();
         },
         //发送邮件
         loginEmils(){
