@@ -27,14 +27,14 @@
         </div>
         <div  v-show="dialog_active==1&&leading_complete==1">
           <div class="data_num">{{data_complete}}</div>
-          <el-button type="primary"  class="dialog_next" @click="dialog_active = 2">继续</el-button>
+          <el-button type="primary"  class="dialog_next" @click="continueOperate">继续</el-button>
         </div>
         <div  v-show="dialog_active==2&&mission_edit==0">
           <div class="mission" :style="{margin:'5% 0'}">
             <p>任务名称</p>
-            <el-select v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' v-if="data==null">
-              <el-option v-for="item in mission_list" :key="item.taskId" :label="item.taskName" :value="item.taskName">
-              </el-option>
+            <el-select id="taskName" v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' v-if="data==null"
+                       @focus="queryCallTaskNameList" @keyup.native="queryCallTaskNameList" @change="checkedTags(mission_value)">
+              <el-option v-for="item in mission_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-model="mission_value" size="mini" disabled v-if="data!=null">
             </el-select>
@@ -155,6 +155,7 @@
           },
           //自动选中关联标签
           checkedTags : function (taskId) {
+            console.log("taskId:",taskId);
             this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskTagListByTask',{"id":taskId})
               .then( (res) => {
                 if(res.data.code==200){
@@ -196,7 +197,8 @@
             },
             //确认信息
             mission_confirm:function () {
-              this.$ajax.post(this.$preix+'/new/calltask/insertCallTask',{"taskTag":{"tagIds":this.tagIds,"taskName":this.mission_value}})
+            var taskName = document.getElementById("taskName").value;
+              this.$ajax.post(this.$preix+'/new/calltask/insertCallTask',{"taskTag":{"tagIds":this.tagIds,"taskName":taskName}})
               .then( (res) => {
                   if(res.data.code==200){
                     this.result=res.data.info.split('</br>');
