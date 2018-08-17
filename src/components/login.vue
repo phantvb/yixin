@@ -215,8 +215,6 @@ export default {
                         this.passCunt.nub++;
                         if(this.passCunt.nub>=3){
                           this.verShow = true;
-                        }else{
-                          this.verShow = false;
                         }
                         this.msgErrorShow(res.data.message);
                         this.loginBtn = "登录";
