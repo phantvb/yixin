@@ -28,7 +28,7 @@
                                 <el-input placeholder="验证码" v-model="formName.flag"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChage">
+                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChange">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
@@ -60,7 +60,7 @@
                                 <el-input placeholder="验证码" v-model="formNames.flags"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChage">
+                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChange">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
@@ -122,7 +122,6 @@ export default {
             loginBtn:'登 录',
             loginEmil:'发送邮件',
             loginRight:'确定',
-            zhuceEmil:'zhuweiwen@yixin.im',
             yzInfo:'',
             errInfo:'',
             passCunt:{
@@ -137,13 +136,13 @@ export default {
     },
     mounted(){
         this.verifyImg=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
-        /*this.$ajax.post(this.$preix+'/new/getFailNum',{})
+        this.$ajax.post(this.$preix+'/new/getFailNum',{})
           .then( (res) => {
               var failNum = res.data.info;
               if(failNum >= 3){
                 this.verShow = true;
               }
-          });*/
+          });
     },
     methods: {
         msgErrorShow(msg){
@@ -152,13 +151,12 @@ export default {
                 type: "error"
             });
         },
-        verifyChage(){
+        verifyChange(){
             this.verifyImg=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
         },
         //判断之前是否有记住密码
         getUserInfo(){
             let UserInfo = JSON.parse(localStorage.getItem("userNamePass"));
-            console.log(UserInfo);
             if(UserInfo){
               this.formName.userName = UserInfo.name;
               this.formName.userPassWord = UserInfo.passWord;
@@ -188,12 +186,6 @@ export default {
                 this.yzInfo = '请输入登陆密码';
 				        return false;
             }
-            if(this.verShow == true){
-                if(self.formName.flag.length!=4) {
-                    this.yzInfo = '验证码错误，请重新输入';
-                    return false;
-                }
-            }
             this.loginBtn = "登录中...";
             let parameter = {
                 "name" : this.formName.userName,
@@ -211,6 +203,7 @@ export default {
                         }else{
                             this.msgErrorShow("浏览器不支持本地存储功能，建议您使用chrome浏览器效果更佳！");
                         }
+                        this.changeCheck();
                         if(res.data.rows[0].type==1){
                             this.$router.push({ path: '/operation/manager'})
                         }else if(res.data.rows[0].type==2){
@@ -218,22 +211,15 @@ export default {
                         }else{
                             this.$router.push({ path: '/staff/index'})
                         }
-                    }else if(res.data.code==404){
-                       // 密码错误
-                       this.passCunt.nub++;
-                        if(this.passCunt.nub>=3){
-                            this.verShow = true;
-                            window.sessionStorage.setItem("passCunt",JSON.stringify(this.passCunt));
-                        }else{
-                            this.verShow = false;
-                        }
-                        return false;
-                       this.msgErrorShow(res.data.message);
-                       this.loginBtn = "登录";
                     }else{
-                       // 登录失败
-                       this.msgErrorShow(res.data.message);
-                       this.loginBtn = "登录";
+                        this.passCunt.nub++;
+                        if(this.passCunt.nub>=3){
+                          this.verShow = true;
+                        }else{
+                          this.verShow = false;
+                        }
+                        this.msgErrorShow(res.data.message);
+                        this.loginBtn = "登录";
                     }
             })
         },
@@ -241,7 +227,7 @@ export default {
         retrievePassword(){
             this.loginShow = false;
             this.passWord = true;
-            this.verifyChage();
+            this.verifyChange();
         },
         //发送邮件
         loginEmils(){
