@@ -432,14 +432,14 @@ export default {
             }
         });
         //右侧任务多选列表
-        this.$ajax.post(this.$preix+'/new/calltask/queryRightCallTaskList')
+        this.$ajax.post(this.$preix+'/new/calltask/queryRightCallTaskList',{'pageSize':'200'})
         .then( (res) => {
             if(res.data.code==200){
                 this.position=res.data.rows;
             }
         });
         //下方任务列表
-        this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',{requireTotalCount:true,"orderField":'creat',"orderWay":'desc'})
+        this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',{requireTotalCount:true,"orderField":'create',"orderWay":'desc'})
         .then( (res) => {
             if(res.data.code==200){
                 this.page_count=res.data.totalCount;

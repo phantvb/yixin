@@ -1,79 +1,104 @@
 <template>
     <div class="container">
-        <el-alert title="最多只能设置10个标签" type="warning" center show-icon v-show="warn"></el-alert>
-        <div class="part2">
-            <div class="part2_tit">
-                <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签</el-button>
-                <el-button plain class="button" :style="{'float':'left'}" @click="DialogVisible=true">效果预览</el-button>
-                <el-tooltip class="item" effect="dark"  placement="right">
-                    <div slot="content" :style="{'min-width':'200px'}">客户标签可以与外呼任务关联，让坐席在与客户沟通时快速标记用户，以便后续的客户分类与跟进。</div>
-                    <el-button type="text" :style="{'float':'right','color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签</el-button>
-                </el-tooltip>
-            </div>
-            <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
-                <el-table-column prop="tagName" label="标签名称" class-name="line2" sortable  :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                <el-table-column label="可选值" class-name="line3" :show-overflow-tooltip=true min-width="300">
-                    <template slot-scope="scope">
-                        {{scope.row.tags.join(';')}}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="tagDefaultValue" label="默认值" class-name="line4" :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                <el-table-column prop="create" label="创建时间" class-name="line5" sortable :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="130">
-                    <template slot-scope="scope">
-                        <el-button
-                        size="mini" type="text"
-                        @click="handlech(scope.$index, scope.row)">修改标签</el-button>&#12288;|
-                        <el-button
-                        size="mini" type="text"
-                        @click="handlede(scope.$index, scope.row)">删除标签</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <tag :see="add_tag" @reset="reset" @update="update" :data="chdata"></tag>
-        <el-dialog title="标签预览" :visible.sync="DialogVisible" width="60%" center>
-            <div class="summary">
-                <p class="black tit">通话小结</p>
+        
+        <div :style="{'position':'relative'}">
+            <div id="mask" v-show="tableData.length===0">
                 <div>
-                    <div class="state">
-                        <p class="grey">跟进状态</p>
-                        <p class="black see see_active">发展成功</p>
-                        <p class="black see">持续跟进</p>
-                        <p class="black see">发展失败</p>
+                    <p><i class="el-icon-noMission"></i></p>
+                    <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签</el-button>
+                </div>
+            </div>
+            <el-alert title="最多只能设置10个标签" type="warning" center show-icon v-show="warn"></el-alert>
+            <div class="part2">
+                <div class="part2_tit">
+                    <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签</el-button>
+                    <el-button plain class="button" :style="{'float':'left'}" @click="DialogVisible=true">效果预览</el-button>
+                    <el-tooltip class="item" effect="dark"  placement="right">
+                        <div slot="content" :style="{'min-width':'200px'}">客户标签可以与外呼任务关联，让坐席在与客户沟通时快速标记用户，以便后续的客户分类与跟进。</div>
+                        <el-button type="text" :style="{'float':'right','color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签</el-button>
+                    </el-tooltip>
+                </div>
+                <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+                    <el-table-column prop="tagName" label="标签名称" class-name="line2" sortable  :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                    <el-table-column label="可选值" class-name="line3" :show-overflow-tooltip=true min-width="300">
+                        <template slot-scope="scope">
+                            {{scope.row.tags.join(';')}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="tagDefaultValue" label="默认值" class-name="line4" :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                    <el-table-column prop="create" label="创建时间" class-name="line5" sortable :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                    <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="130">
+                        <template slot-scope="scope">
+                            <el-button
+                            size="mini" type="text"
+                            @click="handlech(scope.$index, scope.row)">修改标签</el-button>&#12288;|
+                            <el-button
+                            size="mini" type="text"
+                            @click="handlede(scope.$index, scope.row)">删除标签</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <tag :see="add_tag" @reset="reset" @update="update" :data="chdata"></tag>
+            <el-dialog title="标签预览" :visible.sync="DialogVisible" width="60%" center>
+                <div class="summary">
+                    <p class="black tit">通话小结</p>
+                    <div>
+                        <div class="state">
+                            <p class="grey">跟进状态</p>
+                            <p class="black see see_active">发展成功</p>
+                            <p class="black see">持续跟进</p>
+                            <p class="black see">发展失败</p>
+                        </div>
+                    </div>
+                    <div class="tag">
+                        <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">客户标签</p>
+                        <el-dropdown :hide-on-click="false" v-for="(item,index) in tableData" :key="index" :style="{'float':'left','line-height':'26px','margin': '0 6px'}">
+                            <span class="el-dropdown-link">
+                                {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item}">{{_item}}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div class="note">
+                        <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">详情备注</p>
+                        <el-input :style="{'width':'80%','float':'left'}"
+                        type="textarea"
+                        :rows="2"
+                        placeholder="请输入内容">
+                        </el-input>
+                    </div>
+                    <div class="submit">
+                        <p class="grey">提交小结后将自动呼叫下一位客户</p>
+                        <el-button type="info" size="mini" :style="{'background':'#7496F2','border-color':'#fff'}">提交小结</el-button>
                     </div>
                 </div>
-                <div class="tag">
-                    <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">客户标签</p>
-                    <el-dropdown :hide-on-click="false" v-for="(item,index) in tableData" :key="index" :style="{'float':'left','line-height':'26px','margin': '0 6px'}">
-                        <span class="el-dropdown-link">
-                            {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
-                        </span>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item}">{{_item}}</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </div>
-                <div class="note">
-                    <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">详情备注</p>
-                    <el-input :style="{'width':'80%','float':'left'}"
-                    type="textarea"
-                    :rows="2"
-                    placeholder="请输入内容">
-                    </el-input>
-                </div>
-                <div class="submit">
-                    <p class="grey">提交小结后将自动呼叫下一位客户</p>
-                    <el-button type="info" size="mini" :style="{'background':'#7496F2','border-color':'#fff'}">提交小结</el-button>
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="DialogVisible = false">关 闭</el-button>
-            </span>
-        </el-dialog>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="DialogVisible = false">关 闭</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        
     </div>
 </template>
 <style scoped>
+    #mask{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        height: 100%;
+        z-index:99;
+        background-color: #fff;
+        pointer-events: all;
+        box-sizing: border-box;
+        /* transform:translate3d(10px,10px,0); */
+    }
+    #mask .button{
+        display: block;
+    }
     .summary{
         overflow: hidden;
         background-color: #fff;

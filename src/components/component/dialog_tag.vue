@@ -84,7 +84,7 @@ export default {
                 tag_list:[],
                 tag_default:'',
                 id:'',
-                radio:null
+                radio:0
            },
            rules: {
                 tag_name: [
@@ -103,7 +103,7 @@ export default {
             this.$emit("reset");
         },
         open(){
-            if(this.data!=[]){
+            if(this.data.id){
                 this.form.tag_name=this.data.tagName;
                 this.form.tag_list=this.data.tags;
                 this.form.tag_default=this.data.tagDefaultValue;
@@ -115,6 +115,7 @@ export default {
                 this.form.tag_default='';
                 this.form.id='';
                 this.form.tag_value='';
+                this.form.radio=0;
             }
         },
         input_focus:function(){

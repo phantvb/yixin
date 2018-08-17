@@ -154,6 +154,12 @@ export default {
             let day=date.getDate()<10?("0"+date.getDate()):date.getDate();
             return year+'-'+month+'-'+day+' 00:00:00';
         },
+        date_init_ymd(date){
+            let year=date.getFullYear();
+            let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
+            let day=date.getDate()<10?("0"+date.getDate()):date.getDate();
+            return year+'年'+month+'月'+day+'日';
+        },
         init(data){
             this.$ajax.post(this.$preix+'/new/callstatistics/findCallStatisticsList',data
             ).then( res=>{
@@ -201,8 +207,8 @@ export default {
         }
     },
     mounted(){
-        this.leading_record=[this.date_init(new Date(new Date().getTime() - 24*60*60*1000)),this.date_init(new Date())];
-        var data={'pageSize':10,beginDay:this.date_init(new Date(new Date().getTime() - 24*60*60*1000)),endDay:this.date_init(new Date()),'requireTotalCount':true,'shortOrLoginName':this.search};
+        this.leading_record=[this.date_init_ymd(new Date()),this.date_init_ymd(new Date())];
+        var data={'pageSize':10,beginDay:this.date_init(new Date()),endDay:this.date_init(new Date()),'requireTotalCount':true,'shortOrLoginName':this.search};
         for (let key in data){
             if(data[key]==''){
                 delete data[key];

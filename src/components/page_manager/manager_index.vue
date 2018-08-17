@@ -60,21 +60,6 @@
     .part2{
         max-height: 290px;
     }
-    ul{
-        padding: 0;
-        overflow: hidden;
-    }
-    li{
-        list-style: none;
-    }
-    .grey{
-        color: #999;
-        font-size: 12px;
-    }
-    .black{
-        color: #444;
-        font-size: 18px;
-    }
     .p2_tit{
         overflow: hidden;
     }
@@ -127,7 +112,7 @@ export default {
             worker:{num:'8',all:'10'},
             mission_data:[],
             worker_data:[],
-            time_past:1
+            time_past:2
         }
     },
     mounted() {
@@ -414,10 +399,10 @@ export default {
             //今天
             if(num_pass==2){
                 var beginTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
-                var endTime=this.date_init(new Date(new Date().getTime() + 1*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
             }else{
                 var beginTime=this.date_init(new Date(new Date().getTime() - num_pass*24*60*60*1000));
-                var endTime=this.date_init(new Date());
+                var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
             }
             this.$ajax.post(this.$preix+'/new/callstatistics/querySeatsTalkedDurationChart',{'pageSize':10,beginTime:beginTime,endTime:endTime,'requireTotalCount':true}
             ).then( res=>{

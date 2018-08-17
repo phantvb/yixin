@@ -4,6 +4,7 @@
             <div class="p1_tit">
                 <p>统计时间</p>
                 <el-radio-group v-model="time_past" class="p3_radio" @change="change">
+                    <el-radio :label="0">今天</el-radio>
                     <el-radio :label="1">昨天</el-radio>
                     <el-radio :label="7">过去7天</el-radio>
                     <el-radio :label="30">过去30天</el-radio>
@@ -23,27 +24,27 @@
         <div class="part2">
             <ul>
                 <li>
-                    <p class="black">{{infos.calledTotal}}</p>
+                    <p class="black">{{infos?infos.calledTotal:0}}</p>
                     <p class="grey">总呼叫次数</p>
                 </li>
                 <li>
-                    <p class="black">{{infos.callTalkedTotal}}</p>
+                    <p class="black">{{infos?infos.callTalkedTotal:0}}</p>
                     <p class="grey">总呼通次数</p>
                 </li>
                 <li>
-                    <p class="black">{{infos.calledNumTotal}}</p>
+                    <p class="black">{{infos?infos.calledNumTotal:0}}</p>
                     <p class="grey">总呼叫人数</p>
                 </li>
                 <li>
-                    <p class="black">{{infos.callTalkedNumToal}}</p>
+                    <p class="black">{{infos?infos.callTalkedNumToal:0}}</p>
                     <p class="grey">总呼通人数</p>
                 </li>
                 <li>
-                    <p class="black">{{Math.ceil(infos.calledDuration/60)}}</p>
-                    <p class="grey">总呼叫时长(min)</p>
+                    <p class="black">{{infos?Math.ceil(infos.callTalkedDuration/60):0}}</p>
+                    <p class="grey">总呼通时长(min)</p>
                 </li>
                 <li>
-                    <p class="black">{{infos.callTalkedDurationTotal?Math.ceil(infos.callTalkedDurationTotal/infos.callTalkedTotal):0}}</p>
+                    <p class="black">{{infos?Math.ceil(infos.callTalkedDuration/infos.callTalkedTotal):0}}</p>
                     <p class="grey">平均呼叫时长(s)</p>
                 </li>
             </ul>
@@ -107,7 +108,7 @@
             <el-table-column prop="nextContactTime" label="下次联系时间" class-name="line9" :show-overflow-tooltip=true min-width="120"> </el-table-column>
             <el-table-column prop="recordFilePath" label="通话录音" class-name="line10" :show-overflow-tooltip=true min-width="100">
                 <template slot-scope="scope">
-                    <a-player :music="{
+                    <a-player v-if="scope.row.recordFilePath" :music="{
                     src: baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session
                     }"></a-player>
                 </template>
@@ -215,7 +216,7 @@ export default {
     name:'Staff_call_count',
     data:function(){
         return {
-            time_past:1,
+            time_past:0,
             search_state:false,
             mission_list:[],
             mission_active:0,
@@ -259,8 +260,8 @@ export default {
                 this.session=res.data.info.sessionId;
             }
         })
-        this.leading_record=[this.date_init(new Date(new Date().getTime() - 24*60*60*1000)),this.date_init(new Date())];
-        this.init(this.date_init(new Date(new Date().getTime() - 24*60*60*1000)),this.date_init(new Date()));
+        this.leading_record=[this.date_init(new Date(new Date().getTime())),this.date_init(new Date())];
+        this.init(this.date_init(new Date(new Date().getTime())),this.date_init(new Date()));
         this.task_init();
     },
     methods:{
@@ -350,8 +351,9 @@ export default {
             //上方完成情况
             this.$ajax.post(this.$preix+'/new/callstatistics/querySeatTaskCompletion',{beginTime:beginTime,endTime:endTime}
             ).then( res=>{
-                if(res.data.code==200&&res.data.info){
-                    this.infos=res.data.info;
+                if(res.data.code==200){
+                    console.log(res.data.info)
+                    this.infos=res.data.info?res.data.info:undefined;
                 }
             });
             //下方表格数据
@@ -430,10 +432,14 @@ export default {
         change:function(){
             if(this.time_past==2){
                 var beginTime=this.date_init(new Date(new Date().getTime() - 2*24*60*60*1000));
-                var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() - 2*24*60*60*1000));
+            }else if(this.time_past==0){
+                var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
+                this.init(beginTime,endTime);
             }else{
                 var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
-                var endTime=this.date_init(new Date());
+                var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
                 this.init(beginTime,endTime);
             }
         },
