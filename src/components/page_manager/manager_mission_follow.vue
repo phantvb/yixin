@@ -78,6 +78,12 @@
                 <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
                     <template slot-scope="scope">
                         <span v-for="(item,index) in scope.row.tags" :key="index">{{item.tagName}};</span>
+                      <!--<div class="father">
+                        <el-select v-model="scope.row.tags" multiple placeholder="请选择">
+                          <el-option v-for="item in allTagList" :key="item.id" :label="item.tagName" :value="item">
+                          </el-option>
+                        </el-select>
+                      </div>-->
                     </template>
                 </el-table-column>
                 <el-table-column prop="create" label="创建时间" class-name="line9" :show-overflow-tooltip=true min-width="120" sortable='custom'> </el-table-column>
@@ -109,7 +115,7 @@
             </el-pagination>
         </div>
         </div>
-        
+
         <assign v-bind:assign="assign" :total='p_assign' @reset="reset" :taskId="taskId"></assign>
     </div>
 </template>
@@ -145,7 +151,7 @@
         border-bottom: 1px solid #eee;
         overflow: hidden;
     }
-    .part1>div{     
+    .part1>div{
         float: left;
     }
     .part1_show{
@@ -165,7 +171,7 @@
     }
     .part1_nav{
         width: 20%;
-        float: left; 
+        float: left;
         box-sizing: border-box;
     }
     .part1_nav .grey{
@@ -239,7 +245,8 @@ export default {
             orderWay:null,
             orderField:null,
             lead_data:null,
-            blank:false
+            blank:false,
+            allTagList:[]
         }
     },
     components:{
@@ -301,7 +308,7 @@ export default {
                     let obj={'id_num':i};
                     this.drawPie(obj);
                 }
-                
+
             }
         },
         see_change:function(value){
@@ -419,6 +426,14 @@ export default {
         }
     },
     mounted:function(){
+        //标签数据
+        this.$ajax.post(this.$preix+'/new/tag/findTagList')
+          .then( (res) => {
+            if(res.data.code==200){
+              console.log(res);
+              this.allTagList=res.data.info;
+          }
+        });
         //左侧饼图数据
         this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList')
         .then( (res) => {
