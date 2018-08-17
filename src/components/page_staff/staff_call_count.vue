@@ -1,10 +1,10 @@
 <template>
-    <div class="container">
+    <div class="container" id="staff_call_count">
         <div class="part1">
             <div class="p1_tit">
                 <p>统计时间</p>
                 <el-radio-group v-model="time_past" class="p3_radio" @change="change">
-                    <el-radio :label="1">过去24小时</el-radio>
+                    <el-radio :label="1">昨天</el-radio>
                     <el-radio :label="7">过去7天</el-radio>
                     <el-radio :label="30">过去30天</el-radio>
                     <el-radio :label="2">其他时间</el-radio>
@@ -107,7 +107,9 @@
             <el-table-column prop="nextContactTime" label="下次联系时间" class-name="line9" :show-overflow-tooltip=true min-width="120"> </el-table-column>
             <el-table-column prop="recordFilePath" label="通话录音" class-name="line10" :show-overflow-tooltip=true min-width="100">
                 <template slot-scope="scope">
-                    {{scope.row.key9}}
+                    <a-player :music="{
+                    src: baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session
+                    }"></a-player>
                 </template>
             </el-table-column>
         </el-table>
@@ -208,6 +210,7 @@
 </style>
 
 <script>
+import VueAplayer from 'vue-aplayer'
 export default {
     name:'Staff_call_count',
     data:function(){
@@ -241,10 +244,21 @@ export default {
             },
             pageNum:1,
             orderWay:null,
-            orderField:null
+            orderField:null,
+            baseUrl:null,
+            session:null
         }
     },
+    components: {
+        'a-player': VueAplayer
+    },
     mounted() {
+        this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
+            if(res.data.code){
+                this.baseUrl=res.data.info.iccStaticContextPath;
+                this.session=res.data.info.sessionId;
+            }
+        })
         this.leading_record=[this.date_init(new Date(new Date().getTime() - 24*60*60*1000)),this.date_init(new Date())];
         this.init(this.date_init(new Date(new Date().getTime() - 24*60*60*1000)),this.date_init(new Date()));
         this.task_init();
@@ -319,7 +333,7 @@ export default {
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
             let day=date.getDate()<10?("0"+date.getDate()):date.getDate();
-            return year+'-'+month+'-'+day;
+            return year+'-'+month+'-'+day+' 00:00:00';
         },
         task_init(){
             //任务列表

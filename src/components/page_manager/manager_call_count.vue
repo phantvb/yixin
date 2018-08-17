@@ -46,23 +46,8 @@
     </div>
 </template>
 <style scoped>
-    ul{
-        padding: 0;
-        overflow: hidden;
-    }
-    li{
-        list-style: none;
-    }
     .container{
         position: relative;
-    }
-    .grey{
-        color: #999;
-        font-size: 12px;
-    }
-    .black{
-        color: #444;
-        font-size: 12px;
     }
     .part2_tit{
         margin: 20px 0;
@@ -167,7 +152,7 @@ export default {
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
             let day=date.getDate()<10?("0"+date.getDate()):date.getDate();
-            return year+'-'+month+'-'+day;
+            return year+'-'+month+'-'+day+' 00:00:00';
         },
         init(data){
             this.$ajax.post(this.$preix+'/new/callstatistics/findCallStatisticsList',data

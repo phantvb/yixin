@@ -9,7 +9,7 @@
                 </li>
                 <li>
                     <p class="black">{{datas.seatTaskLeftTodayDto.toCallUserNum}}</p>
-                    <p class="grey">待呼叫人数</p>
+                    <p class="grey">继续跟进人数</p>
                 </li>
                 <li>
                     <p class="black">{{datas.seatTaskLeftTodayDto.subscribeTodayNum}}</p>
@@ -224,7 +224,7 @@ export default {
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
             let day=date.getDate()<10?("0"+date.getDate()):date.getDate();
-            return year+'-'+month+'-'+day;
+            return year+'-'+month+'-'+day+' 00:00:00';
         },
         mission_init:function(item){
             for(let i=0;i<4;i++){
@@ -238,8 +238,8 @@ export default {
     //初始化首页数据
     mounted(){
         var _this=this;
-        var beginTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
-        var endTime=this.date_init(new Date());
+        var beginTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
+        var endTime=this.date_init(new Date(new Date().getTime() + 1*24*60*60*1000));
         this.$ajax.post(this.$preix+'/new/getIndexData'
         ).then( res=>{
         if(res.data.code==200){

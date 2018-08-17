@@ -242,6 +242,11 @@
                     <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">详情备注</p>
                     <p :style="{'margin':'3px 7px','text-align':'left'}">{{history.historyDto.details[0].desc}}</p>
                 </div>
+                <p class="grey" :style="{'width':'100%'}" v-if="recordFilePath">通话录音&#12288;
+                    <a-player :music="{
+                    src: baseUrl+recordFilePath+'?callSessionId='+callSeesionId+'&sessionId='+session
+                    }"></a-player>
+                </p>
             </div>
         </div>
         <DialogAdd v-bind:see="see" @reset="reset"></DialogAdd>
@@ -647,6 +652,7 @@ import sockjs from '../js/sockjs.js'
 import stomp from '../js/stomp.js'
 import jssip from '../js/jssip-3.0.27.js'
 import md5 from '../js/md5.js'
+import VueAplayer from 'vue-aplayer'
 export default {
     name:'Staff_stage',
     data:function(){
@@ -749,16 +755,27 @@ export default {
             time_error:null,
             call_hidden:true,
             phone_use:true,
-            history_taskId:null
+            history_taskId:null,
+            baseUrl:null,
+            session:null,
+            recordFilePath:null,
+            callSeesionId:null
         }
     },
     components:{
-      DialogAdd,history
+      DialogAdd,history,'a-player': VueAplayer
     },
     mounted() {
         window.onbeforeunload = function(){
             this.disconnect();
         };
+        //录音基础
+        this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
+            if(res.data.code){
+                this.baseUrl=res.data.info.iccStaticContextPath;
+                this.session=res.data.info.sessionId;
+            }
+        })
         //缩小导航菜单
         //this.$emit("close");
         this.TaskList_init({});
@@ -1118,8 +1135,12 @@ export default {
                             // res.data.summaryDto.tags[i].lastTagValue?_this.tags[i].value=res.data.summaryDto.tags[i].lastTagValue:'';
                         }
                     }
-                    if(res.data.historyDto&&res.data.historyDto.details[0].desc!=undefined){
+                    if(res.data.historyDto&&res.data.historyDto.details){
+                        console.log(res.data.historyDto.details[0]);
                         this.note=res.data.historyDto.details[0].desc;
+                        this.recordFilePath=res.data.historyDto.details[0].recordFilePath;
+                        this.callSeesionId=res.data.historyDto.details[0].callSeesionId;
+                        
                     }else{
                         this.note='';
                     }

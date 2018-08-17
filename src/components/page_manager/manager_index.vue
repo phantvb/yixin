@@ -30,8 +30,8 @@
             <div class="p3_tit">
                 <p>坐席呼叫统计</p>
                 <el-radio-group v-model="time_past" class="p3_radio" @change="change">
-                    <el-radio :label="1" selected>今天</el-radio>
-                    <el-radio :label="2">昨天</el-radio>
+                    <el-radio :label="2" selected>今天</el-radio>
+                    <el-radio :label="1">昨天</el-radio>
                     <el-radio :label="7">过去7天</el-radio>
                     <el-radio :label="30">过去30天</el-radio>
                 </el-radio-group>
@@ -408,12 +408,13 @@ export default {
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
             let day=date.getDate()<10?("0"+date.getDate()):date.getDate();
-            return year+'-'+month+'-'+day;
+            return year+'-'+month+'-'+day+' 00:00:00';
         },
         init(num_pass){
+            //今天
             if(num_pass==2){
-                var beginTime=this.date_init(new Date(new Date().getTime() - 2*24*60*60*1000));
-                var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
+                var beginTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() + 1*24*60*60*1000));
             }else{
                 var beginTime=this.date_init(new Date(new Date().getTime() - num_pass*24*60*60*1000));
                 var endTime=this.date_init(new Date());

@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" id="manager_call_detail">
         <div class="part1">
             <router-link :to="{path:'./call_count'}">
                 坐席呼叫统计
@@ -79,6 +79,9 @@
                 </el-table-column>
                  <el-table-column prop="recordFilePath" class-name="line11" label="通话录音"  min-width="160">
                     <template slot-scope="scope">
+                        <a-player :music="{
+                        src: baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session
+                        }"></a-player>
                     </template>
                 </el-table-column>
             </el-table>
@@ -137,25 +140,6 @@
         font-size: 12px;
         margin: 0 14px;
     }
-    .zhankai{
-        background-color: rgba(242, 242, 242, 1);
-        text-align: left;
-        overflow: hidden;
-    }
-    .zhankai>div{
-        overflow: hidden;
-        margin: 10px 0;
-    }
-    .zhankai>div>p{
-        float: left;
-        padding: 4px 2px;
-    }
-    .zhankai>div>p.grey{
-        margin: 0 14px;
-    }
-    .zhankai>div>p.black{
-        margin: 0 10px;
-    }
     .see_active{
         background-color: rgba(153, 153, 153, 1);
         color: #fff;
@@ -190,6 +174,7 @@
 </style>
 
 <script>
+import VueAplayer from 'vue-aplayer'
 export default {
     name:'call_detail',
     data:function(){
@@ -218,8 +203,13 @@ export default {
             page_count:0,
             pageNum:1,
             orderWay:null,
-            orderField:null
+            orderField:null,
+            baseUrl:null,
+            session:null
         }
+    },
+    components: {
+        'a-player': VueAplayer
     },
     methods:{
         date_change(){
@@ -334,6 +324,12 @@ export default {
         }
     },
     mounted(){
+        this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
+            if(res.data.code){
+                this.baseUrl=res.data.info.iccStaticContextPath;
+                this.session=res.data.info.sessionId;
+            }
+        })
         var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1]};
         this.task_init();
         this.mission_init(data);

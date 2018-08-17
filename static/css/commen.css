@@ -129,6 +129,7 @@ a{
   width: 150px;
   height: 164px;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 .ul .li{
   margin: 5px 0;
@@ -477,4 +478,13 @@ li{
   left:50%;
   top:50%;
   transform:translate3d(-50%,-50%,0);
+}
+#staff_call_count .aplayer-bar-wrap{
+  display: none;
+}
+#staff_call_count .aplayer-body{
+  overflow: hidden;
+}
+#manager_call_detail .aplayer-bar-wrap{
+  display: none;
 }

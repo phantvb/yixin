@@ -77,7 +77,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="create" label="创建时间" class-name="line4" sortable='custom' :show-overflow-tooltip=true  min-width="120"> </el-table-column>
-                <el-table-column prop="recentCallTime" label="最近通话" class-name="line5" :show-overflow-tooltip=true  min-width="120"> </el-table-column>
+                <!-- <el-table-column prop="recentCallTime" label="最近通话" class-name="line5" :show-overflow-tooltip=true  min-width="120"> </el-table-column> -->
                 <el-table-column prop="desc" label="备注" class-name="line6" :show-overflow-tooltip=true>
                     <template slot-scope="scope">
                         <div class="father">
@@ -238,7 +238,7 @@ export default {
         //条件搜索
         findSeat:function(){
             var data={
-                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search
+                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'loginOrShortName':this.search
             };
             for (let key in data){
                 if(data[key]==''){
@@ -249,7 +249,7 @@ export default {
         },
         date_change(){
             var data={
-                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search
+                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'loginOrShortName':this.search
             };
             for (let key in data){
                 if(data[key]==''){
@@ -262,7 +262,7 @@ export default {
         sort_change({column, prop, order} ){
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
-            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'loginOrShortName':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];
@@ -273,7 +273,7 @@ export default {
         //页码改变
         page_change(val){
             this.pageNum=val;
-            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'loginOrShortName':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];

@@ -33,16 +33,6 @@
                             <a-player :music="{
                             src: baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session
                             }"></a-player>
-                            <!-- <audio controls>
-                            <source src="http://10.240.80.72:10712/icc-static/2018/ring.mp3?sessionId=42375b65-e78f-4639-896a-796239866419&callSessionId=3f566e16-3c00-44b5-9ed9-8b43b1e316da" type="audio/ogg">
-                            <source src="http://10.240.80.72:10712/icc-static/2018/ring.mp3?sessionId=42375b65-e78f-4639-896a-796239866419&callSessionId=3f566e16-3c00-44b5-9ed9-8b43b1e316da" type="audio/mpeg">
-                            您的浏览器不支持 audio 元素。
-                            </audio> -->
-                            <!-- <audio controls>
-                            <source :src="baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session" type="audio/ogg">
-                            <source :src="baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session" type="audio/mpeg">
-                            您的浏览器不支持 audio 元素。
-                            </audio> -->
                         </p>
                     </div>
                 </div>

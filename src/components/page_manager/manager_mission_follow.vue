@@ -18,7 +18,7 @@
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
                 <el-checkbox-group v-model="checkedlist" :min="0" :max="4" class="ul" :style="{'text-align':'left','padding':'0 8px','background-color':'#FBFBFB'}" @change="show_mission">
-                    <el-checkbox v-for="(item,index) in position" :label="item.taskId" :key="item.taskId" class="li" :checked="index<4">{{item.taskName}}</el-checkbox>
+                    <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li">{{item.taskName}}</el-checkbox>
                 </el-checkbox-group>
             </div>
         </div>

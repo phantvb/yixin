@@ -17,6 +17,7 @@ import staff_follow from '@/components/page_staff/staff_mission_follow'
 import staff_detail from '@/components/page_staff/staff_mission_detail'
 import staff_call_count from '@/components/page_staff/staff_call_count'
 import operation from '@/components/page_operation/operation'
+import operation_index from '@/components/page_operation/operation_index'
 import operation_manager from '@/components/page_operation/operation_manager'
 import operation_staff from '@/components/page_operation/operation_staff'
 import userInfo from '@/components/user_info'
@@ -62,6 +63,7 @@ export default new Router({
     path: '/operation',
     component: operation,
     children:[
+      {path:'index',component:operation_index},
       {path:'manager',component:operation_manager},
       {path:'staff',component:operation_staff},
       {path:'userInfo',component:userInfo}
