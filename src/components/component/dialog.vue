@@ -32,11 +32,9 @@
         <div  v-show="dialog_active==2&&mission_edit==0">
           <div class="mission" :style="{margin:'5% 0'}">
             <p>任务名称</p>
-            <el-select id="taskName" v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' v-if="data==null"
+            <el-select id="taskName" v-model="mission_value" placeholder="请选择" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' :disabled="data!=null"
                        @focus="queryCallTaskNameList" @keyup.native="queryCallTaskNameList" @change="checkedTags(mission_value)">
               <el-option v-for="item in mission_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-            <el-select v-model="mission_value" size="mini" disabled v-if="data!=null">
             </el-select>
           </div>
           <br>
@@ -219,9 +217,7 @@
             },
             open(){
               //任务列表数据
-              if(this.data==null){
-                this.queryCallTaskNameList();
-              }else{
+              if(this.data!=null){
                 this.mission_value=this.data.name;
               }
             }
