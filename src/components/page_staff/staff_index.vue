@@ -239,7 +239,7 @@ export default {
     mounted(){
         var _this=this;
         var beginTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
-        var endTime=this.date_init(new Date(new Date().getTime() + 1*24*60*60*1000));
+        var endTime=this.date_init(new Date(new Date().getTime() + 0*24*60*60*1000));
         this.$ajax.post(this.$preix+'/new/getIndexData'
         ).then( res=>{
         if(res.data.code==200){

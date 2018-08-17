@@ -203,7 +203,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/loginValidate',parameter)
                 .then( (res) => {
                     if(res.data.code==200){
-                        let loginName={"loginName" : res.data.rows[0].shortName};
+                        let loginName={"loginName" : res.data.rows[0].shortName?res.data.rows[0].shortName:res.data.rows[0].loginName};
                         window.sessionStorage.setItem("loginName",JSON.stringify(loginName));
                         if(window.sessionStorage){
                             let userInfoLst = res.data.rows;

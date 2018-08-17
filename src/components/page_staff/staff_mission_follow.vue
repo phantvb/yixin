@@ -303,7 +303,7 @@ export default {
     mounted:function(){
         var _this=this;
         //右侧任务多选列表
-        this.$ajax.post(this.$preix+'/new/calltask/queryTaskIntroOnWallBySeat',{"pageNum" : 1,"pageSize" : 100})
+        this.$ajax.post(this.$preix+'/new/calltask/queryTaskIntroOnWallBySeat',{"pageNum" : 1,"pageSize" : 200})
         .then( (res) => {
             if(res.data.code==200){
                 this.position=res.data.rows;

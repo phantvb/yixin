@@ -77,7 +77,7 @@
                     <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,1)">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
-                        <span>{{item.nextContactTime}}</span>
+                        <span>{{item.nextContactTime_str}}</span>
                         <span>{{item.depName}}{{item.areaName}}</span>
                     </div>
                 </div>
@@ -766,9 +766,9 @@ export default {
       DialogAdd,history,'a-player': VueAplayer
     },
     mounted() {
-        window.onbeforeunload = function(){
-            this.disconnect();
-        };
+        // window.onbeforeunload = function(){
+        //     this.disconnect();
+        // };
         //录音基础
         this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
             if(res.data.code){
@@ -1071,9 +1071,12 @@ export default {
             .then( (res) => {
                 if(res.status==200){
                     this.task_state=1;
-                    res.data.rows.map(item=>{
-                        item.nextContactTime=md5.time_init(new Date(item.nextContactTime));
-                    })
+                    if(res.data.rows[0]!={}){
+                        res.data.rows.map(item=>{
+                            item.nextContactTime_str=md5.time_init(new Date(item.nextContactTime));
+                        })
+                    }
+                    
                     this.booklist=res.data.rows;
                 }
             });

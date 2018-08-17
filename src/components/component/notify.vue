@@ -110,7 +110,7 @@ export default {
         connect () {
             var _this=this;
             // websocket的连接地址，此值等于WebSocketMessageBrokerConfigurer中registry.addEndpoint("/icc/websocket").withSockJS()配置的地址
-            var socket = new SockJS(this.$preix+'/ws/icc/websocket');
+            var socket = new SockJS(this.$preix+'/ws/icc/websocket', null, { transports: 'websocket' });
             this.stompClient = Stomp.over(socket);
             this.stompClient.connect({}, function(frame) {
                 console.log('Connected: ' + frame);

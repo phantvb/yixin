@@ -18,12 +18,12 @@ Vue.prototype.$ajax = axios;
 axios.interceptors.response.use(res=>{
   switch (res.data.code){
     case 401 :
-      this.$router.push({ path: '/login'})
-      //location.href='https://10.240.80.72:8443/icc-interface/logout'
+      //this.$router.push({ path: '/login'})
+      location.href='#/login'
       break
     case 403 :
-      this.$router.push({ path: '/login'})
-      //location.href='https://10.240.80.72:8443/icc-interface/logout'
+      //this.$router.push({ path: '/login'})
+      location.href='#/login'
       break
   }
   return res;

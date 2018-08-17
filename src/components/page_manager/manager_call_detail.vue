@@ -79,7 +79,7 @@
                 </el-table-column>
                  <el-table-column prop="recordFilePath" class-name="line11" label="通话录音"  min-width="160">
                     <template slot-scope="scope">
-                        <a-player :music="{
+                        <a-player v-if="scope.row.recordFilePath" :music="{
                         src: baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session
                         }"></a-player>
                     </template>
