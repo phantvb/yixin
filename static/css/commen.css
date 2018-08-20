@@ -488,3 +488,6 @@ li{
 #manager_call_detail .aplayer-bar-wrap{
   display: none;
 }
+.sel{
+  min-width: 140px!important;
+}
