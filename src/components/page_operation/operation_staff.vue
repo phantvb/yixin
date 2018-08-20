@@ -3,7 +3,7 @@
         <div class="part1">
             <div class="part1_tit">
                 <el-input
-                    placeholder="按坐席昵称或账号搜索"
+                    placeholder="按坐席昵称或帐号搜索"
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
@@ -262,7 +262,7 @@ export default {
             },
             rules: {
                 loginName: [
-                    { required: true, message: '请输入账号', trigger: 'blur' }
+                    { required: true, message: '请输入帐号', trigger: 'blur' }
                 ],
                 shortName: [
                     { required: true, message: '请输入昵称', trigger: 'blur' }

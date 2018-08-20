@@ -38,7 +38,7 @@
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/manager/worker'}">
-                    <el-menu-item class="item" index="3-1">坐席账号管理</el-menu-item>
+                    <el-menu-item class="item" index="3-1">坐席帐号管理</el-menu-item>
                   </router-link>
                   <router-link :to="{path:'/manager/label'}">
                     <el-menu-item class="item" index="3-2">客户标签管理</el-menu-item>
@@ -52,7 +52,7 @@
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/manager/userInfo'}">
-                    <el-menu-item class="item" index="4-1">账号设置</el-menu-item>
+                    <el-menu-item class="item" index="4-1">帐号设置</el-menu-item>
                   </router-link>
                   <!-- <router-link :to="{path:'/manager/label'}">
                     <el-menu-item class="item" index="4-2">系统设置</el-menu-item>

@@ -30,7 +30,7 @@
                     <p class="grey">已呼人数</p>
                 </li>
                 <li>
-                    <p class="black">{{Math.ceil(todayCompleteDto.calledDuration/60)}}</p>
+                    <p class="black">{{Math.floor(todayCompleteDto.callTalkedDuration/60)}}</p>
                     <p class="grey">呼通时长(min)</p>
                 </li>
                 <li>

@@ -3,7 +3,7 @@
         <div class="part2">
             <div class="part2_tit">
                 <el-input
-                    placeholder="按坐席昵称或账号搜索"
+                    placeholder="按坐席昵称或帐号搜索"
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
@@ -23,7 +23,7 @@
                 </div>
             <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
                 <el-table-column prop="shortName" label="坐席昵称" class-name="line2"  :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                <el-table-column prop="loginName" label="坐席账号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                <el-table-column prop="loginName" label="坐席帐号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
                 <el-table-column prop="callTotal" label="总呼叫次数" class-name="line4" :show-overflow-tooltip=true min-width="110"> </el-table-column>
                 <el-table-column prop="callTalkedTotal" label="总呼通次数" class-name="line5" :show-overflow-tooltip=true min-width="110"> </el-table-column>
                 <el-table-column prop="callNumTotal" label="总呼叫人数" class-name="line6" :show-overflow-tooltip=true min-width="110"> </el-table-column>

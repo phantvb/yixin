@@ -47,7 +47,7 @@ function time_init(time){
     }else{
         if(time.getFullYear()==new Date().getFullYear()&&time.getMonth()==new Date().getMonth()&&time.getDate()==new Date().getDate()&&(new Date().getTime()-time.getTime())<60*1000){
             return '刚刚';
-        }else if(time.getFullYear()==new Date().getFullYear()&&time.getMonth()==new Date().getMonth()&&time.getDate()==new Date().getDate()&&60*60*1000>(new Date().getTime()-time.getTime())>60*1000){
+        }else if(time.getFullYear()==new Date().getFullYear()&&time.getMonth()==new Date().getMonth()&&time.getDate()==new Date().getDate()&&60*60*1000>(new Date().getTime()-time.getTime())&&(new Date().getTime()-time.getTime())>60*1000){
             return Math.ceil((new Date().getTime()-time.getTime())/60000)+'分钟前';
         }else if(time.getFullYear()==new Date().getFullYear()&&time.getMonth()==new Date().getMonth()&&time.getDate()==new Date().getDate()&&1*60*60*1000<((new Date().getTime()-time.getTime()))){
             return (time.getHours()<10?'0'+time.getHours():time.getHours())+':'+(time.getMinutes()<10?'0'+time.getMinutes():time.getMinutes());

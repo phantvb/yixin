@@ -491,3 +491,10 @@ li{
 .sel{
   min-width: 140px!important;
 }
+form{
+  background-color: #fff;
+}
+.unsee{
+  background-color: #f5f5f5;
+  border-radius: 3px;
+}

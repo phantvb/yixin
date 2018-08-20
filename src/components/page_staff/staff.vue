@@ -50,7 +50,7 @@
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/staff/userInfo'}">
-                    <el-menu-item class="item" index="4-1" @click="open">账号设置</el-menu-item>
+                    <el-menu-item class="item" index="4-1" @click="open">帐号设置</el-menu-item>
                   </router-link>
                   <!-- <router-link :to="{path:'/staff/label'}">
                     <el-menu-item class="item" index="4-2" @click="open">线路设置</el-menu-item>
