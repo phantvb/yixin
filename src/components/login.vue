@@ -179,7 +179,7 @@ export default {
         loginSubmit(){
             var self = this;
             if(self.formName.userName ==''){
-                this.yzInfo = '请输入登陆账号';
+                this.yzInfo = '请输入登陆帐号';
 				        return false;
             }
             if(self.formName.userPassWord == ''){

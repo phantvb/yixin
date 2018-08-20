@@ -3,12 +3,12 @@
         <div class="part1">
             <div class="part1_tit">
                 <el-input
-                    placeholder="企业名称或邮箱账号搜索"
+                    placeholder="企业名称或邮箱帐号搜索"
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
                 <el-button type="info" class="button" :style="{float:'left'}" @click="findSeat">搜索</el-button>
-                <el-button type="info" plain class="button" @click="fsAdd">新增FS账号</el-button>
+                <el-button type="info" plain class="button" @click="fsAdd">新增FS帐号</el-button>
                 <el-button type="info"  class="button" @click="managerAdd">新增企业</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" header-row-class-name="table_head">
-                <el-table-column prop="loginName" label="管理账号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="100">
+                <el-table-column prop="loginName" label="管理帐号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="100">
                     <template slot-scope="scope">
                         <router-link :to="{path:'/operation/staff',query:{partnerAccountId:scope.row.id}}">
                             <span>{{scope.row.loginName}}</span>
@@ -53,7 +53,7 @@
                 <el-table-column prop="fullName" label="企业名称" class-name="line2" sortable='custom' :show-overflow-tooltip=true min-width="100"></el-table-column>
                 <el-table-column prop="email" label="邮箱" class-name="line3" sortable='custom' :show-overflow-tooltip=true min-width="120">
                 </el-table-column>
-                <el-table-column prop="seatAccountPrefix" label="坐席账号前缀" class-name="line4" sortable='custom' :show-overflow-tooltip=true  min-width="120"> </el-table-column>
+                <el-table-column prop="seatAccountPrefix" label="坐席帐号前缀" class-name="line4" sortable='custom' :show-overflow-tooltip=true  min-width="120"> </el-table-column>
                 <el-table-column prop="callCredit" label="信用资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
                 <el-table-column prop="callRemaining" label="实时资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
                 <el-table-column prop="create" label="创建日期" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
@@ -87,7 +87,7 @@
             <el-dialog :title="detail_type==0?'详情':'新增企业'" :visible.sync="see" center>
                 <div class="con">
                     <el-form :model="Form" :rules="rules" ref="Form" label-width="120px" class="demo-ruleForm" size="mini">
-                        <el-form-item label="管理员账号" prop="loginName">
+                        <el-form-item label="管理员帐号" prop="loginName">
                             <el-input v-model="Form.loginName"></el-input>
                         </el-form-item>
                         <el-form-item v-if="detail_type==1" label="密码" prop="password">
@@ -101,7 +101,7 @@
                                 <el-option label="企业管理员" value="2"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="坐席账号前缀" prop="seatAccountPrefix">
+                        <el-form-item label="坐席帐号前缀" prop="seatAccountPrefix">
                             <el-input v-model="Form.seatAccountPrefix"></el-input>
                         </el-form-item>
                         <el-form-item label="可配坐席数量" prop="numOfSeat">
@@ -292,7 +292,7 @@ export default {
             },
             rules: {
                 loginName: [
-                    { required: true, message: '请输入管理员账号', trigger: 'blur' }
+                    { required: true, message: '请输入管理员帐号', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -307,7 +307,7 @@ export default {
                     { required: true, message: '请选择用户类型', trigger: 'change' }
                 ],
                 seatAccountPrefix: [
-                    { required: true, message: '请输入坐席账号前缀', trigger: 'blur' },
+                    { required: true, message: '请输入坐席帐号前缀', trigger: 'blur' },
                     { min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur' }
                 ],
                 numOfSeat: [

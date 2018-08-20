@@ -22,7 +22,7 @@
           <div class="notify_mes" >
 
           </div> -->
-            <el-dropdown trigger="click" class="id1" placement="top-end" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
+            <el-dropdown trigger="click" class="id1" placement="top-start" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
                 <div @click="notify=0">
                     <el-badge :value="notify" :max="99" v-show="notify>0">
                     <i class="el-icon-menu"></i>
@@ -30,8 +30,9 @@
                     <i class="el-icon-menu"  v-show="notify==0"></i>
                 </div>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command='item' v-for="item in notifylist" :key="item.mesId">
-                        <div v-html="item.content" :class="{unsee:item.status==0}" class="item"></div>
+                    <el-dropdown-item :class="{unsee:item.status==0}" :command='item' v-for="item in notifylist" :key="item.mesId" :divided="true">
+                        <div v-html="item.content" class="item"></div>
+                        <div :style="{'text-align':'right'}">{{item.create_str}}</div>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -60,6 +61,8 @@
 }
 .unsee{
     background-color: #f5f5f5;
+    border-radius: 3px;
+    padding: 5px;
 }
 .el-icon-menu:before {
     content: '';
@@ -74,6 +77,7 @@
 </style>
 
 <script>
+import md5 from '../js/md5.js'
 export default {
     name:'notify',
     data() {
@@ -86,8 +90,11 @@ export default {
     methods:{
         visible(visible){
         if(visible){
-            this.$ajax.post(this.$preix+'/new/notify/query-msg-intro',{"pageNum" : 1,"pageSize" : 20,"requireTotalCount" : true}).then(res=>{
+            this.$ajax.post(this.$preix+'/new/notify/query-msg-intro',{"pageNum" : 1,"pageSize" : 10,"requireTotalCount" : true}).then(res=>{
                     if(res.data.code==200){
+                        res.data.rows.map(item=>{
+                            item.create_str=md5.time_init(new Date(item.create));
+                        })
                         this.notifylist=res.data.rows;
                     }
                 })

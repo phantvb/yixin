@@ -3,7 +3,7 @@
         <div class="part1">
             <div class="part1_tit">
                 <el-input
-                    placeholder="按坐席昵称或账号搜索"
+                    placeholder="按坐席昵称或帐号搜索"
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
@@ -47,7 +47,7 @@
             </div>
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="loginName" label="坐席账号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
+                <el-table-column prop="loginName" label="坐席帐号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
                     <!-- <template slot-scope="scope">
                         <router-link :to="{path:'./detail', query: { id: '111' }}">
                             {{scope.row.loginName}}
@@ -106,14 +106,14 @@
             <el-dialog title="详情" :visible.sync="see" center>
                 <div class="con">
                     <el-form :model="Form" :rules="rules" ref="Form" label-width="120px" class="demo-ruleForm" size="mini">
-                        <el-form-item label="账号" prop="loginName">
+                        <el-form-item label="帐号" prop="loginName">
                             <el-input v-model="Form.loginName"></el-input>
                         </el-form-item>
                         <el-form-item label="昵称" prop="shortName">
                             <el-input v-model="Form.shortName"></el-input>
                         </el-form-item>
-                        <el-form-item label="账号状态" prop="state">
-                            <el-select v-model="Form.state" placeholder="请选择账号状态">
+                        <el-form-item label="帐号状态" prop="state">
+                            <el-select v-model="Form.state" placeholder="请选择帐号状态">
                                 <el-option label="激活" value="1"></el-option>
                                 <el-option label="冻结" value="2"></el-option>
                                 <el-option label="停用" value="3"></el-option>
@@ -252,7 +252,7 @@ export default {
             },
             rules: {
                 loginName: [
-                    { required: true, message: '请输入账号', trigger: 'blur' }
+                    { required: true, message: '请输入帐号', trigger: 'blur' }
                 ],
                 shortName: [
                     { required: true, message: '请输入昵称', trigger: 'blur' }

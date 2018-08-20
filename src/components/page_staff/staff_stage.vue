@@ -41,7 +41,9 @@
                 </el-input>
                 <ul>
                     <li @click="TaskList_init" :class="{active:task_state==0}">待呼叫</li>
-                    <li @click="BookedList_init({'requireTotalCount':true,'pageSize':'300'})" :class="{active:task_state==1}">已预约</li>
+                    <li @click="BookedList_init({'requireTotalCount':true,'pageSize':'300'})" :class="{active:task_state==1}"><el-badge :value="booknum" :max="99" v-show="booknum>0">
+                    <div class="tit" :style="{'padding-top':'0px'}">已预约</div>
+                    </el-badge><div class="tit" :style="{'padding-top':'0px'}" v-show="booknum==0">已预约</div></li>
                     <li :class="{active:task_state==2}" @click="task_state=2">来电</li>
                 </ul>
             </div>
@@ -469,7 +471,7 @@
         font-size: 23px;
         line-height:45px;
         float: left;
-        margin:4px;
+        margin:11px 4px;
     }
     #call_icon{
         margin:11px;
@@ -781,6 +783,7 @@ export default {
         this.TaskList_init({});
         this.call_init(this.hasGetUserMedia());
         this.connect();
+        this.BookedList_init();
     },
     beforeDestroy(){
         console.log(this.ua);
@@ -789,6 +792,18 @@ export default {
             this.ua.stop();
         }
         this.disconnect();
+    },
+    computed:{
+        booknum:function (){
+            var num=0;
+            this.booklist.map(item=>{
+                console.log(item.nextContactTime)
+                if((new Date(item.nextContactTime).getTime()-new Date().getTime())<1000*60*30){
+                    num++;
+                }
+            })
+            return num;
+        }
     },
     methods:{
         test(){
@@ -1073,10 +1088,13 @@ export default {
                     this.task_state=1;
                     if(res.data.rows[0]!={}){
                         res.data.rows.map(item=>{
-                            item.nextContactTime_str=md5.time_init(new Date(item.nextContactTime));
+                            if(new Date(item.nextContactTime).getTime()<new Date().getTime()){
+                                item.nextContactTime_str="已逾期"
+                            }else{
+                                item.nextContactTime_str=md5.time_init(new Date(item.nextContactTime));
+                            }
                         })
                     }
-                    
                     this.booklist=res.data.rows;
                 }
             });
@@ -1503,7 +1521,7 @@ export default {
                             console.log("退回开始呼叫");
                             _this.$message({
                                 showClose: true,
-                                message: 'res.data.message',
+                                message: res.data.message,
                                 type: 'warning'
                             });
                             this.$message

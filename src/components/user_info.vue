@@ -1,29 +1,30 @@
 <template>
   <div class="container">
     <div class="nav">帐号信息设置</div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="帐号名称">
-        <span class="black">{{loginName}}</span>
-      </el-form-item>
-      <el-form-item label="帐号类型">
-        <span class="black" v-show="type==0">超级管理员</span>
-        <span class="black" v-show="type==1">运维管理员</span>
-        <span class="black" v-show="type==2">企业管理员</span>
-        <span class="black" v-show="type==3">坐席</span>
-      </el-form-item>
-      <el-form-item label="密码">
-        <span class="black">******</span>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-edit" @click="dialogVisible = true"></el-button>
-      </el-form-item>
-    </el-form>
+    <div id="form">
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="帐号名称：" :style="{'text-align':'left'}">
+          <span class="black">{{loginName}}</span>
+        </el-form-item>
+        <el-form-item label="帐号类型：" :style="{'text-align':'left'}">
+          <span class="black" v-show="type==0">超级管理员</span>
+          <span class="black" v-show="type==1">运维管理员</span>
+          <span class="black" v-show="type==2">企业管理员</span>
+          <span class="black" v-show="type==3">坐席</span>
+        </el-form-item>
+        <el-form-item label="密码：" :style="{'text-align':'left'}">
+          <span class="black">******</span>
+          <el-button :style="{'float':'right'}" type="primary" icon="el-icon-edit" @click="dialogVisible = true"></el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    
     <el-dialog
       title="修改密码"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose">
-      <el-form ref="form" :model="form" label-width="80px">
+      :before-close="handleClose" @open="open">
+      <el-form ref="form" :model="form" label-width="120px">
         <el-form-item label="原密码">
           <el-input type="password" v-model="form.oldPassword" auto-complete="off"></el-input>
         </el-form-item>
@@ -50,6 +51,13 @@
     margin-bottom: 10px;
     box-sizing: border-box;
   }
+  #form{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding-right: 50vw;
+  }
 </style>
 <script>
   export default {
@@ -67,6 +75,11 @@
       };
     },
     methods: {
+      open(){
+        this.form.oldPassword=null;
+        this.form.Password=null;
+        this.form.Password2=null;
+      },
       updateAccountPassword(){
         var pattern = /\S{6,32}/;
         if (!pattern.test(this.form.password)) {
@@ -81,14 +94,18 @@
           .then( (res) => {
             var data = res.data;
             if(data.code==200){
-              alert("修改成功");
-            }else{
-              alert(data.message);
-              /*this.$message({
+              this.dialogVisible=false;
+              this.$message({
                 showClose: true,
-                message: res.data.message,
+                message: data.message,
+                type: 'success'
+              });
+            }else{
+              this.$message({
+                showClose: true,
+                message: data.message,
                 type: 'warning'
-              });*/
+              });
             }
           })
       },

@@ -27,14 +27,14 @@
               <el-submenu index="2">
                 <template slot="title">
                   <i class="el-icon-waihu"></i>
-                  <span>账号管理&#12288;&#12288;</span>
+                  <span>帐号管理&#12288;&#12288;</span>
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/operation/manager'}">
-                    <el-menu-item index="2-1">管理员账号&#12288;</el-menu-item>
+                    <el-menu-item index="2-1">管理员帐号&#12288;</el-menu-item>
                   </router-link>
                   <router-link :to="{path:'/operation/staff'}">
-                    <el-menu-item index="2-2">坐席账号&#12288;&#12288;</el-menu-item>
+                    <el-menu-item index="2-2">坐席帐号&#12288;&#12288;</el-menu-item>
                   </router-link>
                 </el-menu-item-group>
               </el-submenu>
