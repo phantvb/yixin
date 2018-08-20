@@ -77,13 +77,12 @@
                 <el-table-column prop="processingNum" label="跟进" class-name="line7" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
                 <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="160">
                     <template slot-scope="scope">
-                        <span v-for="(item,index) in scope.row.tags" :key="index">{{item.tagName}};</span>
-                        <!-- <el-select v-model="scope.row.tags" multiple collapse-tags placeholder="请选择">
-                            <el-option v-for="item in allTagList" :key="item.id" :label="item.tagName" :value="item.id">
+                        <p><span v-for="(item,index) in scope.row.tags" :key="index" v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel">{{item.tagName?item.tagName:item}};</span></p>
+                        <span v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel" v-if="scope.row.tags.length==0">暂无关联标签，点击修改</span>
+                        <el-select  size="mini" v-model="scope.row.tags" multiple collapse-tags placeholder="请选择" v-show="scope.row.showSel" @change="updateSel(scope.$index, scope.row)" popper-class="sel" @focus="scope.row.tags=[]">
+                            <el-option v-for="item in allTagList" :key="item.id" :label="item.tagName" :value="item.tagName">
                             </el-option>
-                        </el-select> -->
-                        
-
+                        </el-select>
                     </template>
                 </el-table-column>
                 <el-table-column prop="create" label="创建时间" class-name="line9" :show-overflow-tooltip=true min-width="120" sortable='custom'> </el-table-column>
@@ -246,7 +245,8 @@ export default {
             orderField:null,
             lead_data:null,
             blank:false,
-            allTagList:[]
+            allTagList:[],
+            upTagTimer:null
         }
     },
     components:{
@@ -311,6 +311,39 @@ export default {
 
             }
         },
+        //修改关联客户标签
+        updateSel(index,row){
+            row.showSel=false;
+            var arr=[];
+            var _this=this;
+            row.tags.map((item,index)=>{
+                for(var i=0;i<this.allTagList.length;i++){
+                    if(item==this.allTagList[i].tagName){
+                        arr.push(this.allTagList[i].id);
+                    }
+                }
+            })
+            this.$ajax.post(this.$preix+'/new/calltask/updateCallTask',{'taskId':row.id,'tagIds':arr})
+            .then( (res) => {
+                clearTimeout(this.upTagTimer);
+                if(res.data.code==200){
+                    _this.upTagTimer=setTimeout(function(){
+                        _this.$message({
+                            showClose: true,
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                    },1000)
+                }
+            })
+            .catch(res=>{
+                this.$message({
+                    showClose: true,
+                    message: res.data.message?res.data.message:'修改失败哦',
+                    type: 'warning'
+                });
+            })
+        },
         see_change:function(value){
             this.see_state=value;
             this.missoin_search();
@@ -366,6 +399,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',data)
             .then( (res) => {
                 if(res.data.code==200){
+                    res.data.rows.map(item=>item.showSel=false);
                     this.tableData=res.data.rows;
                 }
             })
@@ -381,6 +415,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',data)
             .then( (res) => {
                 if(res.data.code==200){
+                    res.data.rows.map(item=>item.showSel=false);
                     this.tableData=res.data.rows;
                     this.page_count=res.data.totalCount;
                 }
@@ -401,11 +436,11 @@ export default {
             }
             this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',data)
             .then( (res) => {
+                res.data.rows.map(item=>item.showSel=false);
                 this.tableData=res.data.rows;
             })
         },
         state_select(row,state){
-            console.log(row);
             this.$ajax.post(this.$preix+'/new/calltask/updateCallTask',{'taskId':row.id,'visibleState':state})
             .then( (res) => {
                 if(res.data.code==200){
@@ -458,6 +493,7 @@ export default {
         .then( (res) => {
             if(res.data.code==200){
                 this.page_count=res.data.totalCount;
+                res.data.rows.map(item=>item.showSel=false);
                 this.tableData=res.data.rows;
                 if(res.data.rows.length<1){
                     this.blank=true;
