@@ -16,11 +16,11 @@
                     <form @submit.prevent="loginSubmit">
                         <!-- 用户名 -->
                         <div class="loginForm">
-                           <el-input placeholder="用户名" suffix-icon="el-icon-edit" v-model="formName.userName"></el-input>  
+                           <el-input placeholder="用户名" suffix-icon="el-icon-edit" v-model="formName.userName"></el-input>
                         </div>
                         <!-- 密码 -->
                         <div class="loginForm">
-                           <el-input type="password" placeholder="密码" suffix-icon="el-icon-view" v-model="formName.userPassWord"></el-input>  
+                           <el-input type="password" placeholder="密码" suffix-icon="el-icon-view" v-model="formName.userPassWord"></el-input>
                         </div>
                         <div v-if="verShow" class="loginForm">
                             <!-- 验证码输入框 -->
@@ -28,7 +28,7 @@
                                 <el-input placeholder="验证码" v-model="formName.flag"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChage">
+                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChange">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
@@ -52,7 +52,7 @@
                     <form @submit.prevent="loginEmils">
                         <!-- 邮箱 -->
                         <div class="loginForm">
-                           <el-input placeholder="请输入管理员注册邮箱号" suffix-icon="el-icon-view" v-model="formNames.emil"></el-input>  
+                           <el-input placeholder="请输入管理员注册邮箱号" suffix-icon="el-icon-view" v-model="formNames.emil"></el-input>
                         </div>
                         <div class="loginForm">
                             <!-- 验证码输入框 -->
@@ -60,7 +60,7 @@
                                 <el-input placeholder="验证码" v-model="formNames.flags"></el-input>
                             </div>
                             <!-- 验证码图片 -->
-                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChage">
+                            <img :src="verifyImg" alt="" class="verifyImg" @click="verifyChange">
                         </div>
                         <div class="verifyText">
                            <!-- 此处为验证提示信息 -->
@@ -122,7 +122,6 @@ export default {
             loginBtn:'登 录',
             loginEmil:'发送邮件',
             loginRight:'确定',
-            zhuceEmil:'zhuweiwen@yixin.im',
             yzInfo:'',
             errInfo:'',
             passCunt:{
@@ -132,14 +131,18 @@ export default {
         }
     },
     created(){
-        // 判断登陆时是否显示验证码
-        this.getVer();
         //判断之前是否有记住密码
         this.getUserInfo();
-        //this.getUrl();
     },
     mounted(){
         this.verifyImg=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
+        this.$ajax.post(this.$preix+'/new/getFailNum',{})
+          .then( (res) => {
+              var failNum = res.data.info;
+              if(failNum >= 3){
+                this.verShow = true;
+              }
+          });
     },
     methods: {
         msgErrorShow(msg){
@@ -148,13 +151,12 @@ export default {
                 type: "error"
             });
         },
-        verifyChage(){
+        verifyChange(){
             this.verifyImg=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
         },
         //判断之前是否有记住密码
         getUserInfo(){
             let UserInfo = JSON.parse(localStorage.getItem("userNamePass"));
-            console.log(UserInfo);
             if(UserInfo){
               this.formName.userName = UserInfo.name;
               this.formName.userPassWord = UserInfo.passWord;
@@ -176,48 +178,18 @@ export default {
         //登陆
         loginSubmit(){
             var self = this;
-            // alert('登陆')
             if(self.formName.userName ==''){
                 this.yzInfo = '请输入登陆账号';
-				return false;
+				        return false;
             }
-            // if(!isRegisterUserName(self.formName.userName)) {
-            //     // self.msgErrorShow("请输入正确账号");
-            //     this.yzInfo = '请输入正确账号';
-			// 	return false;
-            // }
             if(self.formName.userPassWord == ''){
                 this.yzInfo = '请输入登陆密码';
-				return false;
+				        return false;
             }
-            // if(!isPasswd(self.formName.userPassWord)) {
-            //     // self.msgErrorShow("请输入正确密码");
-            //     this.yzInfo = '请输入正确密码';
-            //     this.passCunt.nub++;
-            //     if(this.passCunt.nub>=2){
-            //        this.verShow = true;
-            //        window.sessionStorage.setItem("passCunt",JSON.stringify(this.passCunt));
-            //     }else{
-            //        this.verShow = false;
-            //     }
-			// 	return false;
-            // }
-            if(this.verShow == true){
-                if(self.formName.flag.length!=4) {
-                    // self.msgErrorShow("请输入正确验证码");
-                    this.yzInfo = '验证码错误，请重新输入';
-                    return false;
-                }
-            }
-            this.changeCheck();
             this.loginBtn = "登录中...";
             let parameter = {
-                // "email" : "string",
                 "name" : this.formName.userName,
                 "password" : base64encode.md5(this.formName.userPassWord),
-                // "password2" : "string",
-                // "reqId" : "string",
-                // "token" : "string",
                 "verifyCode" : this.formName.flag
             }
             this.$ajax.post(this.$preix+'/new/loginValidate',parameter)
@@ -229,8 +201,9 @@ export default {
                             let userInfoLst = res.data.rows;
                             window.sessionStorage.setItem("userInfoLst",JSON.stringify(userInfoLst));
                         }else{
-                            this.msgErrorShow("浏览器不支持本地存储功能，建议您使用chrome浏览器效果更佳！"); 
+                            this.msgErrorShow("浏览器不支持本地存储功能，建议您使用chrome浏览器效果更佳！");
                         }
+                        this.changeCheck();
                         if(res.data.rows[0].type==1){
                             this.$router.push({ path: '/operation/manager'})
                         }else if(res.data.rows[0].type==2){
@@ -238,56 +211,33 @@ export default {
                         }else{
                             this.$router.push({ path: '/staff/index'})
                         }
-                    }else if(res.data.code==404){
-                       // 密码错误
-                       this.passCunt.nub++;
-                        if(this.passCunt.nub>=3){
-                            this.verShow = true;
-                            window.sessionStorage.setItem("passCunt",JSON.stringify(this.passCunt));
-                        }else{
-                            this.verShow = false;
-                        }
-                        return false;
-                       this.msgErrorShow(res.data.message);
-                       this.loginBtn = "登录";
                     }else{
-                       // 登录失败
-                       this.msgErrorShow(res.data.message);
-                       this.loginBtn = "登录";
+                        this.passCunt.nub++;
+                        if(this.passCunt.nub>=3){
+                          this.verShow = true;
+                        }
+                        this.msgErrorShow(res.data.message);
+                        this.loginBtn = "登录";
                     }
             })
         },
-        //判断是否在登陆时显示验证码
-        getVer(){
-            let btnState = JSON.parse(sessionStorage.getItem('passCunt'));
-            console.log(btnState);
-            if(btnState){
-               if(btnState.nub>=2){
-                   this.verShow = true;
-               }else{
-                   this.verShow = false;
-               }
-            }
-        },
         //点击找回密码打开找回密码显示框
         retrievePassword(){
-            // alert("11")
             this.loginShow = false;
             this.passWord = true;
-            this.verifyChage();
+            this.verifyChange();
         },
         //发送邮件
         loginEmils(){
             if(this.formNames.emil ==''){
                 this.errInfo = '请输入注册邮箱号';
-				return false;
+				        return false;
             }
             if(!isEmail(this.formNames.emil)){
                 this.errInfo = '输入邮箱有误，请重新输入';
-				return false;
+				        return false;
             }
             if(this.formNames.flags.length!=4) {
-                // self.msgErrorShow("验证码错误，请重新输入");
                 this.errInfo = '验证码错误，请重新输入';
                 return false;
             }
@@ -300,7 +250,6 @@ export default {
                     if(res.data.code==200){
                         console.log(res);
                         this.dialogVisible = true;
-                        // this.msgErrorShow(res.data.message);
                     }else{
                        // 发送失败
                        this.msgErrorShow(res.data.message);
@@ -382,7 +331,7 @@ export default {
 }
 /* login输入框样式 */
 .loginForm,.loginForms{
-   margin-bottom: 10px; 
+   margin-bottom: 10px;
    height: 40px;
    display: flex;
    align-items: center;
@@ -404,10 +353,10 @@ export default {
 /* 登陆和发送邮件按钮样式 */
 .btnLoginSubmit{
    border: 0;
-   width: 100%; 
+   width: 100%;
    height:40px;
-   font-size: 16px; 
-   color: #fff; 
+   font-size: 16px;
+   color: #fff;
    cursor: pointer;
    background:#84abf8;
    background:-webkit-linear-gradient(left, #84abf8, #84abf8);
