@@ -130,7 +130,7 @@ export default {
                 this.mission_init(res.data.info)
             }
         });
-        this.init(1);
+        this.init(this.time_past);
     },
     computed:{
         time_scale:function(){

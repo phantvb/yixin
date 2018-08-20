@@ -106,7 +106,7 @@
                                 <i class="el-icon-phone-outline call_icon"></i>
                                 <span>正在呼叫</span>
                             </div>
-                            <i class="el-icon-more call_icon" @click="sipTerminate"></i>
+                            <i class="el-icon-callend call_icon" @click="sipTerminate"></i>
                             <i :class="phone_use?'el-icon-service':'el-icon-unservice'" class="call_icon" @click="meteMicrophone"></i>
                         </div>
                         <div v-show="call_state==2">
@@ -114,14 +114,14 @@
                                 <i class="el-icon-phone-outline call_icon"></i>
                                 <span>&nbsp;呼叫中&nbsp;</span>
                             </div>
-                            <i class="el-icon-more call_icon" @click="sipTerminate"></i>
+                            <i class="el-icon-callend call_icon" @click="sipTerminate"></i>
                             <i :class="phone_use?'el-icon-service':'el-icon-unservice'" class="call_icon" @click="meteMicrophone"></i>
                         </div>
                         <div v-show="call_state==3">
                             <div class="call_state" :style="{'padding':'0 15px'}">
                                 <span>&nbsp;通话中&nbsp;</span> <span :style="{'font-size':'12px'}">{{timestr}}</span>
                             </div>
-                            <i class="el-icon-more call_icon" @click="sipTerminate"></i>
+                            <i class="el-icon-callend call_icon" @click="sipTerminate"></i>
                             <i :class="phone_use?'el-icon-service':'el-icon-unservice'" class="call_icon" @click="meteMicrophone"></i>
                         </div>
                         <div v-show="call_state==4">

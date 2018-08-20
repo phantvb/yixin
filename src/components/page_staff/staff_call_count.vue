@@ -365,9 +365,12 @@ export default {
             if(this.time_past==2&&this.leading_date!=null){
                 var beginTime=this.leading_date[0];
                 var endTime=this.leading_date[1];
+            }else if(this.time_past==0){
+                var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
             }else{
                 var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
-                var endTime=this.date_init(new Date());
+                var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
             }
             // let taskIds=this.mission_active.map(item=>this.mission_list[item].taskId);
             // let userResults=this.custom_active.map(item=>this.custom_list[item].key);
@@ -391,9 +394,12 @@ export default {
             if(this.time_past==2&&this.leading_date!=null){
                 var beginTime=this.leading_date[0];
                 var endTime=this.leading_date[1];
+            }else if(this.time_past==0){
+                var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
             }else{
                 var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
-                var endTime=this.date_init(new Date());
+                var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
             }
             let taskIds=[this.mission_list[this.mission_active].taskId];
             var data={
@@ -413,9 +419,15 @@ export default {
             if(this.time_past==2&&this.leading_date!=null){
                 var beginTime=this.leading_date[0];
                 var endTime=this.leading_date[1];
+            }else if(this.time_past==0){
+                var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
+            }else if(this.time_past==0){
+                var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
+                var endTime=this.date_init(new Date(new Date().getTime() - 0*24*60*60*1000));
             }else{
                 var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
-                var endTime=this.date_init(new Date());
+                var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
             }
             let taskIds=[this.mission_list[this.mission_active].taskId];
             var data={
