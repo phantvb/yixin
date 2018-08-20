@@ -48,13 +48,8 @@
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="loginName" label="坐席账号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
-                    <!-- <template slot-scope="scope">
-                        <router-link :to="{path:'./detail', query: { id: '111' }}">
-                            {{scope.row.loginName}}
-                        </router-link>
-                    </template> -->
                     <template slot-scope="scope">
-                        <p :style="{'color':'#3399ff'}" @click="handleDetail">
+                        <p :style="{'color':'#3399ff'}" @click="handleDetail(scope.$index, scope.row)">
                             {{scope.row.loginName}}
                         </p>
                     </template>
@@ -70,13 +65,20 @@
                 <el-table-column prop="state" label="坐席状态" class-name="line3" sortable='custom' :show-overflow-tooltip=true min-width="100">
                     <template slot-scope="scope">
                         <div class="father">
-                            <p v-show="scope.row.state==1">激活中</p>
+                            <p v-show="scope.row.state==1">已激活</p>
                             <p v-show="scope.row.state==2">已冻结</p>
                             <p v-show="scope.row.state==3">已停用</p>
-                            <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)">
-                                <option value="3">已停用</option>
-                                <option value="2">已冻结</option>
-                                <option value="1">激活中</option>
+                            <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="scope.row.state==3 && accountType==2">
+                                <option value="3">停用</option>
+                            </select>
+                            <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="scope.row.state!=3 && accountType==2">
+                              <option value="2">冻结</option>
+                              <option value="1">激活</option>
+                            </select>
+                            <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="accountType!=2">
+                              <option value="3">停用</option>
+                              <option value="2">冻结</option>
+                              <option value="1">激活</option>
                             </select>
                         </div>
                     </template>
@@ -106,17 +108,24 @@
             <el-dialog title="详情" :visible.sync="see" center>
                 <div class="con">
                     <el-form :model="Form" :rules="rules" ref="Form" label-width="120px" class="demo-ruleForm" size="mini">
-                        <el-form-item label="账号" prop="loginName">
-                            <el-input v-model="Form.loginName"></el-input>
+                        <el-form-item label="帐号" prop="loginName">
+                            <el-input v-model="Form.loginName" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item label="昵称" prop="shortName">
                             <el-input v-model="Form.shortName"></el-input>
                         </el-form-item>
-                        <el-form-item label="账号状态" prop="state">
-                            <el-select v-model="Form.state" placeholder="请选择账号状态">
-                                <el-option label="激活" value="1"></el-option>
-                                <el-option label="冻结" value="2"></el-option>
-                                <el-option label="停用" value="3"></el-option>
+                        <el-form-item label="帐号状态" prop="state">
+                            <el-select v-model="Form.state" placeholder="请选择帐号状态" v-if="Form.state==3 && accountType==2">
+                              <el-option label="停用" :value="3"></el-option>
+                            </el-select>
+                            <el-select v-model="Form.state" placeholder="请选择帐号状态" v-if="Form.state!=3 && accountType==2">
+                                <el-option label="激活" :value="1"></el-option>
+                                <el-option label="冻结" :value="2"></el-option>
+                            </el-select>
+                            <el-select v-model="Form.state" placeholder="请选择帐号状态" v-if="accountType!=2">
+                              <el-option label="激活" :value="1"></el-option>
+                              <el-option label="冻结" :value="2"></el-option>
+                              <el-option label="停用" :value="3"></el-option>
                             </el-select>
                         </el-form-item>
                         <ul>
@@ -245,6 +254,7 @@ export default {
             orderWay:null,
             orderField:null,
             see:false,
+            accountType:null,
             Form: {
                 loginName: null,
                 shortName: null,
@@ -264,7 +274,12 @@ export default {
         }
     },
     methods:{
-        handleDetail(){
+        handleDetail(index,row){
+            this.$ajax.post(this.$preix+'/new/account/seatDetailView',{'id':row.id}).then(res=>{
+              if(res.data.code==200){
+                this.Form=res.data.info;
+              }
+            });
             this.see=true;
         },
         worker_change:function(value){
@@ -375,7 +390,9 @@ export default {
             this.$ajax.post(this.$preix+'/new/account/updateSeat',data)
             .then( (res) => {
                 if(res.data.code==200){
-                    this.reload()
+                  this.$message({message: '修改成功',type: 'success'});
+                }else {
+                  this.$message({message: res.data.message,type: 'error'});
                 }
             })
             .catch(res=>{
@@ -385,9 +402,11 @@ export default {
         state_select(row,state){
             this.$ajax.post(this.$preix+'/new/account/updateSeat',{'id':row.id,'state':state})
             .then( (res) => {
-                if(res.data.code==200){
-                    this.reload()
-                }
+              if(res.data.code==200){
+                this.$message({message: '修改成功',type: 'success'});
+              }else {
+                this.$message({message: res.data.message,type: 'error'});
+              }
             })
             .catch(res=>{
                 alert('修改失败哦')
@@ -427,6 +446,7 @@ export default {
         }else{
             this.seat_init({requireTotalCount:true,orderField:'create',orderWay:'desc'});
         }
+        this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;
 
     },
     inject:['reload']

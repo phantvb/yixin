@@ -59,9 +59,9 @@
                 <el-table-column prop="create" label="创建日期" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
                 <el-table-column prop="state" label="状态" class-name="line5" :show-overflow-tooltip=true  min-width="100">
                     <template slot-scope="scope">
-                        <p class="black" v-show="scope.row==3">停用</p>
-                        <p class="black" v-show="scope.row==2">冻结</p>
-                        <p class="black" v-show="scope.row==1">激活</p>
+                        <p class="black" v-show="scope.row.state==3">停用</p>
+                        <p class="black" v-show="scope.row.state==2">冻结</p>
+                        <p class="black" v-show="scope.row.state==1">激活</p>
                     </template>
                 </el-table-column>
                 <el-table-column prop="numOfSeat" label="坐席数量上限" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
@@ -97,9 +97,14 @@
                             <el-input type="password" v-model="Form.password2"></el-input>
                         </el-form-item>
                         <el-form-item label="用户类型" prop="type">
-                            <el-select v-model="Form.type" placeholder="请选择用户类型">
-                                <el-option label="企业管理员" value="2"></el-option>
-                            </el-select>
+                            <span v-if="Form.type == 1">运维管理员</span>
+                            <span v-if="Form.type == 2">企业管理员</span>
+                        </el-form-item>
+                        <el-form-item label="用户状态" prop="state">
+                          <el-select v-model="Form.state">
+                            <el-option label="激活" :value="1"></el-option>
+                            <el-option label="冻结" :value="2"></el-option>
+                          </el-select>
                         </el-form-item>
                         <el-form-item label="坐席账号前缀" prop="seatAccountPrefix">
                             <el-input v-model="Form.seatAccountPrefix"></el-input>
@@ -305,6 +310,9 @@ export default {
                 ],
                 type: [
                     { required: true, message: '请选择用户类型', trigger: 'change' }
+                ],
+                state: [
+                  { required: true, message: '请选择用户状态', trigger: 'change' }
                 ],
                 seatAccountPrefix: [
                     { required: true, message: '请输入坐席账号前缀', trigger: 'blur' },
