@@ -57,7 +57,7 @@
                         <p :style="{'color':'#3399ff'}" @click="handleDetail">
                             {{scope.row.loginName}}
                         </p>
-                    </template> 
+                    </template>
                 </el-table-column>
                 <el-table-column prop="shortName" label="坐席昵称" class-name="line2" sortable='custom' :show-overflow-tooltip=true min-width="100">
                     <template slot-scope="scope">
@@ -91,11 +91,11 @@
                         </div>
                     </template>
                 </el-table-column>
-                
+
                 <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="160">
                     <template slot-scope="scope">
                         <el-button
-                        size="mini" type="text" 
+                        size="mini" type="text"
                         @click="handlereset(scope.$index, scope.row)">重置密码</el-button>
                     </template>
                 </el-table-column>
@@ -207,7 +207,7 @@
         font-size: 14px;
         margin-bottom: 10px;
     }
-    
+
     #operate{
         margin:20px 0;
         overflow: hidden;
@@ -333,7 +333,7 @@ export default {
         //条件搜索
         findSeat:function(){
             var data={
-                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search,'partnerAccountId':this.$route.query.partnerAccountId
+                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'loginOrShortName':this.search,'partnerAccountId':this.$route.query.partnerAccountId
             };
             for (let key in data){
                 if(data[key]==''){
@@ -427,7 +427,7 @@ export default {
         }else{
             this.seat_init({requireTotalCount:true,orderField:'create',orderWay:'desc'});
         }
-        
+
     },
     inject:['reload']
 }

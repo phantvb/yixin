@@ -335,7 +335,7 @@ export default {
         search_change:function(value){
             this.search_state=value;
             this.findSeat();
-            
+
         },
         close(){
             this.dialog_show=false;
@@ -400,10 +400,11 @@ export default {
             this.message=[];
             this.$ajax.post(this.$preix+'/new/account/resetPassword',{'id':row.id})
             .then( (res) => {
-                this.message=res.data.info;
-                this.dialog_type=1;
-                this.checkbox=false;
-                this.dialog_show=true;
+              if(res.data.code == 200){
+                this.$message({"message":"邮件已发送","type":"success"});
+              }else{
+                this.$message({"message": res.data.message,"type":"error"});
+              }
             })
         },
         handleAdd(index,row){
@@ -426,14 +427,12 @@ export default {
             this.detail_type=1;
         },
         fsAdd(){
-            this.$ajax.post(this.$preix+'/account/createSeatList')
+            this.$ajax.post(this.$preix+'/new/account/batchInsertFs')
             .then( (res) => {
                 if(res.data.code==200){
-                    this.$message({
-                        showClose: true,
-                        message: '添加成功',
-                        type: 'success'
-                    });
+                  this.$message({ message: "操作成功",type: "success"});
+                }else{
+                  this.$message({ message: res.data.message,type: "error"});
                 }
             })
         },
@@ -477,7 +476,7 @@ export default {
                     this.charges=false;
                 }
             })
-            
+
         }
     },
     computed:{
