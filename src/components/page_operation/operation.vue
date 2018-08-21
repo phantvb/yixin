@@ -10,16 +10,9 @@
       <el-aside width="auto">
         <el-row class="tac">
           <el-col :span="24">
-            <el-menu
-              default-active="2"
-              class="el-menu-vertical-demo"
-              @open="handleOpen"
-              @close="handleClose"
-              background-color="#4B4D50"
-              text-color="#fff"
-              active-text-color="#ffd04b">
+            <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#4B4D50" text-color="#fff" active-text-color="#ffd04b">
               <router-link :to="{path:'/operation/index'}">
-                <el-menu-item index="1">
+                <el-menu-item index="1" class="el-submenu__title">
                   <i class="el-icon-index"></i>
                   <span slot="title">首页&#12288;&#12288;&#12288;&#12288;</span>
                 </el-menu-item>
@@ -44,7 +37,7 @@
                   <span>设置&#12288;&#12288;&#12288;&#12288;</span>
                 </template>
                 <el-menu-item-group>
-                  <router-link :to="{path:'/manager/userInfo'}">
+                  <router-link :to="{path:'/operation/userInfo'}">
                     <el-menu-item index="3-1">个人信息&#12288;&#12288;</el-menu-item>
                   </router-link>
                 </el-menu-item-group>
@@ -70,9 +63,6 @@
   height: 100vh;
   z-index: 2;
 }
-.header{
-  overflow: hidden;
-}
 .header .nav{
   width: 170px;
   float: left;
@@ -84,11 +74,15 @@
 .title{
   line-height: 53px;
 }
+
 .hello{
   width: 100vw;
   min-width: 860px;
   overflow: auto;
   position: relative;
+}
+a{
+  text-decoration: none;
 }
 .content{
   background-color: #F2F4F5;
@@ -97,14 +91,14 @@
 
 <script>
 import notify from '../component/notify.vue';
-import jm from '../js/md5.js';
-//import soc from '../js/common.js';
+import md5 from '../js/md5.js';
+import soc from '../js/common.js'
 export default {
-	name: 'operation',
+	name: 'manager',
 	data() {
 		return {
       alive:true,
-      identity:null
+      stompClient:null
 		};
   },
   components:{notify},
@@ -121,6 +115,9 @@ export default {
         this.alive=true;
       })
     },
+    test(){
+      location.href=this.$preix+'/new/logout'
+    },
     getCookie(c_name){
         if (document.cookie.length > 0) {
             var arrCookie=document.cookie.split("; ");
@@ -134,20 +131,20 @@ export default {
         }
     }
   },
-  mounted(){
-    let UserInfo = JSON.parse(window.sessionStorage.getItem("loginName"));
-    this.identity=UserInfo.loginName;
-    // var data={
-    //   'name':'yw1','password':jm.md5('yw1'),'password2':'123456'
-    // };
-    // this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
-    //   data
-    // )
-  },
 	provide(){
     return {
       reload:this.reload
     }
+  },
+  mounted(){
+    console.log(window.sessionStorage);
+    
+    // var data={
+    //     'name':'qy1','password':md5.md5('224139'),'password2':'123456'
+    // };
+    // this.$ajax.post('https://10.240.80.72:8443/icc-interface/new/loginValidate',
+    //     data
+    // );
   }
 };
 </script>

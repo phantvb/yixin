@@ -97,7 +97,7 @@
               this.dialogVisible=false;
               this.$message({
                 showClose: true,
-                message: data.message,
+                message: '修改成功',
                 type: 'success'
               });
             }else{

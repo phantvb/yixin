@@ -21,6 +21,7 @@
         background-color: #fff;
         pointer-events: all;
         box-sizing: border-box;
+        line-height: 100vh;
         /* transform:translate3d(10px,10px,0); */
     }
     #mask .button{

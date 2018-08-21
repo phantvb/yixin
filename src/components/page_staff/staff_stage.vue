@@ -41,7 +41,7 @@
                 </el-input>
                 <ul>
                     <li @click="TaskList_init" :class="{active:task_state==0}">待呼叫</li>
-                    <li @click="BookedList_init({'requireTotalCount':true,'pageSize':'300'})" :class="{active:task_state==1}"><el-badge :value="booknum" :max="99" v-show="booknum>0">
+                    <li @click="BookedList_init({'requireTotalCount':true,'pageSize':'300'})" :class="{active:task_state==1}"><el-badge is-dot :value="booknum" :max="99" v-show="booknum>0">
                     <div class="tit" :style="{'padding-top':'0px'}">已预约</div>
                     </el-badge><div class="tit" :style="{'padding-top':'0px'}" v-show="booknum==0">已预约</div></li>
                     <li :class="{active:task_state==2}" @click="task_state=2">来电</li>
@@ -128,7 +128,7 @@
                         </div>
                         <div v-show="call_state==4">
                             <div class="call_state" :style="{'padding':'0 15px'}">
-                                <i class="el-icon-phone call_icon"></i>
+                                <i class="el-icon-phone call_icon call_icon_center"></i>
                                 <span>&nbsp;刚刚 通话 {{timestr2?timestr2:'0秒'}}&nbsp;</span>
                             </div>
                         </div>
@@ -471,6 +471,9 @@
         font-size: 23px;
         line-height:45px;
         float: left;
+        margin:4px 4px;
+    }
+    .call_state .call_icon_center{
         margin:11px 4px;
     }
     #call_icon{
@@ -780,10 +783,25 @@ export default {
         })
         //缩小导航菜单
         //this.$emit("close");
+        //提前加载完预约列表
+        this.$ajax.post(this.$preix+'/new/seatWorkbench/queryBookedTaskListBySeat',{'requireTotalCount':true,'pageSize':'300'})
+        .then( (res) => {
+            if(res.status==200){
+                if(res.data.rows[0]!={}){
+                    res.data.rows.map(item=>{
+                        if(new Date(item.nextContactTime).getTime()<new Date().getTime()){
+                            item.nextContactTime_str="已逾期"
+                        }else{
+                            item.nextContactTime_str=md5.time_init(new Date(item.nextContactTime));
+                        }
+                    })
+                }
+                this.booklist=res.data.rows;
+            }
+        });
         this.TaskList_init({});
         this.call_init(this.hasGetUserMedia());
         this.connect();
-        this.BookedList_init();
     },
     beforeDestroy(){
         console.log(this.ua);

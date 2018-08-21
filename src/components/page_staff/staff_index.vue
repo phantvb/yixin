@@ -26,23 +26,23 @@
             <p>今日完成情况</p>
             <ul>
                 <li>
-                    <p class="black">{{todayCompleteDto.calledNumTotal}}</p>
+                    <p class="black">{{todayCompleteDto?todayCompleteDto.calledNumTotal:0}}</p>
                     <p class="grey">已呼人数</p>
                 </li>
                 <li>
-                    <p class="black">{{Math.floor(todayCompleteDto.callTalkedDuration/60)}}</p>
+                    <p class="black">{{todayCompleteDto?Math.floor(todayCompleteDto.callTalkedDuration/60):0}}</p>
                     <p class="grey">呼通时长(min)</p>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto.successNum}}</p>
+                    <p class="black">{{todayCompleteDto?todayCompleteDto.successNum:0}}</p>
                     <p class="grey">发展成功</p>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto.failureNum}}</p>
+                    <p class="black">{{todayCompleteDto?todayCompleteDto.failureNum:0}}</p>
                     <p class="grey">发展失败</p>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto.progressingNum}}</p>
+                    <p class="black">{{todayCompleteDto?todayCompleteDto.progressingNum:0}}</p>
                     <p class="grey">继续跟进</p>
                 </li>
                 <li>
