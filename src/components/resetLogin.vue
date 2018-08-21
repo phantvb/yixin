@@ -10,7 +10,7 @@
             <div class="loginBox">
                 <div v-if="resetPass" class="resetPassword">
                     <div class="bigger">
-                        <i class="el-icon-service iconLoing"></i>
+                        <i class="el-icon-loginPass iconLoing"></i>
                         重置密码
                     </div>
                     <form @submit.prevent="resetPassWord">

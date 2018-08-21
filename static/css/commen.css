@@ -472,7 +472,22 @@ li{
   background: url('../icon/no_mission.png');
   background-size:64px 64px;
 }
-
+.el-icon-login:before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: url('../icon/login.png');
+  background-size:18px 18px;
+}
+.el-icon-loginPass:before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: url('../icon/loginPass.png');
+  background-size:18px 18px;
+}
 #mask>div{
   position:absolute;
   left:50%;
