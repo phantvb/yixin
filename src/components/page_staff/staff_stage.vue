@@ -50,7 +50,7 @@
             <div class="con">
                 <p v-if="task_state==0&&TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
                 <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" ref="tree" node-key="id">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1)">
+                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
                         <span>{{data.lastCalledTime}}</span>
@@ -63,7 +63,7 @@
                     </div>
                 </el-tree>
                 <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" ref="tree" node-key="id">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2)" @contextmenu='prevent($event,data)'>
+                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)'>
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
                         <span>{{data.lastCalledTime}}</span>
@@ -76,7 +76,7 @@
                     </div>
                 </el-tree>
                 <div id="book">
-                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,1)">
+                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3,item)">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
                         <span>{{item.nextContactTime_str}}</span>
@@ -220,7 +220,7 @@
                 </div>
                 <div class="submit">
                     <p class="grey">提交小结后将自动呼叫下一位客户</p>
-                    <el-button type="info" size="mini" :style="{'background':'#7496F2','border-color':'#fff'}" @click="update">提交小结</el-button>
+                    <el-button :type="call_state==4?'primary':'info'" size="mini" :style="{'border-color':'#fff'}" @click="update">提交小结</el-button>
                 </div>
             </div>
             <div class="history">
@@ -403,7 +403,7 @@
         margin: 0;
         cursor: default;
         background:#fff;
-        padding-bottom:20px;
+        padding-bottom:60px;
     }
     .aside .foot li{
         width: 49%;
@@ -1118,8 +1118,8 @@ export default {
             });
         },
         //获取客户详情
-        detail_init(item,type){
-            console.log(item,type);
+        detail_init(item,type,node){
+            console.log(item,type,node);
             var _this=this;
             this.tags=[];
             this.show=false;
@@ -1140,9 +1140,12 @@ export default {
             if(type==1){
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
-            }else{
+            }else if(type==2){
                 this.left.taskId=null;
                 this.left.taskListId=item.id;
+            }else{
+                this.left.taskListId=null;
+                this.left.taskId=item.taskId;
             }
             this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':item.taskClientId})
             .then( (res) => {
@@ -1198,6 +1201,7 @@ export default {
                         let obj={};
                         let id=res.data.rows[i].taskId;
                         obj.id=res.data.rows[i].taskId;
+                        obj.taskName=res.data.rows[i].taskName;
                         obj.label=res.data.rows[i].taskName+'('+res.data.rows[i].processingNum+')';
                         var param = {};
                         param.taskId = res.data.rows[i].taskId;
@@ -1226,6 +1230,7 @@ export default {
                     let _this=this;
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
+                        obj.taskName=res.data.rows[i].taskName;
                         obj.label=res.data.rows[i].name+'('+res.data.rows[i].numberTotal+')';
                         obj.id=res.data.rows[i].id;
                         obj.dialplanId=res.data.rows[i].id;
@@ -1371,7 +1376,7 @@ export default {
                                 if(_this.worker_state!='1'){
                                     _this.TaskBySeat_data[index].children.splice(i,1);
                                     console.log('当前：',items.children[i])
-                                    _this.detail_init(items.children[i],1);
+                                    _this.detail_init(items.children[i],1,);
                                 }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     console.log('当前：',items.children[i+1])
                                     _this.detail_init(items.children[i+1],1);

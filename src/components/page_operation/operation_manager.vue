@@ -97,8 +97,10 @@
                             <el-input type="password" v-model="Form.password2"></el-input>
                         </el-form-item>
                         <el-form-item label="用户类型" prop="type">
-                            <span v-if="Form.type == 1">运维管理员</span>
-                            <span v-if="Form.type == 2">企业管理员</span>
+                            <el-select v-model="Form.type" :disabled="detail_type==0">
+                                <el-option label="运维管理员" :value="1"  :disabled="accountType==1"></el-option>
+                                <el-option label="企业管理员" :value="2"></el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="用户状态" prop="state">
                           <el-select v-model="Form.state">
@@ -264,6 +266,7 @@ export default {
             }
         };
         return {
+            accountType:null,
             worker_state:'',
             search_state:false,
             search_date:[],
@@ -504,6 +507,7 @@ export default {
         }else{
             this.manager_init({requireTotalCount:true});
         }
+        this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;
     },
     inject:['reload']
 }

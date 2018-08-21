@@ -22,7 +22,7 @@
           <div class="notify_mes" >
 
           </div> -->
-            <el-dropdown trigger="click" class="id1" placement="bottom-start" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
+            <el-dropdown trigger="click" class="id1" placement="top-end" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
                 <div @click="handlecommand">
                     <el-badge :value="notify" :max="99" v-show="notify>0">
                     <i class="el-icon-menu"></i>
