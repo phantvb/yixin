@@ -22,8 +22,8 @@
           <div class="notify_mes" >
 
           </div> -->
-            <el-dropdown trigger="click" class="id1" placement="top-start" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
-                <div @click="notify=0">
+            <el-dropdown trigger="click" class="id1" placement="top-end" @visible-change='visible' @command='handlecommand' :hide-on-click="false">
+                <div @click="handlecommand">
                     <el-badge :value="notify" :max="99" v-show="notify>0">
                     <i class="el-icon-menu"></i>
                     </el-badge>
@@ -48,6 +48,8 @@
 .notify{
   margin: 15px 0;
   position: relative;
+  min-width: 500px;
+  text-align: right;
 }
 .title{
   line-height: 53px;

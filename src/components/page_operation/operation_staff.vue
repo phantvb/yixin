@@ -47,7 +47,7 @@
             </div>
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
                 <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="loginName" label="坐席账号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
+                <el-table-column prop="loginName" label="坐席帐号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
                     <template slot-scope="scope">
                         <p :style="{'color':'#3399ff'}" @click="handleDetail(scope.$index, scope.row)">
                             {{scope.row.loginName}}
