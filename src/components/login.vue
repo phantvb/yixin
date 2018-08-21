@@ -10,7 +10,7 @@
             <div class="loginBox">
                 <div v-if="loginShow" class="loginWrapper">
                     <div class="bigger">
-                        <i class="el-icon-service iconLoing"></i>
+                        <i class="el-icon-login iconLoing"></i>
                         欢迎登陆
                     </div>
                     <form @submit.prevent="loginSubmit">
@@ -46,7 +46,7 @@
                 </div>
                 <div v-if="passWord" class="forgetPassword">
                     <div class="bigger">
-                        <i class="el-icon-service iconLoing"></i>
+                        <i class="el-icon-loginPass iconLoing"></i>
                         找回密码
                     </div>
                     <form @submit.prevent="loginEmils">

@@ -1376,14 +1376,14 @@ export default {
                                 if(_this.worker_state!='1'){
                                     _this.TaskBySeat_data[index].children.splice(i,1);
                                     console.log('当前：',items.children[i])
-                                    _this.detail_init(items.children[i],1,);
+                                    _this.detail_init(items.children[i],1,items);
                                 }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     console.log('当前：',items.children[i+1])
-                                    _this.detail_init(items.children[i+1],1);
+                                    _this.detail_init(items.children[i+1],1,items);
                                 }else if(_this.worker_state=='1'&&_this.time_next!=''){
                                     _this.TaskBySeat_data[index].children.splice(i,1);
                                     console.log('当前：',items.children[i])
-                                    _this.detail_init(items.children[i],1);
+                                    _this.detail_init(items.children[i],1,items);
                                 }
                                 // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
                                 if(_this.call_auto=='true'){
@@ -1421,12 +1421,12 @@ export default {
                             if(i<items.children.length-1&&i!=-1){
                                 if(_this.worker_state!='1'){
                                     _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
-                                    _this.detail_init(items.children[i],2);
+                                    _this.detail_init(items.children[i],2,items);
                                 }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    _this.detail_init(items.children[i+1],2);
+                                    _this.detail_init(items.children[i+1],2,items);
                                 }else{
                                     _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
-                                    _this.detail_init(items.children[i],2);
+                                    _this.detail_init(items.children[i],2,items);
                                 }
                                 // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
                                 if(_this.call_auto=='true'){
@@ -1465,9 +1465,9 @@ export default {
                                 if(i==index&&i!=(_this.booklist.length-1)){
                                     if(_this.time_next==''){
                                         _this.booklist.splice(index,1);
-                                        _this.detail_init(_this.booklist[index],1);
+                                        _this.detail_init(_this.booklist[index],1,items);
                                     }else if(_this.time_next!=''){
-                                        _this.detail_init(_this.booklist[index+1],1);
+                                        _this.detail_init(_this.booklist[index+1],1,items);
                                     }
                                     if(_this.call_auto=='true'){
                                         _this.call_state=5;

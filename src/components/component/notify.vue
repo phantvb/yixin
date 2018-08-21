@@ -85,7 +85,9 @@ export default {
     data() {
 		return {
             identity:null,
-            notifylist:[],
+            notifylist:[{
+                content:'距离与娃娃16（153****0115）预约的通话时间00:00还有10分钟距离与娃娃16（'
+            }],
             notify:0
 		};
     },
