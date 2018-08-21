@@ -44,7 +44,7 @@
                     <p class="grey">继续跟进</p>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto.calledNumTotal==0?0:Math.ceil(todayCompleteDto.successNum/todayCompleteDto.calledNumTotal*100)}}%</p>
+                    <p class="black">{{todayCompleteDto&&todayCompleteDto.calledNumTotal!=0?Math.ceil(todayCompleteDto.successNum/todayCompleteDto.calledNumTotal*100):0}}%</p>
                     <p class="grey">成功率(成功/已呼)</p>
                 </li>
             </ul>
@@ -219,9 +219,6 @@ export default {
             };
             myChart.setOption(option);
         },
-        change:function(){
-            
-        },
         date_init(date){
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
@@ -258,7 +255,7 @@ export default {
         this.$ajax.post(this.$preix+'/new/callstatistics/querySeatTaskCompletion',{beginTime:beginTime,endTime:endTime}
         ).then( res=>{
             if(res.data.code==200&&res.data.info){
-                _this.todayCompleteDto=res.data.info;
+                _this.todayCompleteDto=res.data.info?res.data.info:'';
             }
         });
     }

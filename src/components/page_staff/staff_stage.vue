@@ -76,10 +76,10 @@
                     </div>
                 </el-tree>
                 <div id="book">
-                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3,item)">
+                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
-                        <span>{{item.nextContactTime_str}}</span>
+                        <span :class="(new Date(item.nextContactTime).getTime()-30*60*1000)<new Date().getTime()?'red':''">{{item.nextContactTime_str}}</span>
                         <span>{{item.depName}}{{item.areaName}}</span>
                     </div>
                 </div>
@@ -178,19 +178,21 @@
                                 <input type="text" v-model="email" @blur="upSeat">
                             </div>
                         </div>
-                        
                         <div class="grey">公司：
                             <div class="father">
                                 <span class="black">{{company?company:'&#12288;'}}</span>
                                 <input type="text" v-model="company" @blur="upSeat">
                             </div>
                         </div>
+                        <!-- <div class="grey" v-show="taskName_str">所属：
+                            <span class="black">{{taskName_str}}</span>
+                        </div> -->
                     </div>
                 </div>
                 
             </div>
             <div class="summary">
-                <p class="black tit">通话小结</p>
+                <p class="black tit">通话小结 <span class="grey" :style="{'font-weight':'400'}">{{'('+taskName_str+')'}}</span></p>
                 <div>
                     <div class="state">
                         <p class="grey">跟进状态</p>
@@ -285,6 +287,9 @@
     }
 </style>
 <style scoped>
+    .red{
+        color:#e3170d!important;
+    }
     .call_active{
         background-color:#7496F2;
     }
@@ -764,16 +769,19 @@ export default {
             baseUrl:null,
             session:null,
             recordFilePath:null,
-            callSeesionId:null
+            callSeesionId:null,
+            taskName_str:null
         }
     },
     components:{
       DialogAdd,history,'a-player': VueAplayer
     },
     mounted() {
-        // window.onbeforeunload = function(){
-        //     this.disconnect();
-        // };
+        // window.onbeforeunload=function(e){
+
+        //     return false;
+
+        // }
         //录音基础
         this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
             if(res.data.code){
@@ -1119,7 +1127,7 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
-            console.log(item,type,node);
+            console.log(node);
             var _this=this;
             this.tags=[];
             this.show=false;
@@ -1137,6 +1145,13 @@ export default {
             this.right.taskListId=item.id;
             this.right.taskId=item.taskId;
             this.left.taskClientId=item.taskClientId;
+            if(node==undefined){
+                this.taskName_str=null;
+            }else if(node.parent){
+                this.taskName_str=node.parent.data.taskName;
+            }else{
+                this.taskName_str=node.taskName;
+            }
             if(type==1){
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
@@ -1216,7 +1231,6 @@ export default {
                             }
                         });
                     }
-                    console.log(arr);
                     _this.TaskBySeat_data=arr;
                 }
             })
@@ -1230,7 +1244,7 @@ export default {
                     let _this=this;
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
-                        obj.taskName=res.data.rows[i].taskName;
+                        obj.taskName=res.data.rows[i].name;
                         obj.label=res.data.rows[i].name+'('+res.data.rows[i].numberTotal+')';
                         obj.id=res.data.rows[i].id;
                         obj.dialplanId=res.data.rows[i].id;

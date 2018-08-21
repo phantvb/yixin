@@ -44,7 +44,7 @@
                     <p class="grey">总呼通时长(min)</p>
                 </li>
                 <li>
-                    <p class="black">{{infos.callTalkedTotal==0?0:Math.floor(infos.callTalkedDuration/infos.callTalkedTotal)}}</p>
+                    <p class="black">{{infos&&infos.callTalkedTotal!=0?Math.floor(infos.callTalkedDuration/infos.callTalkedTotal):0}}</p>
                     <p class="grey">平均呼叫时长(s)</p>
                 </li>
             </ul>
@@ -353,7 +353,7 @@ export default {
             ).then( res=>{
                 if(res.data.code==200){
                     console.log(res.data.info)
-                    this.infos=res.data.info?res.data.info:undefined;
+                    this.infos=res.data.info?res.data.info:'';
                 }
             });
             //下方表格数据

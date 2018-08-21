@@ -83,11 +83,7 @@
                     <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                     <el-table-column label="最近通话" class-name="line7" :show-overflow-tooltip=true min-width="80">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.callResult==0">未开始</span>
                             <span v-if="scope.row.callResult==10">正常通话</span>
-                            <span v-if="scope.row.callResult==11">转给其他坐席</span>
-                            <span v-if="scope.row.callResult==12">转值班电话</span>
-                            <span v-if="scope.row.callResult==21">没坐席接听</span>
                             <span v-if="scope.row.callResult==22">未接通</span>
                         </template>
                     </el-table-column>

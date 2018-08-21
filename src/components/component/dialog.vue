@@ -8,7 +8,7 @@
         </el-steps>
         <div v-show="dialog_active==0">
           <div class="upfiles">
-            <input type="file" @input="upfiles" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+            <input type="file"  @input="upfiles" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
             <div>
               <p>上传客户资源模板</p>
             </div>
@@ -175,6 +175,7 @@
               var _this=this;
               this.dialog_active=1;
               let formdata = new FormData();
+              console.log(event.target.files[0]);
               formdata.append('file',event.target.files[0]);
               this.$ajax.post(this.$preix+'/new/calltask/importCallTaskClientsCheck',formdata,{headers: { 'Content-Type': 'application/x-www-form-urlencoded' }})
               .then( (res) => {

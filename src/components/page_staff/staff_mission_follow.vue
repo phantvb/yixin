@@ -55,7 +55,7 @@
                 <el-table-column prop="processingNum" label="跟进" class-name="line7" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
                 <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
                     <template slot-scope="scope">
-                        <span v-for="(item,index) in scope.row.tagValue" :key="index">{{item}};</span>
+                        <span v-for="(item,index) in scope.row.tags" :key="index">{{item.tagName}};</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="create" label="创建时间" class-name="line9" sortable='custom' :show-overflow-tooltip=true min-width="120"> </el-table-column>
@@ -290,11 +290,6 @@ export default {
                     if(res.data.totalCount){
                         this.page_count=res.data.totalCount;
                     }
-                    res.data.rows.map(item=>{
-                        if(item.tags.length>0&&item.tags[0].tagValue.length>0){
-                            item.tagValue=item.tags[0].tagValue.split(';')
-                        }
-                    });
                     this.tableData=res.data.rows;
                 }
             })
