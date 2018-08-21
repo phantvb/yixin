@@ -77,8 +77,8 @@
     methods: {
       open(){
         this.form.oldPassword=null;
-        this.form.Password=null;
-        this.form.Password2=null;
+        this.form.password=null;
+        this.form.password2=null;
       },
       updateAccountPassword(){
         var pattern = /\S{6,32}/;

@@ -16,9 +16,7 @@
                     <p class="grey">今日已预约</p>
                 </li>
                 <li :style="{'float':'right'}">
-                    <router-link :to="{path:'/staff/stage'}">
-                    <el-button type="info" size="small" :style="{'margin-top':'1em'}">开始呼叫工作</el-button>
-                    </router-link>
+                    <el-button type="info" size="small" :style="{'margin-top':'1em'}" @click="pushStage">开始呼叫工作</el-button>
                 </li>
             </ul>
         </div>
@@ -172,6 +170,10 @@ export default {
         }
     },
     methods:{
+        pushStage(){
+            this.$emit('close');
+            this.$router.push({ path: '/staff/stage'})
+        },
         drawPie:function(item){
             console.log(item);
             var myChart = echarts.init(document.getElementsByClassName('svg')[item.id_num]);
