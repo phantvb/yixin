@@ -135,29 +135,29 @@
                         <ul  v-show="detail_type==0">
                             <li>
                                 <p class="black">实时资源：</p>
-                                <div class="grey charge">2000分钟
+                                <div class="grey charge">{{Form.callCredit+Form.callRemaining}}分钟
                                     <el-button type="info" plain size="mini" id="charge" @click="charges=true">充值</el-button>
                                 </div>
                             </li>
                             <li>
                                 <p class="black">id：</p>
-                                <div class="grey">0edafda9-57d3-48e5-9cad-88041ca2a4a4</div>
+                                <div class="grey">{{Form.id}}</div>
                             </li>
                             <li>
                                 <p class="black">创建日期：</p>
-                                <div class="grey">2018-03-23 11:53:05</div>
+                                <div class="grey">{{Form.create}}</div>
                             </li>
                             <li>
                                 <p class="black">更新日期：</p>
-                                <div class="grey">2018-06-29 13:54:34</div>
+                                <div class="grey">{{Form.update}}</div>
+                            </li>
+                            <li>
+                              <p class="black">token：</p>
+                              <div class="grey">{{Form.token}}</div>
                             </li>
                             <li>
                                 <p class="black">手机：</p>
-                                <div class="grey">13325717959 </div>
-                            </li>
-                            <li>
-                                <p class="black">token：</p>
-                                <div class="grey">zwwqy</div>
+                                <div class="grey">{{Form.phone}} </div>
                             </li>
                         </ul>
                     </el-form>
