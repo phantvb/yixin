@@ -12,8 +12,13 @@ import VueClipboard from 'vue-clipboard2';
 Vue.config.debug = true;
 Vue.config.productionTip = false;
 axios.defaults.withCredentials = true;
+<<<<<<< HEAD
 Vue.prototype.$preix = 'https://10.240.80.72:8443/icc-interface';
 // Vue.prototype.$preix = '/icc-interface';
+=======
+//Vue.prototype.$preix = 'https://10.240.80.72:8443/icc-interface';
+Vue.prototype.$preix = '/icc-interface';
+>>>>>>> d70c3b3de4059f009ad907654d2fb8ebeac8437c
 Vue.prototype.$ajax = axios;
 axios.interceptors.response.use(res=>{
   switch (res.data.code){

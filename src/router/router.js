@@ -42,7 +42,7 @@ export default new Router({
       {path:'index',component:manager_index},
       {path:'follow',component:mission_follow},
       {path:'detail',component:mission_detail},
-      {path:'worker',component:worker},
+      {path:'worker',component:operation_staff},
       {path:'call_count',component:call_count},
       {path:'call_detail',component:call_detail},
       {path:'label',component:label},
