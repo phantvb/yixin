@@ -12,7 +12,16 @@
                 <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">任务名称&#12288;&#12288;</p>
-                    <p class="black" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:mission_state==index}" @click="mission_change(index)">{{item.taskName}}</p>
+                    <p class="black" v-if="index < 6" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
+                    <el-select id="taskId" v-if="mission_list.length >= 6" v-model="taskIdsTmp" @change="mission_change2" clearable filterable placeholder="请选择">
+                      <el-option
+                        v-if="index >=6"
+                        v-for="(item,index) in mission_list"
+                        :key="item.taskId"
+                        :label="item.taskName"
+                        :value="item.taskId">
+                      </el-option>
+                    </el-select>
                 </div>
                 <div>
                     <p class="grey">客户状态&#12288;&#12288;</p>
@@ -124,7 +133,7 @@
         border-left: 1px solid #eee;
         box-sizing: border-box;
     }
-    
+
     .part2_tit{
         margin: 20px 0;
         overflow: hidden;
@@ -187,7 +196,7 @@ export default {
             close_date:null,
             //0：预留 1：继续跟进 2：发展成功 3：发展失败
             custom_list:[{'key':'','value':'全部'},{'key':'0','value':'未分配'},{'key':'1','value':'持续跟进'},{'key':'2','value':'发展成功'},{'key':'3','value':'发展失败'}],
-           //呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 
+           //呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通
             call_list:[{'key':'','value':'全部'},{'key':'10','value':'正常通话'},{'key':'22','value':'未接通'}],
             call_state:0,
             tableData: [],
@@ -195,6 +204,8 @@ export default {
             tag_list:[],
             mission_list:[],
             mission_state:0,
+            taskIds : '',
+            taskIdsTmp: '',
             pickerOptions:{
                 disabledDate:(time)=>{
                     return time.getTime()<new Date(this.$route.query.days[0]).getTime()||time.getTime()>new Date(this.$route.query.days[1]).getTime()
@@ -229,6 +240,8 @@ export default {
         },
         mission_change:function(value){
             this.mission_state=value;
+            this.taskIds = this.mission_list[value].taskId
+            this.taskIdsTmp = '';
             // if(this.mission_state.indexOf(value)==-1&&value!=0){
             //     this.mission_state.push(value);
             //     for(let i in this.mission_state){
@@ -245,14 +258,17 @@ export default {
             // }
             this.mission_search();
         },
+        mission_change2:function () {
+          this.taskIds = this.taskIdsTmp;
+          this.mission_search();
+        },
         task_init(){
             //任务列表
             this.$ajax.post(this.$preix+'/new/calltask/queryRightCallTaskList',{'pageSize':100})
             .then( (res) => {
                 if(res.data.code==200){
-                    res.data.rows.splice(0,0,{'taskName':'全部','taskId':''});
-                    res.data.rows.map((value, index)=>value.key=index);
-                    this.mission_list=res.data.rows;
+                  this.mission_list = res.data.rows;
+                  this.mission_list.splice(0,0,{'taskName':'全部','taskId':''});
                 }
             });
         },
@@ -269,14 +285,14 @@ export default {
         },
         //条件搜索
         mission_search(){
-            let taskIds=this.mission_list[this.mission_state].taskId;
+//            let taskIds=this.mission_list[this.mission_state].taskId;
             //let taskIds=this.mission_state.map(item=>this.mission_list[item].taskId);
             if(this.close_date!=undefined||this.close_date!=null){
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
-            
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
+
             }else{
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
-            
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
+
             }
             for (let key in data){
                 if(data[key]==''){
@@ -288,13 +304,13 @@ export default {
         //页码改变
         page_change(val){
             this.pageNum=val;
-            let taskIds=this.mission_list[this.mission_state].taskId;
+//            let taskIds=this.mission_list[this.mission_state].taskId;
             if(this.close_date!=undefined||this.close_date!=null){
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
-            
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+
             }else{
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
-            
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+
             }
             for (let key in data){
                 if(data[key]==''){
@@ -307,13 +323,13 @@ export default {
         sort_change({column, prop, order} ){
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
-            let taskIds=this.mission_list[this.mission_state].taskId;
+//            let taskIds=this.mission_list[this.mission_state].taskId;
             if(this.close_date!=undefined||this.close_date!=null){
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
-            
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+
             }else{
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
-            
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+
             }
             for (let key in data){
                 if(data[key]==''){
