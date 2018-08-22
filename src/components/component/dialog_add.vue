@@ -16,7 +16,17 @@
                     <div>
                         <p class="grey">任务名称&#12288;&#12288;</p>
                         <!-- <p class="black" v-for=" (item,index) in mission_list" :key="item.taskId" :class="{see_active:mission_state==index}" @click="mission_change(index)">{{item.taskName}}</p> -->
-                        <p class="black" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
+                        <p class="black" v-for=" (item,index) in mission_list" :key="index" v-if="index < 5" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
+                        <p class="black" v-if="mission_list.length > 5" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
+                        <el-select v-show="mission_more" id="taskId" :style="{'float':'right'}" v-if="mission_list.length > 5" v-model="taskIdsTmp" @change="mission_change2" filterable multiple size='mini' placeholder="请选择" collapse-tags>
+                            <el-option
+                                v-if="index >=5"
+                                v-for="(item,index) in mission_list"
+                                :key="item.taskId"
+                                :label="item.taskName"
+                                :value="item.taskId">
+                            </el-option>
+                        </el-select>
                     </div>
                     <div>
                         <p class="grey">客户状态&#12288;&#12288;</p>
@@ -34,24 +44,22 @@
                     </div>
                     <div>
                         <p class="grey">客户标签&#12288;&#12288;</p>
-                        <el-dropdown :style="{'margin':'0px 6px'}" v-for="(item,index) in tag_data" :key="index"  @command="handleCommand">
+                        <el-dropdown :hide-on-click="false" :style="{'margin':'0px 6px'}" v-for="(item,index) in tag_data" :key="index"  @command="handleCommand">
                             <span class="el-dropdown-link">
-                                {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                                {{tags[item.tagOrder].length>0?tags[item.tagOrder][0]+'('+tags[item.tagOrder].length+')':item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
                             </span>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item}">{{_item}}</el-dropdown-item>
+                                <el-dropdown-item @click.native="selcolor($event)" v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':item.tagOrder,'value':_item}">{{_item}}</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
-                        <!-- <el-tree
-                        :data="tag_data"
-                        show-checkbox
-                        node-key="id"
-                        default-expand-all
-                        :expand-on-click-node="false">
-                        <span class="custom-tree-node" slot-scope="{ node, data }">
-                            <span>{{ node.label }}</span>
-                        </span>
-                        </el-tree> -->
+                        <!-- <el-select v-model="tag_data[index]" multiple collapse-tags style="margin-left: 20px;" size="" placeholder="请选择" v-for="(item,index) in tag_data" :key="index">
+                            <el-option
+                            v-for="(_item,_index) in item.tags"
+                            :key="_index"
+                            :label="_item"
+                            :value="_item">
+                            </el-option>
+                        </el-select> -->
                     </div>
                 </div>
                 <div class="zhankai shouqi" v-if="search_state">
@@ -169,7 +177,9 @@ export default {
             tableData: [],
             page_count:0,
             pageNum:1,
-            cansave:true
+            cansave:true,
+            mission_more:false,
+            taskIdsTmp:[]
         }
     },
     props:['see'],
@@ -184,7 +194,9 @@ export default {
                 if(res.data.code==200){
                     for(let i=0;i<res.data.info.length;i++){
                         res.data.info[i].tags=res.data.info[i].tagValue.split(';');
+                        this.tags[res.data.info[i].tagOrder]=[];
                     }
+                    console.log(this.tags)
                     this.tag_data=res.data.info;
                 }
             });
@@ -199,19 +211,38 @@ export default {
             var data={"requireTotalCount" : true};
             this.mission_init(data);
         },
+        mission_change2:function () {
+          this.missoin_search();
+        },
+        //多选标签选中改变颜色
+        selcolor(e){
+            console.log(e.target.style.backgroundColor)
+            
+            if(e.target.style.backgroundColor=="rgb(236, 245, 255)"){
+                e.target.style.backgroundColor="#fff"
+            }else{
+                e.target.style.backgroundColor="rgb(236, 245, 255)";
+            }
+        },
         //条件搜索
         missoin_search:function(){
-            let taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            //选了全部
+            if(this.mission_state[0]==0){
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            }else{
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+                taskIds=taskIds.concat(this.taskIdsTmp);
+            }
             let userResults=this.custom_state.map((item)=>this.custom_list[item].key);
             let callResults=this.call_state.map((item)=>this.call_list[item].key);
             //let tags=this.tags.map((item)=>tags.push(item.value));
             
             var data={'userResults':userResults,'nameOrNumber':this.search,'taskIds':taskIds,'callResults':callResults,'whetherCalledToday':this.link_list[this.link_state].key,"requireTotalCount" : true,'pageNum':this.pageNum};
-            console.log(this.tags);
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
-                    var str='customTag'+(i+1);
-                    data[str]=this.tags[i].value;
+                    var str='customTag'+(i);
+                    console.log(str,this.tags[i])
+                    data[str]=this.tags[i];
                 }
             }
             //删除空属性
@@ -249,7 +280,13 @@ export default {
         },
         //页码改变
         page_change(val){
-            let taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            //选了全部
+            if(this.mission_state[0]==0){
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            }else{
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+                taskIds=taskIds.concat(this.taskIdsTmp);
+            }
             let userResults=this.custom_state.map((item)=>this.custom_list[item].key);
             let callResults=this.call_state.map((item)=>this.call_list[item].key);
             var data={'userResults':userResults,'nameOrNumber':this.search,'taskIds':taskIds,'callResults':callResults,'whetherCalledToday':this.link_list[this.link_state].key,"requireTotalCount" : true,'pageNum':this.pageNum};
@@ -329,8 +366,15 @@ export default {
             })
         },
         handleCommand(command) {
-            console.log(command);
-            this.tags[command.index]={'value':command.value};
+            if(!this.tags[command.index]){
+                this.tags[command.index]=[];
+                this.tags[command.index].push(command.value);
+            }else if(this.tags[command.index].indexOf(command.value)==-1){
+                this.tags[command.index].push(command.value);
+            }else{
+                var i=this.tags[command.index].indexOf(command.value);
+                this.tags[command.index].splice(i,1);
+            }
             this.missoin_search();
         }
     },

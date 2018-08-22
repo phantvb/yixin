@@ -118,6 +118,10 @@ export default {
                 this.form.radio=0;
             }
         },
+        //阻止冒泡或捕获
+        test(){
+            return
+        },
         input_focus:function(){
             document.getElementById('tag').focus();
         },
@@ -125,7 +129,8 @@ export default {
             if(this.form.tag_list==undefined){
                 this.form.tag_list=[];
             }
-            if(e.keyCode==13){
+            console.log(this.form.tag_list.length)
+            if(e.keyCode==13&&this.form.tag_list.length<10&&this.form.tag_value!=''){
                 this.form.tag_list.push(this.form.tag_value);
                 this.form.tag_value='';
             }else if(this.form.tag_value.length>10){
@@ -133,8 +138,10 @@ export default {
             }
         },
         addblur(){
-            this.form.tag_list.push(this.form.tag_value);
-            this.form.tag_value='';
+            if(this.form.tag_list.length<10&&this.form.tag_value!=''){
+                this.form.tag_list.push(this.form.tag_value);
+                this.form.tag_value='';
+            }
         },
         deletes:function(e,index){
             if(e.keyCode==8){

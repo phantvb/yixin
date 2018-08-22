@@ -254,8 +254,8 @@ export default {
         });
         this.$ajax.post(this.$preix+'/new/callstatistics/querySeatTaskCompletion',{beginTime:beginTime,endTime:endTime}
         ).then( res=>{
-            if(res.data.code==200&&res.data.info){
-                _this.todayCompleteDto=res.data.info?res.data.info:'';
+            if(res.data.code==200){
+                _this.todayCompleteDto=res.data.info?res.data.info:null;
             }
         });
     }
