@@ -53,7 +53,16 @@
             <el-button type="info" plain class="button" @click="search()">搜索收起</el-button>
             <div>
                 <p class="grey">任务名称&#12288;&#12288;</p>
-                <p v-for="(item,index) in mission_list" :key="index" class="black" :class="{worker_active:mission_active==index}" @click="mission_change(index)">{{item.taskName}}</p>
+                <p v-if="index < 6" v-for="(item,index) in mission_list" :key="index" class="black" :class="{worker_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
+                <el-select id="taskId" v-if="mission_list.length >= 6" v-model="taskIdsTmp" @change="mission_change2" filterable placeholder="请选择">
+                  <el-option
+                    v-if="index >=6"
+                    v-for="(item,index) in mission_list"
+                    :key="item.taskId"
+                    :label="item.taskName"
+                    :value="item.taskId">
+                  </el-option>
+                </el-select>
             </div>
             <div>
                 <p class="grey">客户状态&#12288;&#12288;</p>
@@ -89,7 +98,7 @@
                     <span v-if="scope.row.userResult==1">继续跟进</span>
                     <span v-if="scope.row.userResult==2">发展成功</span>
                     <span v-if="scope.row.userResult==3">发展失败</span>
-                </template> 
+                </template>
             </el-table-column>
             <el-table-column label="最近通话情况" class-name="line6" :show-overflow-tooltip=true>
                 <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
@@ -220,6 +229,8 @@ export default {
             search_state:false,
             mission_list:[],
             mission_active:0,
+            taskIds:'',
+            taskIdsTmp:'',
             //0：预留 1：继续跟进 2：发展成功 3：发展失败
             custom_list:[{'key':'','value':'全部'},{'key':'1','value':'持续跟进'},{'key':'2','value':'发展成功'},{'key':'3','value':'发展失败'}],
             custom_active:0,
@@ -272,6 +283,8 @@ export default {
         },
         mission_change:function(value){
             this.mission_active=value;
+            this.taskIds = this.mission_list[value].taskId
+            this.taskIdsTmp = '';
             // let _this=this;
             // if(this.mission_active.indexOf(value)==-1&&value!=0){
             //     this.mission_active.push(value);
@@ -288,6 +301,10 @@ export default {
             //     this.mission_active=[0];
             // };
             this.search();
+        },
+        mission_change2:function () {
+          this.taskIds = this.taskIdsTmp;
+          this.mission_search();
         },
         custom_change:function(value){
             this.custom_active=value;
@@ -342,7 +359,6 @@ export default {
             .then( (res) => {
                 if(res.data.code==200){
                     res.data.rows.splice(0,0,{'taskName':'全部','taskId':''});
-                    res.data.rows.map((value, index)=>value.key=index);
                     this.mission_list=res.data.rows;
                 }
             });
@@ -375,11 +391,11 @@ export default {
             // let taskIds=this.mission_active.map(item=>this.mission_list[item].taskId);
             // let userResults=this.custom_active.map(item=>this.custom_list[item].key);
             // let callResults=this.call_active.map(item=>this.call_list[item].key);
-            let taskIds=[this.mission_list[this.mission_active].taskId];
+//            let taskIds=[this.mission_list[this.mission_active].taskId];
             let userResults=[this.custom_list[this.custom_active].key];
             let callResults=[this.call_list[this.call_active].key];
             var data={
-                'beginDay':beginTime,'endDay':endTime,"requireTotalCount" : true,'taskIds':taskIds,userResults:userResults,callResults:callResults
+                'beginDay':beginTime,'endDay':endTime,"requireTotalCount" : true,'taskIds':this.taskIds,userResults:userResults,callResults:callResults
             }
             for (let key in data){
                 if(data[key]==''){
@@ -401,9 +417,9 @@ export default {
                 var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
                 var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
             }
-            let taskIds=[this.mission_list[this.mission_active].taskId];
+//            let taskIds=[this.mission_list[this.mission_active].taskId];
             var data={
-                'beginDay':beginTime,'endDay':endTime,"requireTotalCount" : true,'taskIds':taskIds,userResults:[this.custom_list[this.custom_active].key],callResults:[this.call_list[this.call_active].key],'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField
+                'beginDay':beginTime,'endDay':endTime,"requireTotalCount" : true,'taskIds':this.taskIds,userResults:[this.custom_list[this.custom_active].key],callResults:[this.call_list[this.call_active].key],'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField
             }
             for (let key in data){
                 if(data[key]==''){
@@ -429,9 +445,9 @@ export default {
                 var beginTime=this.date_init(new Date(new Date().getTime() - this.time_past*24*60*60*1000));
                 var endTime=this.date_init(new Date(new Date().getTime() - 1*24*60*60*1000));
             }
-            let taskIds=[this.mission_list[this.mission_active].taskId];
+//            let taskIds=[this.mission_list[this.mission_active].taskId];
             var data={
-                'beginDay':beginTime,'endDay':endTime,"requireTotalCount" : true,'taskIds':taskIds,userResults:[this.custom_list[this.custom_active].key],callResults:[this.call_list[this.call_active].key],'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField
+                'beginDay':beginTime,'endDay':endTime,"requireTotalCount" : true,'taskIds':this.taskIds,userResults:[this.custom_list[this.custom_active].key],callResults:[this.call_list[this.call_active].key],'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField
             }
             for (let key in data){
                 if(data[key]==''){
