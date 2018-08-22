@@ -16,7 +16,17 @@
                     <div>
                         <p class="grey">任务名称&#12288;&#12288;</p>
                         <!-- <p class="black" v-for=" (item,index) in mission_list" :key="item.taskId" :class="{see_active:mission_state==index}" @click="mission_change(index)">{{item.taskName}}</p> -->
-                        <p class="black" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
+                        <p class="black" v-for=" (item,index) in mission_list" :key="index" v-if="index < 5" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
+                        <p class="black" v-if="mission_list.length > 5" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
+                        <el-select v-show="mission_more" id="taskId" :style="{'float':'right'}" v-if="mission_list.length > 5" v-model="taskIdsTmp" @change="mission_change2" filterable multiple size='mini' placeholder="请选择" collapse-tags>
+                            <el-option
+                                v-if="index >=5"
+                                v-for="(item,index) in mission_list"
+                                :key="item.taskId"
+                                :label="item.taskName"
+                                :value="item.taskId">
+                            </el-option>
+                        </el-select>
                     </div>
                     <div>
                         <p class="grey">客户状态&#12288;&#12288;</p>
@@ -167,7 +177,9 @@ export default {
             tableData: [],
             page_count:0,
             pageNum:1,
-            cansave:true
+            cansave:true,
+            mission_more:false,
+            taskIdsTmp:[]
         }
     },
     props:['see'],
@@ -199,6 +211,9 @@ export default {
             var data={"requireTotalCount" : true};
             this.mission_init(data);
         },
+        mission_change2:function () {
+          this.missoin_search();
+        },
         //多选标签选中改变颜色
         selcolor(e){
             console.log(e.target.style.backgroundColor)
@@ -211,7 +226,13 @@ export default {
         },
         //条件搜索
         missoin_search:function(){
-            let taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            //选了全部
+            if(this.mission_state[0]==0){
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            }else{
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+                taskIds=taskIds.concat(this.taskIdsTmp);
+            }
             let userResults=this.custom_state.map((item)=>this.custom_list[item].key);
             let callResults=this.call_state.map((item)=>this.call_list[item].key);
             //let tags=this.tags.map((item)=>tags.push(item.value));
@@ -259,7 +280,13 @@ export default {
         },
         //页码改变
         page_change(val){
-            let taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            //选了全部
+            if(this.mission_state[0]==0){
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+            }else{
+                var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
+                taskIds=taskIds.concat(this.taskIdsTmp);
+            }
             let userResults=this.custom_state.map((item)=>this.custom_list[item].key);
             let callResults=this.call_state.map((item)=>this.call_list[item].key);
             var data={'userResults':userResults,'nameOrNumber':this.search,'taskIds':taskIds,'callResults':callResults,'whetherCalledToday':this.link_list[this.link_state].key,"requireTotalCount" : true,'pageNum':this.pageNum};

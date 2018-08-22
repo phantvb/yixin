@@ -49,7 +49,7 @@
             </div>
             <div class="con">
                 <p v-if="task_state==0&&TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
-                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" ref="tree" node-key="id">
+                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id" ref="tree">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
@@ -62,7 +62,7 @@
                         <span>{{data.depName}}{{data.areaName}}</span>
                     </div>
                 </el-tree>
-                <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" ref="tree" node-key="id">
+                <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" ref="trees" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)'>
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
@@ -812,7 +812,6 @@ export default {
         this.connect();
     },
     beforeDestroy(){
-        console.log(this.ua);
         if(this.ua != null){
             console.log("uaClose...");
             this.ua.stop();
@@ -823,7 +822,6 @@ export default {
         booknum:function (){
             var num=0;
             this.booklist.map(item=>{
-                console.log(item.nextContactTime)
                 if((new Date(item.nextContactTime).getTime()-new Date().getTime())<1000*60*30){
                     num++;
                 }
@@ -834,7 +832,6 @@ export default {
     methods:{
         test(){
             this.name_change=false;
-            console.log('test');
         },
         uaInit:function (workbenchRst) {
             var _this=this;
@@ -1127,7 +1124,7 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
-            console.log(node);
+            console.log(this.$refs,this.$refs.tree.getCheckedKeys());
             var _this=this;
             this.tags=[];
             this.show=false;
@@ -1193,7 +1190,6 @@ export default {
                         }
                     }
                     if(res.data.historyDto&&res.data.historyDto.details){
-                        console.log(res.data.historyDto.details[0]);
                         this.note=res.data.historyDto.details[0].desc;
                         this.recordFilePath=res.data.historyDto.details[0].recordFilePath;
                         this.callSeesionId=res.data.historyDto.details[0].callSeesionId;
@@ -1215,9 +1211,10 @@ export default {
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
                         let id=res.data.rows[i].taskId;
-                        obj.id=res.data.rows[i].taskId;
+                        obj.id=res.data.rows[i].taskClientId;
+                        obj.processingNum=res.data.rows[i].processingNum
                         obj.taskName=res.data.rows[i].taskName;
-                        obj.label=res.data.rows[i].taskName+'('+res.data.rows[i].processingNum+')';
+                        obj.label=res.data.rows[i].taskName+'('+obj.processingNum+')';
                         var param = {};
                         param.taskId = res.data.rows[i].taskId;
                         data?param.nameOrNumber=data.nameOrNumber:'';
@@ -1245,7 +1242,8 @@ export default {
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
                         obj.taskName=res.data.rows[i].name;
-                        obj.label=res.data.rows[i].name+'('+res.data.rows[i].numberTotal+')';
+                        obj.processingNum=res.data.rows[i].numberTotal;
+                        obj.label=res.data.rows[i].name+'('+obj.processingNum+')';
                         obj.id=res.data.rows[i].id;
                         obj.dialplanId=res.data.rows[i].id;
                         var param = {};
@@ -1322,7 +1320,6 @@ export default {
         },
         //记录客户标签
         handleCommand(command) {
-            console.log(command,this.history.summaryDto)
             this.$set(this.history.summaryDto.tags[command.index], 'value',command.value);
             this.tags[command.index]={'value':command.value};
         },
@@ -1364,7 +1361,6 @@ export default {
                 //         data[str]=this.tags[i].value;
                 //     }
                 // }
-                console.log(this.history.summaryDto.tags);
                 for(let i=0;i<this.history.summaryDto.tags.length;i++){
                     if(this.history.summaryDto.tags[i]!=null||this.history.summaryDto.tags[i]!=undefined){
                         var str='customTag'+this.history.summaryDto.tags[i].tagOrder;
@@ -1388,14 +1384,18 @@ export default {
                             let i=items.children.indexOf(_this.active_data);
                             if(i<(items.children.length-1)&&i!=-1){
                                 if(_this.worker_state!='1'){
-                                    _this.TaskBySeat_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                     console.log('当前：',items.children[i])
                                     _this.detail_init(items.children[i],1,items);
                                 }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     console.log('当前：',items.children[i+1])
                                     _this.detail_init(items.children[i+1],1,items);
                                 }else if(_this.worker_state=='1'&&_this.time_next!=''){
-                                    _this.TaskBySeat_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                     console.log('当前：',items.children[i])
                                     _this.detail_init(items.children[i],1,items);
                                 }
@@ -1422,11 +1422,15 @@ export default {
                                 console.log('到底了')
                                 _this.call_hidden=true;
                                 if(_this.worker_state!='1'){
-                                    _this.TaskBySeat_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                 }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     return;
                                 }else{
-                                    _this.TaskBySeat_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                 }
                             }
                         })
@@ -1434,12 +1438,16 @@ export default {
                             let i=items.children.indexOf(_this.active_data);
                             if(i<items.children.length-1&&i!=-1){
                                 if(_this.worker_state!='1'){
-                                    _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                     _this.detail_init(items.children[i],2,items);
                                 }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     _this.detail_init(items.children[i+1],2,items);
                                 }else{
-                                    _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                     _this.detail_init(items.children[i],2,items);
                                 }
                                 // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
@@ -1464,16 +1472,19 @@ export default {
                                 console.log('到底了')
                                 _this.call_hidden=true;
                                 if(_this.worker_state!='1'){
-                                    _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                 }else if(_this.worker_state=='1'&&_this.time_next==''){
                                     return;
                                 }else{
-                                    _this.DialPlanIntroWithPage_data[index].children.splice(i,1);
+                                    items.processingNum--;
+                                    items.label=items.taskName+'('+items.processingNum+')';
+                                    items.children.splice(i,1);
                                 }
                             }
                         });
                         if(this.booklist.length>0&&this.booklist[0].taskClientId!='string'){
-                            console.log(this.booklist,this.booklist.length)
                             let i=this.booklist.indexOf(_this.active_data);
                             this.booklist.map((items,index)=>{
                                 if(i==index&&i!=(_this.booklist.length-1)){
@@ -1521,7 +1532,6 @@ export default {
             var _this=this;
             clearTimeout(this.time_error);
             //mask
-            console.log(this.left);
             //开始拨号
             if(!this.ua.isRegistered()){
                 alert("freeswitch连接异常！");

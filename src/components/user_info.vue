@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="密码：" :style="{'text-align':'left'}">
           <span class="black">******</span>
-          <el-button :style="{'float':'right'}" type="primary" icon="el-icon-edit" @click="dialogVisible = true"></el-button>
+          <el-button :style="{'float':'right'}" type="primary" @click="dialogVisible = true">修改</el-button>
         </el-form-item>
       </el-form>
     </div>

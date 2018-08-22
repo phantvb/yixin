@@ -6,6 +6,12 @@
                 <div>
                     <p><i class="el-icon-noMission"></i></p>
                     <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签</el-button>
+                    <div>
+                        <el-tooltip class="item" effect="dark"  placement="right">
+                            <div slot="content" :style="{'min-width':'200px'}">客户标签可以与外呼任务关联，让坐席在与客户沟通时快速标记用户，以便后续的客户分类与跟进。</div>
+                            <el-button type="text" :style="{'color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签</el-button>
+                        </el-tooltip>
+                    </div>
                 </div>
             </div>
             <el-alert title="最多只能设置10个标签" type="warning" center show-icon v-show="warn"></el-alert>
