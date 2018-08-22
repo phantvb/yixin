@@ -352,8 +352,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/callstatistics/querySeatTaskCompletion',{beginTime:beginTime,endTime:endTime}
             ).then( res=>{
                 if(res.data.code==200){
-                    console.log(res.data.info)
-                    this.infos=res.data.info?res.data.info:'';
+                    this.infos=res.data.info?res.data.info:null;
                 }
             });
             //下方表格数据

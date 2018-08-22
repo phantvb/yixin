@@ -34,24 +34,22 @@
                     </div>
                     <div>
                         <p class="grey">客户标签&#12288;&#12288;</p>
-                        <el-dropdown :style="{'margin':'0px 6px'}" v-for="(item,index) in tag_data" :key="index"  @command="handleCommand">
+                        <el-dropdown :hide-on-click="false" :style="{'margin':'0px 6px'}" v-for="(item,index) in tag_data" :key="index"  @command="handleCommand">
                             <span class="el-dropdown-link">
-                                {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                                {{tags[item.tagOrder].length>0?tags[item.tagOrder][0]+'('+tags[item.tagOrder].length+')':item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
                             </span>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item}">{{_item}}</el-dropdown-item>
+                                <el-dropdown-item @click.native="selcolor($event)" v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':item.tagOrder,'value':_item}">{{_item}}</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
-                        <!-- <el-tree
-                        :data="tag_data"
-                        show-checkbox
-                        node-key="id"
-                        default-expand-all
-                        :expand-on-click-node="false">
-                        <span class="custom-tree-node" slot-scope="{ node, data }">
-                            <span>{{ node.label }}</span>
-                        </span>
-                        </el-tree> -->
+                        <!-- <el-select v-model="tag_data[index]" multiple collapse-tags style="margin-left: 20px;" size="" placeholder="请选择" v-for="(item,index) in tag_data" :key="index">
+                            <el-option
+                            v-for="(_item,_index) in item.tags"
+                            :key="_index"
+                            :label="_item"
+                            :value="_item">
+                            </el-option>
+                        </el-select> -->
                     </div>
                 </div>
                 <div class="zhankai shouqi" v-if="search_state">
@@ -184,7 +182,9 @@ export default {
                 if(res.data.code==200){
                     for(let i=0;i<res.data.info.length;i++){
                         res.data.info[i].tags=res.data.info[i].tagValue.split(';');
+                        this.tags[res.data.info[i].tagOrder]=[];
                     }
+                    console.log(this.tags)
                     this.tag_data=res.data.info;
                 }
             });
@@ -199,6 +199,16 @@ export default {
             var data={"requireTotalCount" : true};
             this.mission_init(data);
         },
+        //多选标签选中改变颜色
+        selcolor(e){
+            console.log(e.target.style.backgroundColor)
+            
+            if(e.target.style.backgroundColor=="rgb(236, 245, 255)"){
+                e.target.style.backgroundColor="#fff"
+            }else{
+                e.target.style.backgroundColor="rgb(236, 245, 255)";
+            }
+        },
         //条件搜索
         missoin_search:function(){
             let taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
@@ -207,11 +217,11 @@ export default {
             //let tags=this.tags.map((item)=>tags.push(item.value));
             
             var data={'userResults':userResults,'nameOrNumber':this.search,'taskIds':taskIds,'callResults':callResults,'whetherCalledToday':this.link_list[this.link_state].key,"requireTotalCount" : true,'pageNum':this.pageNum};
-            console.log(this.tags);
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
-                    var str='customTag'+(i+1);
-                    data[str]=this.tags[i].value;
+                    var str='customTag'+(i);
+                    console.log(str,this.tags[i])
+                    data[str]=this.tags[i];
                 }
             }
             //删除空属性
@@ -329,8 +339,15 @@ export default {
             })
         },
         handleCommand(command) {
-            console.log(command);
-            this.tags[command.index]={'value':command.value};
+            if(!this.tags[command.index]){
+                this.tags[command.index]=[];
+                this.tags[command.index].push(command.value);
+            }else if(this.tags[command.index].indexOf(command.value)==-1){
+                this.tags[command.index].push(command.value);
+            }else{
+                var i=this.tags[command.index].indexOf(command.value);
+                this.tags[command.index].splice(i,1);
+            }
             this.missoin_search();
         }
     },

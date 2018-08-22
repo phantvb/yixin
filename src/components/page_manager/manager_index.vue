@@ -172,7 +172,8 @@ export default {
                             normal: {
                                 show: false,
                                 position: 'center'
-                            }
+                            },
+                            formatter: '{b}: {d}'
                         },
                         labelLine: {
                             normal: {
