@@ -204,21 +204,24 @@ export default {
                             this.msgErrorShow("浏览器不支持本地存储功能，建议您使用chrome浏览器效果更佳！");
                         }
                         this.changeCheck();
-                        if(res.data.rows[0].type==1){
-                            this.$router.push({ path: '/operation/manager'})
-                        }else if(res.data.rows[0].type==2){
-                            this.$router.push({ path: '/manager/index'})
-                        }else{
-                            this.$router.push({ path: '/staff/index'})
-                        }
-                    }else{
-                        this.passCunt.nub++;
-                        if(this.passCunt.nub>=3){
-                          this.verShow = true;
-                        }
-                        this.msgErrorShow(res.data.message);
-                        this.loginBtn = "登录";
-                    }
+                        var type = res.data.rows[0].type;
+                        if(type==0){
+                          this.$router.push({ path: '/operation/manager'})
+                        }else if(type==1){
+                              this.$router.push({ path: '/operation/manager'})
+                          }else if(type==2){
+                              this.$router.push({ path: '/manager/index'})
+                          }else{
+                              this.$router.push({ path: '/staff/index'})
+                          }
+                      }else{
+                          this.passCunt.nub++;
+                          if(this.passCunt.nub>=3){
+                            this.verShow = true;
+                          }
+                          this.msgErrorShow(res.data.message);
+                          this.loginBtn = "登录";
+                      }
             })
         },
         //点击找回密码打开找回密码显示框

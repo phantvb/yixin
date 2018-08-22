@@ -3,16 +3,22 @@
         <div class="part1">
             <div class="part1_tit">
                 <el-input
-                    placeholder="企业名称或邮箱帐号搜索"
+                    placeholder="帐号、全名称或邮箱搜索"
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
                 <el-button type="info" class="button" :style="{float:'left'}" @click="findSeat">搜索</el-button>
                 <el-button type="info" plain class="button" @click="fsAdd">新增FS帐号</el-button>
-                <el-button type="info"  class="button" @click="managerAdd">新增企业</el-button>
+                <el-button type="info"  class="button" @click="managerAdd">新增管理员</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
                 <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
+                <div v-if="accountType == 0">
+                  <p class="grey">帐号类型</p>
+                  <p class="black" :class="{worker_active:type == null}" @click="type_change(null)">全部</p>
+                  <p class="black" :class="{worker_active:type == 1}" @click="type_change(1)">运维管理员</p>
+                  <p class="black" :class="{worker_active:type == 2}" @click="type_change(2)">企业管理员</p>
+                </div>
                 <div>
                     <p class="grey">客户状态</p>
                     <p class="black" :class="{worker_active:worker_state==''}" @click="worker_change('')">全部</p>
@@ -50,7 +56,7 @@
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="fullName" label="企业名称" class-name="line2" sortable='custom' :show-overflow-tooltip=true min-width="100"></el-table-column>
+                <el-table-column prop="fullName" label="全名称" class-name="line2" sortable='custom' :show-overflow-tooltip=true min-width="100"></el-table-column>
                 <el-table-column prop="email" label="邮箱" class-name="line3" sortable='custom' :show-overflow-tooltip=true min-width="120">
                 </el-table-column>
                 <el-table-column prop="seatAccountPrefix" label="坐席帐号前缀" class-name="line4" sortable='custom' :show-overflow-tooltip=true  min-width="120"> </el-table-column>
@@ -75,6 +81,7 @@
                         type="text"
                         @click="handlereset(scope.$index, scope.row)">重置密码</el-button>&#12288;|
                         <el-button
+                          v-if="scope.row.type == 2"
                         size="mini"
                         type="text"
                         @click="handleAdd(scope.$index, scope.row)">生成坐席</el-button>
@@ -88,7 +95,7 @@
                 <div class="con">
                     <el-form :model="Form" :rules="rules" ref="Form" label-width="120px" class="demo-ruleForm" size="mini">
                         <el-form-item label="管理员帐号" prop="loginName">
-                            <el-input v-model="Form.loginName"></el-input>
+                            <el-input v-model="Form.loginName" :disabled="detail_type==0"></el-input>
                         </el-form-item>
                         <el-form-item v-if="detail_type==1" label="密码" prop="password">
                             <el-input type="password" v-model="Form.password"></el-input>
@@ -108,10 +115,10 @@
                             <el-option label="冻结" :value="2"></el-option>
                           </el-select>
                         </el-form-item>
-                        <el-form-item label="坐席帐号前缀" prop="seatAccountPrefix">
+                        <el-form-item v-if="Form.type == 2" label="坐席帐号前缀" prop="seatAccountPrefix">
                             <el-input v-model="Form.seatAccountPrefix"></el-input>
                         </el-form-item>
-                        <el-form-item label="可配坐席数量" prop="numOfSeat">
+                        <el-form-item v-if="Form.type == 2" label="可配坐席数量" prop="numOfSeat">
                             <el-input v-model.number="Form.numOfSeat"></el-input>
                         </el-form-item>
                         <el-form-item label="邮箱" prop="email">
@@ -120,7 +127,7 @@
                         <el-form-item label="手机" prop="phone">
                             <el-input v-model.number="Form.phone"></el-input>
                         </el-form-item>
-                        <el-form-item label="企业名称" prop="fullName">
+                        <el-form-item label="全名称" prop="fullName">
                             <el-input v-model="Form.fullName"></el-input>
                         </el-form-item>
                         <el-form-item label="地址" prop="address">
@@ -129,11 +136,11 @@
                         <el-form-item label="描述信息" prop="desc">
                             <el-input v-model="Form.desc"></el-input>
                         </el-form-item>
-                        <el-form-item label="信用资源" prop="callCredit">
+                        <el-form-item v-if="Form.type == 2" label="信用资源" prop="callCredit">
                             <el-input v-model.number="Form.callCredit"></el-input>
                         </el-form-item>
                         <ul  v-show="detail_type==0">
-                            <li>
+                            <li v-if="Form.type == 2">
                                 <p class="black">实时资源：</p>
                                 <div class="grey charge">{{Form.callCredit+Form.callRemaining}}分钟
                                     <el-button type="info" plain size="mini" id="charge" @click="charges=true">充值</el-button>
@@ -267,6 +274,7 @@ export default {
         };
         return {
             accountType:null,
+            type:null,
             worker_state:'',
             search_state:false,
             search_date:[],
@@ -339,6 +347,10 @@ export default {
     },
     components:{Dialog},
     methods:{
+        type_change : function (value) {
+          this.type = value;
+          this.findSeat();
+        },
         worker_change:function(value){
             this.worker_state=value;
             this.findSeat();
@@ -364,7 +376,7 @@ export default {
         //条件搜索
         findSeat:function(){
             var data={
-                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search
+                'type':this.type,'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search
             };
             for (let key in data){
                 if(data[key]==''){
