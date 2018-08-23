@@ -21,7 +21,7 @@
             <div class="tit staff_stage_tit">
                 <el-button type="info" size="mini" icon="el-icon-sort" :style="{'float':'left','margin':'8px 5%','border-color':'#fff'}" @click="online_change" :class="{call_active:online_state==0}"><span v-show="online_state==0">在线</span><span v-show="online_state==0.5">......</span><span v-show="online_state==1">离线</span></el-button>
                 <div id="auto_call" @click.stop="call_set=true">
-                    <el-button type="info" size="mini" :style="{'float':'right','margin':'8px 5%','border-color':'#fff'}" @click="call_set=!call_set" :class="{call_active:call_auto=='true'}">{{call_auto?'自动呼叫':'手动呼叫'}}</el-button>
+                    <el-button type="info" size="mini" :style="{'float':'right','margin':'8px 5%','border-color':'#fff'}" :class="{call_active:call_auto=='true'}">{{call_auto?'自动呼叫':'手动呼叫'}}<i @click.stop="call_set=!call_set" class="el-icon-arrow-down el-icon--right"></i></el-button>
                     <div v-show="call_set">
                         <el-switch
                             v-model="call_auto"
@@ -166,7 +166,7 @@
                         </div>
                         <div class="grey">意向：
                             <div class="father">
-                                <span class="black">{{think?think:'待添加'}}</span>
+                                <span class="black">{{think?think:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="think" @blur="upSeat">
                             </div>
                         </div>

@@ -242,6 +242,10 @@
             }
         },
         mounted(){
+          var _this=this;
+              eventBus.$on('lead_mes',function(val){
+                _this.result=val.content.split('</br>');
+              });
               //标签数据
               this.$ajax.post(this.$preix+'/new/tag/findTagList')
               .then( (res) => {

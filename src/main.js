@@ -36,6 +36,7 @@ axios.interceptors.response.use(res=>{
 
 Vue.use(ElementUI);
 Vue.use(VueClipboard);
+window.eventBus=new Vue();
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

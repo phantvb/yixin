@@ -128,7 +128,6 @@ export default {
                 _this.stompClient.subscribe(
                     '/user/topic/ws',
                     function(respnose){
-                        console.log(this);
                         _this.showResponse(JSON.parse(respnose.body));
                     }
                 );
@@ -143,8 +142,9 @@ export default {
             console.log("Disconnected");
         },
         showResponse:function (result) {
-            console.log('结果：'+result);
-            if(result.msgType){
+            if(result.msgType==5){
+                eventBus.$emit('lead_mes',result);
+            }else{
                 this.notify++;
             }
         }
