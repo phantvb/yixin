@@ -43,17 +43,17 @@
                 </div>
             </div>
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" header-row-class-name="table_head">
-                <el-table-column prop="loginName" label="管理帐号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="100">
+                <el-table-column prop="loginName" label="管理帐号" sortable='custom' class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="100">
                     <template slot-scope="scope">
                         <router-link :to="{path:'/operation/staff',query:{partnerAccountId:scope.row.id}}">
                             <span>{{scope.row.loginName}}</span>
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="fullName" label="企业名称" class-name="line2" sortable='custom' :show-overflow-tooltip=true min-width="100"></el-table-column>
-                <el-table-column prop="email" label="邮箱" class-name="line3" sortable='custom' :show-overflow-tooltip=true min-width="120">
+                <el-table-column prop="fullName" label="企业名称" class-name="line2" :show-overflow-tooltip=true min-width="100"></el-table-column>
+                <el-table-column prop="email" label="邮箱" class-name="line3" :show-overflow-tooltip=true min-width="120">
                 </el-table-column>
-                <el-table-column prop="seatAccountPrefix" label="坐席帐号前缀" class-name="line4" sortable='custom' :show-overflow-tooltip=true  min-width="120"> </el-table-column>
+                <el-table-column prop="seatAccountPrefix" label="坐席帐号前缀" class-name="line4" :show-overflow-tooltip=true  min-width="120"> </el-table-column>
                 <el-table-column prop="callCredit" label="信用资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
                 <el-table-column prop="callRemaining" label="实时资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
                 <el-table-column prop="create" label="创建日期" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
@@ -505,7 +505,7 @@ export default {
             this.search=this.nameornum;
             this.manager_init({fullNameOrEmail:this.nameornum,requireTotalCount:true});
         }else{
-            this.manager_init({requireTotalCount:true});
+            this.manager_init({requireTotalCount:true,orderWay:'desc',orderField:'loginName'});
         }
         this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;
     },

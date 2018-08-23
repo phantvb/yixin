@@ -25,6 +25,11 @@ axios.interceptors.response.use(res=>{
       //this.$router.push({ path: '/login'})
       location.href='#/login'
       break
+    case 530 :
+      alert(res.data.message);
+      //this.$router.push({ path: '/login'})
+      location.href='#/login'
+      break
   }
   return res;
 })

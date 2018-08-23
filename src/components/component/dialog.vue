@@ -29,7 +29,7 @@
           <div class="data_num">{{data_complete}}</div>
           <el-button type="primary"  class="dialog_next" @click="continueOperate">继续</el-button>
         </div>
-        <div  v-show="dialog_active==2&&mission_edit==0">
+        <div  v-show="dialog_active==2&&mission_edit==0" v-loading="confirm_loading">
           <div class="mission" :style="{margin:'5% 0'}">
             <p>任务名称</p>
             <el-select id="taskName" v-model="mission_value" placeholder="请输入或选择任务" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' :disabled="data!=null"
@@ -44,7 +44,7 @@
               <el-checkbox :label="item.id" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}">{{item.tagName}}</el-checkbox>
             </el-checkbox-group>
           </div>
-          <el-button type="primary"  class="dialog_next" @click="mission_confirm" :disabled="mission_value==''">确认信息</el-button>
+          <el-button type="primary"  class="dialog_next" @click="mission_confirm">确认信息</el-button>
         </div>
         <div  v-show="dialog_active==3">
           <div class="data_num"><i class="el-icon-success"></i>{{result[0]}}<br>{{result[1]}}</div>
@@ -131,7 +131,8 @@
               mission_list:[],
               taglist:[],
               tagIds:[],
-              result:[]
+              result:[],
+              confirm_loading:false
             }
         },
         props:["leading","data"],
@@ -196,12 +197,29 @@
             },
             //确认信息
             mission_confirm:function () {
-            var taskName = document.getElementById("taskName").value;
+              if(this.mission_value==''){
+                this.$message({
+                    showClose: true,
+                    message: '请输入或选择任务',
+                    type: 'warning'
+                });
+                document.getElementById("taskName").focus();
+                return false;
+              }
+              this.confirm_loading=true;
+              var taskName = document.getElementById("taskName").value;
               this.$ajax.post(this.$preix+'/new/calltask/insertCallTask',{"taskTag":{"tagIds":this.tagIds,"taskName":taskName}})
               .then( (res) => {
                   if(res.data.code==200){
-                    this.result=res.data.info.split('</br>');
+                    this.confirm_loading=false;
+                    //this.result=res.data.info.split('</br>');
                     this.dialog_active=3;
+                  }else{
+                    this.$message({
+                    showClose: true,
+                    message: res.data.message,
+                    type: 'error'
+                });
                   }
               });
             },

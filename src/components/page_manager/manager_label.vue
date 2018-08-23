@@ -173,7 +173,7 @@ export default {
             search:'',
             leading_date:[],
             add_tag:false,
-            tableData: [],
+            tableData: [{}],
             chdata:[],
             DialogVisible:false,
             warn:false

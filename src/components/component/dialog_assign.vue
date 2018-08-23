@@ -9,6 +9,11 @@
             <p>分配客户数量(人)</p>
         </div>
         <div class="con">
+            <div v-if="worker.length==0">
+                <p class="blask" :style="{'text-align':'center'}">
+                    请前往呼叫管理-<router-link :to="{path:'/manager/worker'}">坐席帐号管理页</router-link>激活坐席后才能实现分配
+                </p>
+            </div>
             <ul> 
                 <li v-for="(item, index) in workerlist" :key="index" v-show="index<show_num">
                     <el-select v-model="workerlist[index]" placeholder="请选择坐席" size="mini">

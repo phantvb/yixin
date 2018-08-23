@@ -1,7 +1,7 @@
 <template>
-    <div class="container" v-on:click.capture="hide">
+    <div class="container" v-on:click.capture="hide" :class="{relative:call_hidden==true}">
         <!-- 蒙层 -->
-        <div class="mask" v-show="call_state!=0">
+        <div class="mask" v-show="call_state!=0" @click="mask_toast">
             <div></div>
             <div :style="{'width':'65px','height':'100%'}"></div>
         </div>
@@ -14,14 +14,14 @@
         <!-- 自定义右键菜单 -->
         <div v-show="contextmenu.state" class="contextmenu" :style="{'position':'absolute','left':contextmenu.left+'px','top':contextmenu.top+'px','z-index':'3','width':'150px','line-height':'30px','background':'#fff','border':'1px solid #ccc','border-radio':'3px','box-shadow':'0px 0px 4px #ccc','cursor':'pointer'}" @click="remove">移除该项</div>
         <div class="aside">
-            <div class="mask" :style="{'width':'100%','height':'100%'}" v-show="call_state!=0">
+            <div class="mask" :style="{'width':'100%','height':'100%'}" v-show="call_state!=0" @click="mask_toast">
                 <div :style="{'width':'50%','height':'100%'}"></div>
                 <div :style="{'width':'50%','height':'100%','left':'50%','top':'53px'}"></div>
             </div>
             <div class="tit staff_stage_tit">
                 <el-button type="info" size="mini" icon="el-icon-sort" :style="{'float':'left','margin':'8px 5%','border-color':'#fff'}" @click="online_change" :class="{call_active:online_state==0}"><span v-show="online_state==0">在线</span><span v-show="online_state==0.5">......</span><span v-show="online_state==1">离线</span></el-button>
                 <div id="auto_call" @click.stop="call_set=true">
-                    <el-button type="info" size="mini" :style="{'float':'right','margin':'8px 5%','border-color':'#fff'}" @click="call_set=!call_set" :class="{call_active:call_auto=='true'}">自动呼叫</el-button>
+                    <el-button type="info" size="mini" :style="{'float':'right','margin':'8px 5%','border-color':'#fff'}" @click="call_set=!call_set" :class="{call_active:call_auto=='true'}">{{call_auto?'自动呼叫':'手动呼叫'}}</el-button>
                     <div v-show="call_set">
                         <el-switch
                             v-model="call_auto"
@@ -160,7 +160,7 @@
                         </div>
                         <div class="grey">职业：
                             <div class="father">
-                                <span class="black">{{job?job:'&#12288;'}}</span>
+                                <span class="black">{{job?job:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="job" @blur="upSeat">
                             </div>
                         </div>
@@ -174,13 +174,13 @@
                     <div class="mes">
                         <div class="grey">邮箱：
                             <div class="father">
-                                <span class="black">{{email?email:'&#12288;'}}</span>
+                                <span class="black">{{email?email:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="email" @blur="upSeat">
                             </div>
                         </div>
                         <div class="grey">公司：
                             <div class="father">
-                                <span class="black">{{company?company:'&#12288;'}}</span>
+                                <span class="black">{{company?company:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="company" @blur="upSeat">
                             </div>
                         </div>
@@ -362,7 +362,9 @@
         overflow: hidden;
         background: #F2F4F5;
         padding:10px;
-        position: relative;
+    }
+    .relative{
+        position:relative;
     }
     .aside{
         float: left;
@@ -833,6 +835,13 @@ export default {
         test(){
             this.name_change=false;
         },
+        mask_toast(){
+            this.$message({
+                showClose: true,
+                message: '请先提交小结后再进行其他操作',
+                type: 'warning'
+            });
+        },
         uaInit:function (workbenchRst) {
             var _this=this;
             var fsDto = workbenchRst.fsDto;
@@ -1124,7 +1133,7 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
-            console.log(this.$refs,this.$refs.tree.getCheckedKeys());
+            
             var _this=this;
             this.tags=[];
             this.show=false;

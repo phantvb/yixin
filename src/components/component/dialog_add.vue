@@ -218,10 +218,12 @@ export default {
         selcolor(e){
             console.log(e.target.style.backgroundColor)
             
-            if(e.target.style.backgroundColor=="rgb(236, 245, 255)"){
+            if(e.target.style.backgroundColor=="rgb(116, 150, 242)"){
                 e.target.style.backgroundColor="#fff"
+                e.target.style.color="#606266"
             }else{
-                e.target.style.backgroundColor="rgb(236, 245, 255)";
+                e.target.style.backgroundColor="rgb(116, 150, 242)";
+                e.target.style.color="#fff"
             }
         },
         //条件搜索

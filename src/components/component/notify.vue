@@ -62,7 +62,7 @@
   float: right;
 }
 .unsee{
-    background-color: #f5f5f5;
+    background-color: #ccc;
     border-radius: 3px;
     padding: 5px;
 }
@@ -86,7 +86,7 @@ export default {
 		return {
             identity:null,
             notifylist:[{
-                content:'距离与娃娃16（153****0115）预约的通话时间00:00还有10分钟距离与娃娃16（'
+                content:'&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;'
             }],
             notify:0
 		};
@@ -143,6 +143,7 @@ export default {
             console.log("Disconnected");
         },
         showResponse:function (result) {
+            console.log('结果：'+result);
             if(result.msgType){
                 this.notify++;
             }
