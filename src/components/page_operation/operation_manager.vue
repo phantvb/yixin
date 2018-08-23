@@ -62,7 +62,7 @@
                 <el-table-column prop="seatAccountPrefix" label="坐席帐号前缀" class-name="line4" :show-overflow-tooltip=true  min-width="120"> </el-table-column>
                 <el-table-column prop="callCredit" label="信用资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
                 <el-table-column prop="callRemaining" label="实时资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
-                <el-table-column prop="create" label="创建日期" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
+                <el-table-column prop="create" label="创建日期" sortable='custom' class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
                 <el-table-column prop="state" label="状态" class-name="line5" :show-overflow-tooltip=true  min-width="100">
                     <template slot-scope="scope">
                         <p class="black" v-show="scope.row.state==3">停用</p>
@@ -517,7 +517,7 @@ export default {
             this.search=this.nameornum;
             this.manager_init({fullNameOrEmail:this.nameornum,requireTotalCount:true});
         }else{
-            this.manager_init({requireTotalCount:true,orderWay:'desc',orderField:'loginName'});
+            this.manager_init({requireTotalCount:true,orderWay:'desc',orderField:'create'});
         }
         this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;
     },
