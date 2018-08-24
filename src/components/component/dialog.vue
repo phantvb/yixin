@@ -29,8 +29,9 @@
           <div class="data_num">{{data_complete}}</div>
           <el-button type="primary"  class="dialog_next" @click="continueOperate">继续</el-button>
         </div>
-        <div  v-show="dialog_active==2&&mission_edit==0" v-loading="confirm_loading">
-          <div class="mission" :style="{margin:'5% 0'}">
+        <div  v-show="dialog_active==2&&mission_edit==0">
+          <div v-loading="confirm_loading"></div>
+          <div class="mission" :style="{margin:'5% 0'}" v-show="!confirm_loading">
             <p>任务名称</p>
             <el-select id="taskName" v-model="mission_value" placeholder="请输入或选择任务" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' :disabled="data!=null"
                        @focus="queryCallTaskNameList" @keyup.native="queryCallTaskNameList" @change="checkedTags(mission_value)">
@@ -38,7 +39,7 @@
             </el-select>
           </div>
           <br>
-          <div class="mission" :style="{margin:'0 0 10%'}">
+          <div class="mission" :style="{margin:'0 0 10%'}" v-show="!confirm_loading">
             <p>关联客户标签</p>
             <el-checkbox-group v-model="tagIds" size="mini" name="mission_tag">
               <el-checkbox :label="item.id" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}">{{item.tagName}}</el-checkbox>
@@ -122,6 +123,7 @@
         data:function () {
             return {
               dialog_active:0,
+              test:true,
               loading:true,
               leading_complete:0,
               leading_state:false,

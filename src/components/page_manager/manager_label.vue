@@ -173,7 +173,8 @@ export default {
             search:'',
             leading_date:[],
             add_tag:false,
-            tableData: [{}],
+            //初始化时占个位，防止闪现新建标签，加tags防止报错
+            tableData: [{tags:[]}],
             chdata:[],
             DialogVisible:false,
             warn:false

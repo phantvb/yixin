@@ -135,6 +135,9 @@ export default {
         this.getUserInfo();
     },
     mounted(){
+        if(this.$route.query.error_type==1){
+            this.msgErrorShow("帐号已再其他地方登录或者密码已被重置");
+        }
         this.verifyImg=this.$preix+'/new/verifyCode?ts='+new Date().getTime();
         this.$ajax.post(this.$preix+'/new/getFailNum',{})
           .then( (res) => {

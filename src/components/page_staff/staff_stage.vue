@@ -21,7 +21,7 @@
             <div class="tit staff_stage_tit">
                 <el-button type="info" size="mini" icon="el-icon-sort" :style="{'float':'left','margin':'8px 5%','border-color':'#fff'}" @click="online_change" :class="{call_active:online_state==0}"><span v-show="online_state==0">在线</span><span v-show="online_state==0.5">......</span><span v-show="online_state==1">离线</span></el-button>
                 <div id="auto_call" @click.stop="call_set=true">
-                    <el-button type="info" size="mini" :style="{'float':'right','margin':'8px 5%','border-color':'#fff'}" :class="{call_active:call_auto=='true'}">{{call_auto?'自动呼叫':'手动呼叫'}}<i @click.stop="call_set=!call_set" class="el-icon-arrow-down el-icon--right"></i></el-button>
+                    <el-button type="info" size="mini" :style="{'float':'right','margin':'8px 5%','border-color':'#fff'}" :class="{call_active:call_auto=='true'}">{{call_auto=='true'?'自动呼叫':'手动呼叫'}}<i @click.stop="call_set=!call_set" class="el-icon-arrow-down el-icon--right"></i></el-button>
                     <div v-show="call_set">
                         <el-switch
                             v-model="call_auto"
@@ -76,7 +76,7 @@
                     </div>
                 </el-tree>
                 <div id="book">
-                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)"  :ref="item.taskClientId">
+                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)" :ref="item.taskClientId">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
                         <span :class="(new Date(item.nextContactTime).getTime()-30*60*1000)<new Date().getTime()?'red':''">{{item.nextContactTime_str}}</span>
@@ -517,6 +517,7 @@
     .node{
         padding:10px;
         cursor: pointer;
+        background-color:#fff;
     }
     .mes{
         overflow: hidden;
@@ -791,6 +792,9 @@ export default {
         //     return false;
 
         // }
+        if(this.$route.query.id||this.$route.query.taskClientId){
+            this.task_state=1;
+        }
         //录音基础
         this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
             if(res.data.code){
@@ -1140,14 +1144,9 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
-            console.log(this.$refs[item.taskClientId].style.backgroundColor)
-            if(this.$refs[item.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
-                this.$refs[item.taskClientId].style.backgroundColor='#fff';
-            }else{
-                this.$refs[item.taskClientId].style.backgroundColor='#ccffff';
-            }
-            //console.log(this.active_data);
-            if(this.active_data&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
+            if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId][0]&&this.$refs[this.active_data.taskClientId][0].style.backgroundColor=='rgb(204, 255, 255)'){
+                this.$refs[this.active_data.taskClientId][0].style.backgroundColor='#fff';
+            }else if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
                 this.$refs[this.active_data.taskClientId].style.backgroundColor='#fff';
             }
             var _this=this;
@@ -1159,6 +1158,7 @@ export default {
             this.worker_state=1;
             clearTimeout(this.call_error);
             this.callIccSessionId=null;
+            //防止点到以及菜单
             if(item.children){
                 return;
             }
@@ -1175,12 +1175,27 @@ export default {
                 this.taskName_str=node.taskName;
             }
             if(type==1){
+                if(this.$refs[item.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
+                    this.$refs[item.taskClientId].style.backgroundColor='#fff';
+                }else{
+                    this.$refs[item.taskClientId].style.backgroundColor='#ccffff';
+                }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
             }else if(type==2){
+                if(this.$refs[item.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
+                    this.$refs[item.taskClientId].style.backgroundColor='#fff';
+                }else{
+                    this.$refs[item.taskClientId].style.backgroundColor='#ccffff';
+                }
                 this.left.taskId=null;
                 this.left.taskListId=item.id;
             }else{
+                if(this.$refs[item.taskClientId][0].style.backgroundColor=='rgb(204, 255, 255)'){
+                    this.$refs[item.taskClientId][0].style.backgroundColor='#fff';
+                }else{
+                    this.$refs[item.taskClientId][0].style.backgroundColor='#ccffff';
+                }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
             }
@@ -1515,9 +1530,9 @@ export default {
                                 if(i==index&&i!=(_this.booklist.length-1)){
                                     if(_this.time_next==''){
                                         _this.booklist.splice(index,1);
-                                        _this.detail_init(_this.booklist[index],1,items);
+                                        _this.detail_init(_this.booklist[index],3,items);
                                     }else if(_this.time_next!=''){
-                                        _this.detail_init(_this.booklist[index+1],1,items);
+                                        _this.detail_init(_this.booklist[index+1],3,items);
                                     }
                                     if(_this.call_auto=='true'){
                                         _this.call_state=5;

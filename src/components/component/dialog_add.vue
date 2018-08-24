@@ -167,7 +167,7 @@ export default {
             custom_list:[{'key':'','value':'全部'},{'key':'1','value':'持续跟进'},{'key':'2','value':'发展成功'},{'key':'3','value':'发展失败'}],
             search_state:false,
             //呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 
-            call_list:[{'key':'','value':'全部'},{'key':'0','value':'未开始'},{'key':'10','value':'正常通话'},{'key':'11','value':'转给其他坐席'},{'key':'12','value':'转值班电话'},{'key':'21','value':'没坐席接听'},{'key':'22','value':'未接通'}],
+            call_list:[{'key':'','value':'全部'},{'key':'10','value':'正常通话'},{'key':'22','value':'未接通'}],
             call_state:[0],
             //全部：0；今日未联系：1；
             link_list:[{'key':'','value':'全部'},{'key':'0','value':'今日未联系'}],
