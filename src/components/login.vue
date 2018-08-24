@@ -83,7 +83,7 @@
         </div>
         <!-- 找回密码发送成功提示弹窗 -->
         <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-            <span>找回密码邮件已成功发送，请注意查收！</span>
+            <span>找回密码邮件已成功发送，请注意查收；如果未收到邮件请稍后再试或联系管理员！</span>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="dialogVisible = false">知道了</el-button>
             </span>
