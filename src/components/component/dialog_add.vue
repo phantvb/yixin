@@ -16,11 +16,11 @@
                     <div>
                         <p class="grey">任务名称&#12288;&#12288;</p>
                         <!-- <p class="black" v-for=" (item,index) in mission_list" :key="item.taskId" :class="{see_active:mission_state==index}" @click="mission_change(index)">{{item.taskName}}</p> -->
-                        <p class="black" v-for=" (item,index) in mission_list" :key="index" v-if="index < 5" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
-                        <p class="black" v-if="mission_list.length > 5" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
-                        <el-select v-show="mission_more" id="taskId" :style="{'float':'right'}" v-if="mission_list.length > 5" v-model="taskIdsTmp" @change="mission_change2" filterable multiple size='mini' placeholder="请选择" collapse-tags>
+                        <p class="black" v-for=" (item,index) in mission_list" :key="index" v-if="index < 7" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
+                        <p class="black" v-if="mission_list.length > 7" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
+                        <el-select v-show="mission_more" id="taskId" v-if="mission_list.length > 7" v-model="taskIdsTmp" @change="mission_change2" filterable multiple size='mini' placeholder="请选择" collapse-tags>
                             <el-option
-                                v-if="index >=5"
+                                v-if="index >=7"
                                 v-for="(item,index) in mission_list"
                                 :key="item.taskId"
                                 :label="item.taskName"
@@ -216,8 +216,6 @@ export default {
         },
         //多选标签选中改变颜色
         selcolor(e){
-            console.log(e.target.style.backgroundColor)
-            
             if(e.target.style.backgroundColor=="rgb(116, 150, 242)"){
                 e.target.style.backgroundColor="#fff"
                 e.target.style.color="#606266"

@@ -8,7 +8,7 @@
         </el-steps>
         <div v-show="dialog_active==0">
           <div class="upfiles">
-            <input type="file"  @input="upfiles" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+            <input type="file"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" @change="upfiles">
             <div>
               <p>上传客户资源模板</p>
             </div>
@@ -44,7 +44,7 @@
               <el-checkbox :label="item.id" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}">{{item.tagName}}</el-checkbox>
             </el-checkbox-group>
           </div>
-          <el-button type="primary"  class="dialog_next" @click="mission_confirm">确认信息</el-button>
+          <el-button type="primary" v-show="!confirm_loading"  class="dialog_next" @click="mission_confirm">确认信息</el-button>
         </div>
         <div  v-show="dialog_active==3">
           <div class="data_num"><i class="el-icon-success"></i>{{result[0]}}<br>{{result[1]}}</div>
@@ -73,7 +73,7 @@
     }
     .upfiles>div>p{
       padding: 10px 8px;
-      background-color: rgb(153,153,153);
+      background-color: #7496F2;
       color: #fff;
       -webkit-border-radius: 3px;
       -moz-border-radius: 3px;
@@ -132,7 +132,8 @@
               taglist:[],
               tagIds:[],
               result:[],
-              confirm_loading:false
+              confirm_loading:false,
+              uptime:0
             }
         },
         props:["leading","data"],
@@ -174,6 +175,10 @@
           //上传模板
             upfiles:function (e) {
               var _this=this;
+              if(this.uptime!=0){
+                return;
+              }
+              this.uptime==1;
               this.dialog_active=1;
               let formdata = new FormData();
               console.log(event.target.files[0]);
@@ -211,9 +216,7 @@
               this.$ajax.post(this.$preix+'/new/calltask/insertCallTask',{"taskTag":{"tagIds":this.tagIds,"taskName":taskName}})
               .then( (res) => {
                   if(res.data.code==200){
-                    this.confirm_loading=false;
-                    //this.result=res.data.info.split('</br>');
-                    this.dialog_active=3;
+                    
                   }else{
                     this.$message({
                     showClose: true,
@@ -230,6 +233,7 @@
               this.dialog_active=0;
               this.leading_complete=0;
               this.mission_edit=0;
+              this.uptime=0;
             },
             complete(){
               this.reload();
@@ -245,6 +249,8 @@
           var _this=this;
               eventBus.$on('lead_mes',function(val){
                 _this.result=val.content.split('</br>');
+                _this.confirm_loading=false;
+                _this.dialog_active=3;
               });
               //标签数据
               this.$ajax.post(this.$preix+'/new/tag/findTagList')

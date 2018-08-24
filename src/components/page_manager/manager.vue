@@ -109,7 +109,6 @@ a{
 <script>
 import notify from '../component/notify.vue';
 import md5 from '../js/md5.js';
-import soc from '../js/common.js'
 export default {
 	name: 'manager',
 	data() {

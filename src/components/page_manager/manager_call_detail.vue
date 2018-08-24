@@ -12,11 +12,11 @@
                 <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">任务名称&#12288;&#12288;</p>
-                    <p class="black" v-if="index < 6" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
-                    <p class="black" v-if="mission_list.length > 6" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
-                    <el-select v-show="mission_more" id="taskId" :style="{'float':'right'}" v-if="mission_list.length > 6" v-model="taskIdsTmp" @change="mission_change2" filterable size='mini' placeholder="请选择">
+                    <p class="black" v-if="index < 10" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
+                    <p class="black" v-if="mission_list.length > 10" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
+                    <el-select v-show="mission_more" id="taskId" v-if="mission_list.length > 10" v-model="taskIdsTmp" @change="mission_change2" filterable size='mini' placeholder="请选择">
                       <el-option
-                        v-if="index >=6"
+                        v-if="index >=10"
                         v-for="(item,index) in mission_list"
                         :key="item.taskId"
                         :label="item.taskName"

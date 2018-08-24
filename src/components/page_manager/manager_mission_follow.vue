@@ -489,7 +489,9 @@ export default {
             }
         });
         //下方任务列表
-        this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',{requireTotalCount:true,"orderField":'creat',"orderWay":'desc'})
+        this.orderWay='desc';
+        this.orderField='create';
+        this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',{requireTotalCount:true,"orderField":'create',"orderWay":'desc'})
         .then( (res) => {
             if(res.data.code==200){
                 this.page_count=res.data.totalCount;
