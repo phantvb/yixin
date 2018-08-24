@@ -446,6 +446,9 @@ li{
   background-size:27px 27px;
   margin-top: 9px;
 }
+.el-icon-callend:hover {
+  transform: scale(1.1);
+}
 .el-icon-service:before {
   content: '';
   width: 27px;
@@ -454,6 +457,9 @@ li{
   background: url('../icon/phone_use.png');
   background-size:27px 27px;
   margin-top: 9px;
+}
+.el-icon-service:hover {
+  transform: scale(1.1);
 }
 .el-icon-unservice:before {
   content: '';
