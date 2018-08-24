@@ -517,6 +517,8 @@ export default {
             this.search=this.nameornum;
             this.manager_init({fullNameOrEmail:this.nameornum,requireTotalCount:true});
         }else{
+            this.orderWay='desc';
+            this.orderField='create';
             this.manager_init({requireTotalCount:true,orderWay:'desc',orderField:'create'});
         }
         this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;

@@ -49,8 +49,8 @@
             </div>
             <div class="con">
                 <p v-if="task_state==0&&TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
-                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id" ref="tree">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)">
+                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id">
+                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
                         <span>{{data.lastCalledTime}}</span>
@@ -62,8 +62,8 @@
                         <span>{{data.depName}}{{data.areaName}}</span>
                     </div>
                 </el-tree>
-                <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" ref="trees" node-key="id">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)'>
+                <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" node-key="id">
+                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)' :ref="data.taskClientId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
                         <span>{{data.lastCalledTime}}</span>
@@ -76,7 +76,7 @@
                     </div>
                 </el-tree>
                 <div id="book">
-                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)">
+                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)"  :ref="item.taskClientId">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
                         <span :class="(new Date(item.nextContactTime).getTime()-30*60*1000)<new Date().getTime()?'red':''">{{item.nextContactTime_str}}</span>
@@ -99,7 +99,7 @@
             <div class="head">
                 <div class="mes2">
                     <div id="call">
-                        <div class="call_state" v-show="call_state==0" @click="startCall">
+                        <div class="call_state high_hover"  v-show="call_state==0" @click="startCall">
                             <i class="el-icon-phone call_icon" id="call_icon"></i>
                             <span v-show="call_auto_init" :style="{'display':'inline-block','padding-right':'15px'}">{{call_during_copy}}秒后开始呼叫</span>
                         </div>
@@ -293,6 +293,10 @@
     .call_active{
         background-color:#7496F2;
     }
+    .high_hover:hover{
+        transform: scale(1.1);
+        box-shadow: 0px 0px 2px #39c;
+    }
     #auto_call{
         position: relative;
     }
@@ -473,6 +477,9 @@
     #call{
         float: right;
         padding: 0 2%;
+    }
+    .call_state{
+        box-sizing:border-box;
     }
     .call_state .call_icon{
         font-size: 23px;
@@ -1133,7 +1140,16 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
-            
+            console.log(this.$refs[item.taskClientId].style.backgroundColor)
+            if(this.$refs[item.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
+                this.$refs[item.taskClientId].style.backgroundColor='#fff';
+            }else{
+                this.$refs[item.taskClientId].style.backgroundColor='#ccffff';
+            }
+            //console.log(this.active_data);
+            if(this.active_data&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
+                this.$refs[this.active_data.taskClientId].style.backgroundColor='#fff';
+            }
             var _this=this;
             this.tags=[];
             this.show=false;

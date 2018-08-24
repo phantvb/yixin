@@ -331,7 +331,9 @@ export default {
         Dialog
     },
     mounted:function(){
-        this.seat_init({requireTotalCount:true,"orderField":'creat',"orderWay":'asc'});
+        this.orderWay='desc';
+        this.orderField='create';
+        this.seat_init({requireTotalCount:true,"orderField":'create',"orderWay":'asc'});
     },
     inject:['reload']
 }

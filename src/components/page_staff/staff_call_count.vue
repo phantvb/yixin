@@ -53,11 +53,11 @@
             <el-button type="info" plain class="button" @click="search()">搜索收起</el-button>
             <div>
                 <p class="grey">任务名称&#12288;&#12288;</p>
-                <p v-if="index < 6" v-for="(item,index) in mission_list" :key="index" class="black" :class="{worker_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
-                <p class="black" v-if="mission_list.length > 6" :style="{'border':'1px solid #666','padding':'2px 6px'}" @click="mission_more=!mission_more">更多</p>
-                <el-select id="taskId" v-show="mission_more" size="mini" :style="{'float':'right'}" v-if="mission_list.length > 6" v-model="taskIdsTmp" @change="mission_change2" filterable placeholder="请选择">
+                <p v-if="index < 10" v-for="(item,index) in mission_list" :key="index" class="black" :class="{worker_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
+                <p class="black" v-if="mission_list.length > 10" :style="{'border':'1px solid #666','padding':'2px 6px'}" @click="mission_more=!mission_more">更多</p>
+                <el-select id="taskId" v-show="mission_more" size="mini" v-if="mission_list.length > 6" v-model="taskIdsTmp" @change="mission_change2" filterable placeholder="请选择">
                   <el-option
-                    v-if="index >=6"
+                    v-if="index >=10"
                     v-for="(item,index) in mission_list"
                     :key="item.taskId"
                     :label="item.taskName"
@@ -239,6 +239,7 @@ export default {
             call_active:0,
             tableData:[],
             infos:{
+                "callTalkedDuration":0,
                 "callTalkedNumToal" : 0,
                 "callTalkedTotal" : 0,
                 "calledDuration" : 0,

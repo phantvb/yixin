@@ -456,6 +456,8 @@ export default {
         if(partnerAccountId){
             this.seat_init({requireTotalCount:true,orderField:'create',orderWay:'desc',partnerAccountId:partnerAccountId});
         }else{
+            this.orderWay='desc';
+            this.orderField='create';
             this.seat_init({requireTotalCount:true,orderField:'create',orderWay:'desc'});
         }
         this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;

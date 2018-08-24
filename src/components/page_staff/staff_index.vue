@@ -16,7 +16,7 @@
                     <p class="grey">今日已预约</p>
                 </li>
                 <li :style="{'float':'right'}">
-                    <el-button type="info" size="small" :style="{'margin-top':'1em'}" @click="pushStage">开始呼叫工作</el-button>
+                    <el-button type="primary" size="small" :style="{'margin-top':'1em'}" @click="pushStage">开始呼叫工作</el-button>
                 </li>
             </ul>
         </div>
@@ -158,6 +158,7 @@ export default {
                 }
             },
             todayCompleteDto : {
+                "callTalkedDuration":0,
                 "callTalkedNumToal" : 0,
                 "callTalkedTotal" : 0,
                 "calledDuration" : 0,
