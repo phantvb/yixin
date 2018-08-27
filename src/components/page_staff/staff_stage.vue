@@ -44,7 +44,7 @@
                     <li @click="BookedList_init({'requireTotalCount':true,'pageSize':'300'})" :class="{active:task_state==1}"><el-badge is-dot :value="booknum" :max="99" v-show="booknum>0">
                     <div class="tit" :style="{'padding-top':'0px'}">已预约</div>
                     </el-badge><div class="tit" :style="{'padding-top':'0px'}" v-show="booknum==0">已预约</div></li>
-                    <li :class="{active:task_state==2}" @click="task_state=2">来电</li>
+                    <!-- <li :class="{active:task_state==2}" @click="task_state=2">来电</li> -->
                 </ul>
             </div>
             <div class="con">
@@ -75,8 +75,8 @@
                         <span>{{data.depName}}{{data.areaName}}</span>
                     </div>
                 </el-tree>
-                <div id="book">
-                    <div class="custom-tree-node node" v-show="task_state==1" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)" :ref="item.taskClientId">
+                <div id="book" ref="bookTree">
+                    <div class="custom-tree-node node" v-show="task_state==1&&item.taskClientId" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)" :ref="item.taskClientId">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
                         <span :class="(new Date(item.nextContactTime).getTime()-30*60*1000)<new Date().getTime()?'red':''">{{item.nextContactTime_str}}</span>
@@ -192,7 +192,8 @@
                 
             </div>
             <div class="summary">
-                <p class="black tit">通话小结 <span class="grey" :style="{'font-weight':'400'}">{{'('+taskName_str+')'}}</span></p>
+                <p class="black tit">通话小结 <span class="grey" v-show="taskName_str
+                " :style="{'font-weight':'400'}">{{'('+taskName_str+')'}}</span></p>
                 <div>
                     <div class="state">
                         <p class="grey">跟进状态</p>
@@ -397,7 +398,7 @@
         margin: 0;
     }
     .tit ul li{
-        width: 33%;
+        width: 49%;
         float: left;
         padding: 12px 0;
         cursor: pointer;
@@ -780,7 +781,8 @@ export default {
             session:null,
             recordFilePath:null,
             callSeesionId:null,
-            taskName_str:null
+            taskName_str:null,
+            curret:null
         }
     },
     components:{
@@ -1146,7 +1148,7 @@ export default {
         detail_init(item,type,node){
             if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId][0]&&this.$refs[this.active_data.taskClientId][0].style.backgroundColor=='rgb(204, 255, 255)'){
                 this.$refs[this.active_data.taskClientId][0].style.backgroundColor='#fff';
-            }else if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
+            }else if(this.active_data&&this.$refs[this.active_data.taskClientId].style&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
                 this.$refs[this.active_data.taskClientId].style.backgroundColor='#fff';
             }
             var _this=this;
@@ -1198,6 +1200,13 @@ export default {
                 }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
+                // $('.node').map((index,items)=>{
+                //     console.log(item.taskClientId)
+                //     if($(items).attr('id')==item.taskClientId){
+                //         console.log(items,$(items),$('#'+item.taskClientId));
+                //         $('#'+item.taskClientId).css('backgroundColor','#ccffff');
+                //     }
+                // })
             }
             this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':item.taskClientId})
             .then( (res) => {
@@ -1529,8 +1538,12 @@ export default {
                             this.booklist.map((items,index)=>{
                                 if(i==index&&i!=(_this.booklist.length-1)){
                                     if(_this.time_next==''){
-                                        _this.booklist.splice(index,1);
-                                        _this.detail_init(_this.booklist[index],3,items);
+                                        // setTimeout(function(){
+                                            
+                                        // _this.booklist.splice(index,1);
+                                        // },200)
+                                        _this.booklist.splice(index,1,{});
+                                        _this.detail_init(_this.booklist[index+1],3,items);
                                     }else if(_this.time_next!=''){
                                         _this.detail_init(_this.booklist[index+1],3,items);
                                     }

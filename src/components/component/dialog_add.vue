@@ -212,7 +212,8 @@ export default {
             this.mission_init(data);
         },
         mission_change2:function () {
-          this.missoin_search();
+            this.pageNum=1;
+            this.missoin_search();
         },
         //多选标签选中改变颜色
         selcolor(e){
@@ -287,6 +288,7 @@ export default {
                 var taskIds=this.mission_state.map((item)=>this.mission_list[item].taskId);
                 taskIds=taskIds.concat(this.taskIdsTmp);
             }
+            this.pageNum=val;
             let userResults=this.custom_state.map((item)=>this.custom_list[item].key);
             let callResults=this.call_state.map((item)=>this.call_list[item].key);
             var data={'userResults':userResults,'nameOrNumber':this.search,'taskIds':taskIds,'callResults':callResults,'whetherCalledToday':this.link_list[this.link_state].key,"requireTotalCount" : true,'pageNum':this.pageNum};
@@ -312,10 +314,12 @@ export default {
             }else if(value==0){
                 this.mission_state=[0];
             }
+            this.pageNum=1;
             this.missoin_search();
         },
         search_change:function(value){
             this.search_state=value;
+            this.pageNum=1;
             this.missoin_search();
         },
         custom_change:function(value){
@@ -333,6 +337,7 @@ export default {
             }else if(value==0){
                 this.custom_state=[0];
             }
+            this.pageNum=1;
             this.missoin_search();
         },
         call_change:function(value){
@@ -350,10 +355,12 @@ export default {
             }else if(value==0){
                 this.call_state=[0];
             }
+            this.pageNum=1;
             this.missoin_search();
         },
         link_change:function(value){
             this.link_state=value;
+            this.pageNum=1;
             this.missoin_search();
         },
         save(){
