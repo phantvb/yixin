@@ -50,7 +50,7 @@
             <div class="con">
                 <p v-if="task_state==0&&TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
                 <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId">
+                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId+data.taskId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
                         <span>{{data.lastCalledTime}}</span>
@@ -63,7 +63,7 @@
                     </div>
                 </el-tree>
                 <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" node-key="id">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)' :ref="data.taskClientId">
+                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)' :ref="data.taskClientId+data.taskId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label}}</p>
                         <span>{{data.lastCalledTime}}</span>
@@ -76,7 +76,7 @@
                     </div>
                 </el-tree>
                 <div id="book" ref="bookTree">
-                    <div class="custom-tree-node node" v-show="task_state==1&&item.taskClientId" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)" :ref="item.taskClientId">
+                    <div class="custom-tree-node node" v-show="task_state==1&&item.taskClientId" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)" :ref="item.taskClientId+item.taskId">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
                         <span :class="(new Date(item.nextContactTime).getTime()-30*60*1000)<new Date().getTime()?'red':''">{{item.nextContactTime_str}}</span>
@@ -1147,10 +1147,11 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
-            if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId][0]&&this.$refs[this.active_data.taskClientId][0].style.backgroundColor=='rgb(204, 255, 255)'){
-                this.$refs[this.active_data.taskClientId][0].style.backgroundColor='#fff';
-            }else if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId].style&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
-                this.$refs[this.active_data.taskClientId].style.backgroundColor='#fff';
+            console.log(item);
+            if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor=='rgb(204, 255, 255)'){
+                this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor='#fff';
+            }else if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor=='rgb(204, 255, 255)'){
+                this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor='#fff';
             }
             var _this=this;
             this.tags=[];
@@ -1179,26 +1180,26 @@ export default {
                 this.taskName_str=node.taskName;
             }
             if(type==1){
-                if(this.$refs[item.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
-                    this.$refs[item.taskClientId].style.backgroundColor='#fff';
+                if(this.$refs[item.taskClientId+item.taskId].style.backgroundColor=='rgb(204, 255, 255)'){
+                    this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#fff';
                 }else{
-                    this.$refs[item.taskClientId].style.backgroundColor='#ccffff';
+                    this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#ccffff';
                 }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
             }else if(type==2){
-                if(this.$refs[item.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
-                    this.$refs[item.taskClientId].style.backgroundColor='#fff';
+                if(this.$refs[item.taskClientId+item.taskId].style.backgroundColor=='rgb(204, 255, 255)'){
+                    this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#fff';
                 }else{
-                    this.$refs[item.taskClientId].style.backgroundColor='#ccffff';
+                    this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#ccffff';
                 }
                 this.left.taskId=null;
                 this.left.taskListId=item.id;
             }else{
-                if(this.$refs[item.taskClientId][0].style.backgroundColor=='rgb(204, 255, 255)'){
-                    this.$refs[item.taskClientId][0].style.backgroundColor='#fff';
+                if(this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor=='rgb(204, 255, 255)'){
+                    this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor='#fff';
                 }else{
-                    this.$refs[item.taskClientId][0].style.backgroundColor='#ccffff';
+                    this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor='#ccffff';
                 }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;

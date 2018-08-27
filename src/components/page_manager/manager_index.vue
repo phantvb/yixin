@@ -10,7 +10,7 @@
                 <li>
                     <p class="grey">企业坐席</p>
                     <p class="grey"><span class="black">{{worker.num}}人</span>/{{worker.all}}人</p>
-                    <el-progress :percentage="worker_scale" :show-text='false' :status='time_scale>20?"success":"exception"'></el-progress>
+                    <el-progress :percentage="worker_scale" :show-text='false' :color="worker_scale>20?'#7496F2':'#EF5679'"></el-progress>
                 </li>
             </ul>
         </div>
@@ -21,7 +21,7 @@
                 <p class="grey">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
-            <div class="svg"></div>
+            <div class="svg" id="svg"></div>
             <div class="svg"></div>
             <div class="svg"></div>
             <div class="svg"></div>
@@ -83,14 +83,17 @@
     .p3_tit>a>p.grey{
         float: right;
     }
+    #svg{
+        width: 31%
+    }
     .svg{
-        width: 25%;
+        width: 23%;
         height: 230px;
         float: left;
     }
     .svg_work{
         width: 49%;
-        height: 300px;
+        height: 400px;
         float: left;
     }
 </style>
@@ -151,11 +154,14 @@ export default {
                 legend: {
                     x: 'left',
                     data:['发展成功','发展失败','未分配','继续跟进'],
-                    show:item.show_tit
+                    show:item.showLegend,
+                    orient:'vertical',
+                    top:'14%',
+                    icon:'circle'
                 },
                 title:{
                     text:item.id,
-                    bottom:'0px',
+                    top:'0px',
                     left:'center',
                     textStyle:{
                         fontSize:14,
@@ -166,18 +172,12 @@ export default {
                     {
                         name:'客户状态',
                         type:'pie',
-                        radius: ['50%', '70%'],
-                        avoidLabelOverlap: false,
+                        radius: ['50px', '72px'],
+                        color: ['#83CA0D', '#EF5679', '#7496F2', '#D4D4D4'],
                         label: {
                             normal: {
-                                show: false,
-                                position: 'center'
-                            },
-                            formatter: '{b}: {d}'
-                        },
-                        labelLine: {
-                            normal: {
-                                show: false
+                                position: 'center',
+                                show:false
                             }
                         },
                         data:item.data
@@ -217,6 +217,8 @@ export default {
                         fontWeight:'100'
                     }
                 },
+                barMaxWidth:'5%',
+                barMinHeight :'12px',
                 grid: {
                     left: '3%',
                     right: '4%',
@@ -224,17 +226,24 @@ export default {
                     containLabel: true
                 },
                 xAxis: {
-                    type: 'value',
+                    type: 'category',
                     boundaryGap: [0, 0.01],
-                    splitLine:{show: false}
+                    splitLine:{show: false},
+                    data: arr_person
                 },
                 yAxis: {
-                    type: 'category',
-                    data: arr_person
+                    type: 'value',
+                    splitLine:{
+                        lineStyle:{
+                            type:'dashed'
+                        },
+                        show:true
+                    }
                 },
                 series: [
                     {
                         type: 'bar',
+                        color:'#7496F2',
                         label: {
                             normal: {
                                 show: true,
@@ -287,6 +296,8 @@ export default {
                         fontWeight:'100'
                     }
                 },
+                barMaxWidth:'5%',
+                barMinHeight :'12px',
                 legend: {
                     data:['发展成功', '发展失败','继续跟进'],
                     bottom:0,
@@ -307,18 +318,25 @@ export default {
                     containLabel: true
                 },
                 xAxis: {
-                    type: 'value',
+                    type: 'category',
                     boundaryGap: [0, 0.01],
-                    splitLine:{show: false}
+                    splitLine:{show: false}, 
+                    data: arr_person
                 },
                 yAxis: {
-                    type: 'category',
-                    data: arr_person
+                    type: 'value',
+                    splitLine:{
+                        lineStyle:{
+                            type:'dashed'
+                        },
+                        show:true
+                    }
                 },
                 series: [
                     {
                         type: 'bar',
                         name:'发展成功',
+                        color: '#83CA0D',
                         stack: '总量',
                         label: {
                             normal: {
@@ -328,7 +346,7 @@ export default {
                         },
                         itemStyle:{
                             normal:{
-                                color:'rgba(120, 185, 153, 1)'
+                                color:'#83CA0D'
                             }
                         },
                         data: arr_success
@@ -336,6 +354,7 @@ export default {
                     {
                         type: 'bar',
                         name:'发展失败',
+                        color: '#EF5679', 
                         stack: '总量',
                         label: {
                             normal: {
@@ -345,13 +364,14 @@ export default {
                         },
                         itemStyle:{
                             normal:{
-                                color:'rgba(217, 120, 120, 1)'
+                                color:'#EF5679'
                             }
                         },
                         data: arr_fail
                     },{
                         type: 'bar',
                         name:'继续跟进',
+                        color:'#D4D4D4',
                         stack: '总量',
                         label: {
                             normal: {
@@ -361,7 +381,7 @@ export default {
                         },
                         itemStyle:{
                             normal:{
-                                color:'rgba(153, 153, 153, 1)'
+                                color:'#D4D4D4'
                             }
                         },
                         data: arr_doing
@@ -382,10 +402,11 @@ export default {
         mission_init:function(item){
             for(let i=0;i<4;i++){
                 if(i<item.length){
-                    let obj={'id_num':i,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
+                    let obj={'id_num':i,'id':item[i].taskName,'key':item[i].taskId,'showLegend':i==0,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
                     this.drawPie(obj);
                 }else{
-                    let obj={'id_num':i};
+                    item.showLegend=false;
+                    let obj={'id_num':i,'showLegend':i==0};
                     this.drawPie(obj);
                 }
             }
