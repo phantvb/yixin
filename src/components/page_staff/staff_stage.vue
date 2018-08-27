@@ -86,14 +86,14 @@
                 
             </div>
             <ul class="foot" @click="see=true">
-                <li class="grey"><i class="el-icon-plus"></i>新增呼叫计划</li>
+                <li class="grey"><i class="el-icon-plus"></i>新增临时任务</li>
             </ul>
         </div>
         <div class="body">
             <div id="hidden" v-show="call_hidden">
                 <div>
                     <i class="el-icon-share" :style="{'font-size':'80px'}"></i>
-                    <p>未选择客户</p>
+                    <p>{{call_hidden_time==0?'未选择客户':'当前外呼任务自动呼叫已完成，请重新选择'}}</p>
                 </div>
             </div>
             <div class="head">
@@ -775,6 +775,7 @@ export default {
             call_timer:null,
             time_error:null,
             call_hidden:true,
+            call_hidden_time:0,
             phone_use:true,
             history_taskId:null,
             baseUrl:null,
@@ -1148,7 +1149,7 @@ export default {
         detail_init(item,type,node){
             if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId][0]&&this.$refs[this.active_data.taskClientId][0].style.backgroundColor=='rgb(204, 255, 255)'){
                 this.$refs[this.active_data.taskClientId][0].style.backgroundColor='#fff';
-            }else if(this.active_data&&this.$refs[this.active_data.taskClientId].style&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
+            }else if(this.active_data&&this.$refs[this.active_data.taskClientId]&&this.$refs[this.active_data.taskClientId].style&&this.$refs[this.active_data.taskClientId].style.backgroundColor=='rgb(204, 255, 255)'){
                 this.$refs[this.active_data.taskClientId].style.backgroundColor='#fff';
             }
             var _this=this;
@@ -1165,6 +1166,7 @@ export default {
                 return;
             }
             this.call_hidden=false;
+            this.call_hidden_time=1;
             this.active_data=item;
             this.right.taskListId=item.id;
             this.right.taskId=item.taskId;

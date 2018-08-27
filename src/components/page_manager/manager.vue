@@ -24,24 +24,24 @@
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/manager/follow'}">
-                    <el-menu-item class="item" index="2-1">外呼任务跟踪</el-menu-item>
+                    <el-menu-item class="item" index="2-1">外呼任务配置&#12288;</el-menu-item>
                   </router-link>
-                  <router-link :to="{path:'/manager/call_count'}">
-                    <el-menu-item class="item" index="2-2">坐席呼叫统计</el-menu-item>
+                  <router-link :to="{path:'/manager/label'}">
+                    <el-menu-item class="item" index="2-2">客户标签组配置</el-menu-item>
                   </router-link>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="3">
                 <template slot="title">
                   <i class="el-icon-waihu"></i>
-                  <span>呼叫管理&#12288;&#12288;</span>
+                  <span>坐席管理&#12288;&#12288;</span>
                 </template>
                 <el-menu-item-group>
                   <router-link :to="{path:'/manager/worker'}">
                     <el-menu-item class="item" index="3-1">坐席帐号管理</el-menu-item>
                   </router-link>
-                  <router-link :to="{path:'/manager/label'}">
-                    <el-menu-item class="item" index="3-2">客户标签管理</el-menu-item>
+                  <router-link :to="{path:'/manager/call_count'}">
+                    <el-menu-item class="item" index="3-2">坐席情况统计</el-menu-item>
                   </router-link>
                 </el-menu-item-group>
               </el-submenu>

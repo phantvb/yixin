@@ -5,11 +5,11 @@
             <div id="mask" v-show="tableData.length===0">
                 <div>
                     <p><i class="el-icon-noMission"></i></p>
-                    <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签</el-button>
+                    <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签组</el-button>
                     <div>
                         <el-tooltip class="item" effect="dark"  placement="right">
                             <div slot="content" :style="{'min-width':'200px'}">客户标签可以与外呼任务关联，让坐席在与客户沟通时快速标记用户，以便后续的客户分类与跟进。</div>
-                            <el-button type="text" :style="{'color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签</el-button>
+                            <el-button type="text" :style="{'color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签组</el-button>
                         </el-tooltip>
                     </div>
                 </div>
@@ -17,15 +17,15 @@
             <el-alert title="最多只能设置10个标签" type="warning" center show-icon v-show="warn"></el-alert>
             <div class="part2">
                 <div class="part2_tit">
-                    <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签</el-button>
+                    <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签组</el-button>
                     <el-button plain class="button" :style="{'float':'left'}" @click="DialogVisible=true">效果预览</el-button>
                     <el-tooltip class="item" effect="dark"  placement="right">
                         <div slot="content" :style="{'min-width':'200px'}">客户标签可以与外呼任务关联，让坐席在与客户沟通时快速标记用户，以便后续的客户分类与跟进。</div>
-                        <el-button type="text" :style="{'float':'right','color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签</el-button>
+                        <el-button type="text" :style="{'float':'right','color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签组</el-button>
                     </el-tooltip>
                 </div>
                 <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
-                    <el-table-column prop="tagName" label="标签名称" class-name="line2" sortable  :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                    <el-table-column prop="tagName" label="标签组名称" class-name="line2" sortable  :show-overflow-tooltip=true min-width="100"> </el-table-column>
                     <el-table-column label="可选值" class-name="line3" :show-overflow-tooltip=true min-width="300">
                         <template slot-scope="scope">
                             {{scope.row.tags.join(';')}}
@@ -37,10 +37,10 @@
                         <template slot-scope="scope">
                             <el-button
                             size="mini" type="text"
-                            @click="handlech(scope.$index, scope.row)">修改标签</el-button>&#12288;|
+                            @click="handlech(scope.$index, scope.row)">修改标签组</el-button>&#12288;|
                             <el-button
                             size="mini" type="text"
-                            @click="handlede(scope.$index, scope.row)">删除标签</el-button>
+                            @click="handlede(scope.$index, scope.row)">删除标签组</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="tag">
-                        <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">客户标签</p>
+                        <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">客户标签组</p>
                         <el-dropdown :hide-on-click="false" v-for="(item,index) in tableData" :key="index" :style="{'float':'left','line-height':'26px','margin': '0 6px'}">
                             <span class="el-dropdown-link">
                                 {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>

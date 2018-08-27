@@ -43,7 +43,7 @@
             <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
                 <el-table-column label="任务名称" class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="120">
                     <template slot-scope="scope">
-                        <router-link :to="{path:'./detail', query: { id: scope.row.taskId }}">
+                        <router-link :to="{path:'./detail', query: { id: scope.row.taskId , taskName : scope.row.name }}">
                             {{scope.row.name}}
                         </router-link>
                     </template>

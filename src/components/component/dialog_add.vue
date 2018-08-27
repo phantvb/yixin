@@ -1,6 +1,6 @@
 <template>
     <div >
-      <el-dialog title="新增呼叫计划" :visible.sync="see" @close="close" center @open="open" width="850px">
+      <el-dialog title="新增临时任务" :visible.sync="see" @close="close" center @open="open" width="850px">
         <div class="container">
             <div class="part2">
                 <div class="part2_tit">
@@ -107,7 +107,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="see=false" size="small">&#12288;&#12288;取消&#12288;&#12288;</el-button>
-            <el-button type="info" @click="save" size="small" :disabled="cansave">生成呼叫计划</el-button>
+            <el-button type="info" @click="save" size="small" :disabled="cansave">生成临时任务</el-button>
         </span>
       </el-dialog>
     </div>

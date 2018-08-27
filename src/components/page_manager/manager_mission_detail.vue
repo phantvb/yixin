@@ -5,7 +5,7 @@
                 外呼任务跟踪
             </router-link>
             <i class="el-icon-arrow-right"></i>
-            任务详情
+            {{this.$route.query.taskName?this.$route.query.taskName:'任务详情'}}
         </div>
         <div class="part2">
             <div class="part2_tit">

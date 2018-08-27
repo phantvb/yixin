@@ -2,7 +2,7 @@
     <div>
       <el-dialog title="导入客户" :visible.sync="leading" @close="close" @open="open">
         <el-steps :active="dialog_active" align-center>
-          <el-step title="上传客户资源"></el-step>
+          <el-step title="上传客户数据"></el-step>
           <el-step title="确认导入数据"></el-step>
           <el-step title="编辑导入任务"></el-step>
         </el-steps>
@@ -10,7 +10,7 @@
           <div class="upfiles">
             <input type="file"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" @change="upfiles">
             <div>
-              <p>上传客户资源模板</p>
+              <p>上传客户数据文档</p>
             </div>
           </div>
           <div class="note">

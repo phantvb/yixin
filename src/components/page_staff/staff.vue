@@ -2,7 +2,14 @@
   <el-container>
     <el-header>
       <el-row height="auto" class="header">
-        <div class="nav title">猎客呼叫中心</div>
+        <div id="title" v-show="isCollapse">
+            <div><i class="el-icon-logo"></i></div>
+            <p><i class="el-icon-toggle" @click="isCollapse=!isCollapse"></i>工作台</p>
+        </div>
+        <div  id="title_nex" v-show="!isCollapse">
+          <div class="nav title">猎客呼叫中心</div>
+          <i class="el-icon-toggle" @click="isCollapse=!isCollapse"></i>
+        </div>
         <notify></notify>
       </el-row>
     </el-header>
@@ -97,6 +104,31 @@
 .title {
   line-height: 60px;
   font-size: 18px;
+}
+#title{
+  overflow: hidden;
+  float: left;
+}
+#title>div{
+  width: 63px;
+  height: 60px;
+  float: left;
+  background-color: #7496F2;
+}
+#title>p{
+  float: left;
+  margin: 0px 8px;
+  line-height: 60px;
+}
+#title i.el-icon-toggle{
+  transform: translateY(4px);
+}
+#title_nex{
+  overflow: hidden;
+  float: left;
+}
+#title_nex i{
+  margin: 18px 6px;
 }
 .hello {
 	width: 100vw;
