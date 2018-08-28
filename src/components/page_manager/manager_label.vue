@@ -182,10 +182,13 @@ export default {
     },
     components:{tag},
     methods:{
+        //修改标签
         handlech:function(index,row){
+            //绑定数据到<tag></tag>,并显示
             this.chdata=row;
             this.add_tag=true;
         },
+        //删除标签
         handlede:function(index,row){
             this.$ajax.post(this.$preix+'/new/tag/delTag',{'id':row.id})
             .then( (res) => {
@@ -194,14 +197,15 @@ export default {
                 }
             });
         },
+        //新增标签
         add:function(){
-            console.log(this.tableData.length);
             if(this.tableData.length>9){
                 this.warn=true;
                 return
             }
             this.add_tag=true;
         },
+        //初始化标签数据
         tag_init:function(data){
             this.$ajax.post(this.$preix+'/new/tag/findTagList',data)
             .then( (res) => {
@@ -213,10 +217,12 @@ export default {
                 }
             });
         },
+        //编辑标签弹窗关闭的回调，清空里面的数据，可能多余了
         reset:function(){
             this.chdata=[];
             this.add_tag=false;
         },
+        //编辑标签弹窗修改成功的回调
         update:function(){
             this.tag_init();
         }

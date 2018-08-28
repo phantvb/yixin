@@ -225,25 +225,30 @@ export default {
         'a-player': VueAplayer
     },
     methods:{
+        //时间改变
         date_change(){
             this.mission_search();
         },
+        //筛选条件收起展开
         search_change:function(value){
             this.search_state=value;
-            this.mission_search();
         },
+        //客户状态改变
         custom_change:function(value){
             this.custom_state=value;
             this.mission_search();
         },
+        //最近通话情况改变
         call_change:function(value){
             this.call_state=value;
             this.mission_search();
         },
+        //任务名称改变
         mission_change:function(value){
             this.mission_state=value;
             this.taskIds = this.mission_list[value].taskId
             this.taskIdsTmp = '';
+            //万一以后多选呢
             // if(this.mission_state.indexOf(value)==-1&&value!=0){
             //     this.mission_state.push(value);
             //     for(let i in this.mission_state){
@@ -260,10 +265,12 @@ export default {
             // }
             this.mission_search();
         },
+        //任务名称更多
         mission_change2:function () {
           this.taskIds = this.taskIdsTmp;
           this.mission_search();
         },
+        //初始化任务列表
         task_init(){
             //任务列表
             this.$ajax.post(this.$preix+'/new/calltask/queryRightCallTaskList',{'pageSize':100})

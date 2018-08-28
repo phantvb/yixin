@@ -131,9 +131,7 @@ export default {
         }
     },
     methods:{
-        search_change:function(value){
-            this.search_state=value;
-        },
+        //时间改变
         date_change(){
             this.leading_record=this.leading_date;
             var data={'pageSize':10,beginDay:this.leading_date?this.leading_date[0]:null,endDay:this.leading_date?this.leading_date[1]:null,'requireTotalCount':true,'shortOrLoginName':this.search};
@@ -144,16 +142,14 @@ export default {
             }
             this.init(data);
         },
-        handleNodeClick(data) {
-            this.label_list[data.group]=data.id;
-            this.tag_list[data.group]=data.label;
-        },
+        //格式化时间到秒
         date_init(date){
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
             let day=date.getDate()<10?("0"+date.getDate()):date.getDate();
             return year+'-'+month+'-'+day+' 00:00:00';
         },
+        //格式化时间到天
         date_init_ymd(date){
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
@@ -198,6 +194,7 @@ export default {
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
             var data={'pageSize':10,beginDay:this.leading_record[0],endDay:this.leading_record[1],'shortOrLoginName':this.search,'pageNum':val,"orderWay":this.orderWay,'orderField':this.orderField};
+            //删除空属性
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];

@@ -183,7 +183,6 @@
               this.uptime==1;
               this.dialog_active=1;
               let formdata = new FormData();
-              console.log(event.target.files[0]);
               formdata.append('file',event.target.files[0]);
               this.$ajax.post(this.$preix+'/new/calltask/importCallTaskClientsCheck',formdata,{headers: { 'Content-Type': 'application/x-www-form-urlencoded' }})
               .then( (res) => {

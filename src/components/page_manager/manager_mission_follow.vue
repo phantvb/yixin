@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" @click="hiddenSel">
         <div class="nav">外呼任务跟踪</div>
         <div :style="{'position':'relative'}">
             <div v-show="blank" id="mask">
@@ -253,6 +253,11 @@ export default {
       Dialog,assign
     },
     methods:{
+        hiddenSel(){
+            // this.tableData.map(item=>{
+            //     item.showSel=false;
+            // })
+        },
         //画饼图
         drawPie:function(item){
             var myChart = echarts.init(document.getElementsByClassName('svg')[item.id_num]);

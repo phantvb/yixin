@@ -176,7 +176,6 @@ export default {
             this.$router.push({ path: '/staff/stage'})
         },
         drawPie:function(item){
-            console.log(item);
             var myChart = echarts.init(document.getElementsByClassName('svg')[item.id_num]);
             var option = {
                 tooltip: {
@@ -185,12 +184,15 @@ export default {
                 },
                 legend: {
                     x: 'left',
-                    data:['发展成功','发展失败','继续跟进'],
-                    show:item.show_tit
+                    data:['发展成功','发展失败','未分配','继续跟进'],
+                    show:item.showLegend,
+                    orient:'vertical',
+                    top:'14%',
+                    icon:'circle'
                 },
                 title:{
                     text:item.id,
-                    bottom:'0px',
+                    top:'0px',
                     left:'center',
                     textStyle:{
                         fontSize:14,
@@ -201,17 +203,12 @@ export default {
                     {
                         name:'客户状态',
                         type:'pie',
-                        radius: ['50%', '70%'],
-                        avoidLabelOverlap: false,
+                        radius: ['50px', '72px'],
+                        color: ['#83CA0D', '#EF5679', '#7496F2', '#D4D4D4'],
                         label: {
                             normal: {
-                                show: false,
-                                position: 'center'
-                            }
-                        },
-                        labelLine: {
-                            normal: {
-                                show: false
+                                position: 'center',
+                                show:false
                             }
                         },
                         data:item.data

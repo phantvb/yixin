@@ -48,7 +48,10 @@
                 </ul>
             </div>
             <div class="con">
-                <p v-if="task_state==0&&TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">暂无数据</p>
+                <p v-if="task_state==0&&TaskBySeat_data.length==0&&DialPlanIntroWithPage_data.length==0">
+                    <i class="el-icon-noMission"></i>
+                    <span :style="{'display':'block'}">暂无数据</span>
+                </p>
                 <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId+data.taskId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
@@ -76,6 +79,10 @@
                     </div>
                 </el-tree>
                 <div id="book" ref="bookTree">
+                    <p v-if="task_state==1&&booklist.length==0">
+                        <i class="el-icon-noMission"></i>
+                        <span :style="{'display':'block'}">暂无数据</span>
+                    </p>
                     <div class="custom-tree-node node" v-show="task_state==1&&item.taskClientId" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)" :ref="item.taskClientId+item.taskId">
                         <p>{{item.userName}}</p>
                         <span>{{item.lastCalledTime}}</span>
@@ -1019,7 +1026,7 @@ export default {
         connect:function () {
             var _this=this;
             // websocket的连接地址，此值等于WebSocketMessageBrokerConfigurer中registry.addEndpoint("/icc/websocket").withSockJS()配置的地址
-            var socket = new SockJS(this.$preix+'/ws/icc/websocket');
+            var socket = new SockJS(this.$preix+'/ws/icc/websocket', null, { transports: 'websocket' });
             this.stompClient = Stomp.over(socket);
             this.stompClient.connect({}, function(frame) {
                 console.log('Connected: ' + frame);

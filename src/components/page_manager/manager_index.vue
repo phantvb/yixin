@@ -136,6 +136,7 @@ export default {
         this.init(this.time_past);
     },
     computed:{
+        //计算属性，计算剩余时间和坐席的比例
         time_scale:function(){
             return (this.time.remin/this.time.all)*100
         },
@@ -144,6 +145,7 @@ export default {
         }
     },
     methods:{
+        //画饼图
         drawPie:function(item){
             var myChart = echarts.init(document.getElementsByClassName('svg')[item.id_num]);
             var option = {
@@ -186,6 +188,7 @@ export default {
             };
             myChart.setOption(option);
         },
+        //画第一张柱图
         drawLine:function(item){
             var myChart = echarts.init(document.getElementsByClassName('svg_work')[0]);
             var compare = function (obj1, obj2) {
@@ -261,6 +264,7 @@ export default {
             };
             myChart.setOption(option);
         },
+        //画第二张柱图
         drawLines:function(item){
             var myChart = echarts.init(document.getElementsByClassName('svg_work')[1]);
             var compare = function (obj1, obj2) {
@@ -390,15 +394,19 @@ export default {
             };
             myChart.setOption(option);
         },
+        //单选统计时间
         change:function(){
             this.init(this.time_past);
         },
+        //到时候配合ui图做处理，柱图数据
         worker_time_init:function(item){
             this.drawLine(item)
         },
+        //到时候配合ui图做处理，柱图数据
         worker_person_init:function(value){
             this.drawLines(value)
         },
+        //处理饼图数据
         mission_init:function(item){
             for(let i=0;i<4;i++){
                 if(i<item.length){
@@ -411,6 +419,7 @@ export default {
                 }
             }
         },
+        //格式化时间
         date_init(date){
             let year=date.getFullYear();
             let month=(date.getMonth()+1)<10?("0"+(date.getMonth()+1)):(date.getMonth()+1);
@@ -435,7 +444,6 @@ export default {
             this.$ajax.post(this.$preix+'/new/callstatistics/querySeatsCalledNumTotalChart',{'pageSize':10,beginTime:beginTime,endTime:endTime,'requireTotalCount':true}
             ).then( res=>{
                 if(res.data.code==200){
-                    console.log(res);
                     this.worker_person_init(res.data.rows);
                 }
             });
