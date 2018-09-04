@@ -90,7 +90,7 @@
                         <span>{{item.depName}}{{item.areaName}}</span>
                     </div>
                 </div>
-                
+
             </div>
             <ul class="foot" @click="see=true">
                 <li class="grey"><i class="el-icon-plus"></i>新增临时任务</li>
@@ -196,7 +196,7 @@
                         </div> -->
                     </div>
                 </div>
-                
+
             </div>
             <div class="summary">
                 <p class="black tit">通话小结 <span class="grey" v-show="taskName_str
@@ -358,7 +358,7 @@
         text-align: left;
     }
     .custom-tree-node p{
-        
+
     }
     .custom-tree-node span{
         color: #999;
@@ -875,7 +875,7 @@ export default {
             }
             var wsProt = fsDto.wsProt;
             var sessionTimers = fsDto.sessionTimers;
-    
+
             var uri = "sip:"+this.from_name+"@"+realm;
             var freeswitchProtocol = workbenchRst.freeswitchProtocol;
             var wsURL = freeswitchProtocol+"://"+realm+":"+wsProt;
@@ -890,7 +890,7 @@ export default {
             };
             this.ua = new JsSIP.UA(configuration);
             //JsSIP.debug.enable('JsSIP:*');JsSIP.debug.disable('JsSIP:*');
-    
+
             //WebSocket连接事件
             this.ua.on('connected',function(data){
                 console.log("onConnected- ",data);
@@ -903,7 +903,7 @@ export default {
             });
             //WebSocket连接事件
             this.ua.on('disconnected',function(data){
-                
+
                 console.log("onDisconnected- ",data);
             });
             //注册事件
@@ -916,7 +916,7 @@ export default {
                 console.log("onUnregistered- ",data);
                 _this.online_state=1;
             });
-    
+
             /*新的传入或传出呼叫事件*/
             this.ua.on('newRTCSession', function (data) {
                 console.log('incoming or outgoing call event :', data);
@@ -984,7 +984,7 @@ export default {
                     _this.stopTimer();
                 });
             });
-    
+
             this.ua.start();
         },
         //判断当前浏览器是否支持
@@ -1021,7 +1021,7 @@ export default {
 
                 }
             });
-        
+
         },
         connect:function () {
             var _this=this;
@@ -1041,7 +1041,7 @@ export default {
         disconnect:function () {
             if (this.stompClient != null) {
                 this.stompClient.disconnect();
-                
+
             console.log('关闭websocket')
             }
             console.log("Disconnected");
@@ -1123,10 +1123,11 @@ export default {
                 let data={'nameOrNumber':this.search,'requireTotalCount':true};
                 this.BookedList_init(data);
             }
-            
+
         },
         //初始化呼叫列表
         TaskList_init(data){
+            data.pageSize = 50;
             //初始化数据
             this.task_state=0;
             this.TaskBySeat_init(data);
@@ -1258,7 +1259,7 @@ export default {
                         this.note=res.data.historyDto.details[0].desc;
                         this.recordFilePath=res.data.historyDto.details[0].recordFilePath;
                         this.callSeesionId=res.data.historyDto.details[0].callSeesionId;
-                        
+
                     }else{
                         this.note='';
                     }
@@ -1502,19 +1503,19 @@ export default {
                         this.DialPlanIntroWithPage_data.map((items,index)=>{
                             let i=items.children.indexOf(_this.active_data);
                             if(i<items.children.length-1&&i!=-1){
-                                if(_this.worker_state!='1'){
+                                /*if(_this.worker_state!='1'){*/
                                     items.processingNum--;
                                     items.label=items.taskName+'('+items.processingNum+')';
                                     items.children.splice(i,1);
                                     _this.detail_init(items.children[i],2,items);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
+                                /*}else if(_this.worker_state=='1'&&_this.time_next==''){
                                     _this.detail_init(items.children[i+1],2,items);
                                 }else{
                                     items.processingNum--;
                                     items.label=items.taskName+'('+items.processingNum+')';
                                     items.children.splice(i,1);
                                     _this.detail_init(items.children[i],2,items);
-                                }
+                                }*/
                                 // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
                                 if(_this.call_auto=='true'){
                                     _this.call_state=5;
@@ -1526,14 +1527,14 @@ export default {
                                 }
                             }else if(i==(items.children.length-1)&&items.children.length==1){
                                 _this.call_hidden=true;
-                                if(_this.worker_state!='1'){
+                                /*if(_this.worker_state!='1'){*/
                                     _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
+                                /*}else if(_this.worker_state=='1'&&_this.time_next==''){
                                     return;
                                 }else{
                                     _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }
-                            }else if(i==(items.children.length-1)&&items.children.length>1){
+                                }*/
+                            }/*else if(i==(items.children.length-1)&&items.children.length>1){
                                 console.log('到底了')
                                 _this.call_hidden=true;
                                 if(_this.worker_state!='1'){
@@ -1547,7 +1548,7 @@ export default {
                                     items.label=items.taskName+'('+items.processingNum+')';
                                     items.children.splice(i,1);
                                 }
-                            }
+                            }*/
                         });
                         if(this.booklist.length>0&&this.booklist[0].taskClientId!='string'){
                             let i=this.booklist.indexOf(_this.active_data);
@@ -1555,7 +1556,7 @@ export default {
                                 if(i==index&&i!=(_this.booklist.length-1)){
                                     if(_this.time_next==''){
                                         // setTimeout(function(){
-                                            
+
                                         // _this.booklist.splice(index,1);
                                         // },200)
                                         _this.booklist.splice(index,1,{});
