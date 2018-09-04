@@ -1506,11 +1506,7 @@ export default {
                                 items.processingNum--;
                                 items.label=items.taskName+'('+items.processingNum+')';
                                 items.children.splice(i,1);
-                                if(items.children.length == 0){
-                                  _this.call_hidden=true;
-                                  _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }
-                                if(i < items.children.length-1){
+                                if(i < items.children.length){
                                   _this.detail_init(items.children[i],2,items);
                                   if(_this.call_auto=='true'){
                                       _this.call_state=5;
@@ -1520,6 +1516,14 @@ export default {
                                           _this.startCallTimeOut();
                                       },_this.call_remin*1000)
                                   }
+                                }
+                                console.log("i:"+i+";children.length:"+items.children.length);
+                                if(i == items.children.length){
+                                  console.log("call_hidden=true");
+                                  _this.call_hidden=true;
+                                }
+                                if(items.children.length == 0){
+                                  _this.DialPlanIntroWithPage_data.splice(index,1);
                                 }
                             }
                         });
