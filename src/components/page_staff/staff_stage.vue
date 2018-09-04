@@ -1502,53 +1502,26 @@ export default {
                         })
                         this.DialPlanIntroWithPage_data.map((items,index)=>{
                             let i=items.children.indexOf(_this.active_data);
-                            if(i<items.children.length-1&&i!=-1){
-                                /*if(_this.worker_state!='1'){*/
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                    _this.detail_init(items.children[i],2,items);
-                                /*}else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    _this.detail_init(items.children[i+1],2,items);
-                                }else{
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                    _this.detail_init(items.children[i],2,items);
-                                }*/
-                                // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
-                                if(_this.call_auto=='true'){
-                                    _this.call_state=5;
-                                    _this.call_auto_init=true;
-                                    _this.call_timer=setTimeout(function(){
-                                        _this.call_state=0;
-                                        _this.startCallTimeOut();
-                                    },_this.call_remin*1000)
+                            if(i != -1){
+                                items.processingNum--;
+                                items.label=items.taskName+'('+items.processingNum+')';
+                                items.children.splice(i,1);
+                                if(items.children.length == 0){
+                                  _this.call_hidden=true;
+                                  _this.DialPlanIntroWithPage_data.splice(index,1);
                                 }
-                            }else if(i==(items.children.length-1)&&items.children.length==1){
-                                _this.call_hidden=true;
-                                /*if(_this.worker_state!='1'){*/
-                                    _this.DialPlanIntroWithPage_data.splice(index,1);
-                                /*}else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    return;
-                                }else{
-                                    _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }*/
-                            }/*else if(i==(items.children.length-1)&&items.children.length>1){
-                                console.log('到底了')
-                                _this.call_hidden=true;
-                                if(_this.worker_state!='1'){
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    return;
-                                }else{
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
+                                if(i < items.children.length-1){
+                                  _this.detail_init(items.children[i],2,items);
+                                  if(_this.call_auto=='true'){
+                                      _this.call_state=5;
+                                      _this.call_auto_init=true;
+                                      _this.call_timer=setTimeout(function(){
+                                          _this.call_state=0;
+                                          _this.startCallTimeOut();
+                                      },_this.call_remin*1000)
+                                  }
                                 }
-                            }*/
+                            }
                         });
                         if(this.booklist.length>0&&this.booklist[0].taskClientId!='string'){
                             let i=this.booklist.indexOf(_this.active_data);
