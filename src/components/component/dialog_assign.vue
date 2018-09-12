@@ -3,10 +3,14 @@
       <el-dialog title="分配客户" :visible.sync="assign" @close="close" center @open="open">
         <!-- <el-alert title="输入的分配数量已大于可分配的客户总量" center type="error" :show-icon="toast" class="toast" v-show="warn"></el-alert>
         <el-alert title="请输入分配数量" center type="error" :show-icon="toast" class="toast" v-show="warn2"></el-alert> -->
-        <div :style="{'text-align':'left'}">未分配客户总量：{{totals}}人</div>
+        
+        <div style="overflow: hidden;">
+            <div :style="{'float':'left'}">未分配客户总量：{{totals}}人</div>
+            <el-button size="mini" @click="average" :style="{'float':'right','padding-right':'3%'}">平均分配客户</el-button>
+        </div>
         <div class="tit">
             <p>坐席</p>
-            <p>分配客户数量(人)</p>
+            <p style="text-align:right;padding-right: 5%;">分配客户数量(人)</p>
         </div>
         <div class="con">
             <div v-if="worker.length==0">
@@ -31,13 +35,10 @@
             <div :style="{'float':'left','padding-left':'3%'}">
                 <el-button type="text" size="mini" @click="add" v-show="worker.length>show_num"><i class="el-icon-plus"></i>新增一行</el-button>
             </div>
-            <div :style="{'float':'right','padding-right':'3%'}">
-                <el-button type="text" size="mini" @click="average">平均分配剩余客户</el-button>
-            </div>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="assign=false">&#12288;取消&#12288;</el-button>
-            <el-button type="info" @click="save">完成分配</el-button>
+            <el-button @click="assign=false">&#12288;&#12288;&#12288;&#12288;取消&#12288;&#12288;&#12288;&#12288;</el-button>
+            <el-button style="margin-left:5%;" type="primary" @click="save">&#12288;&#12288;&#12288;完成分配&#12288;&#12288;&#12288;</el-button>
         </span>
       </el-dialog>
     </div>
@@ -89,8 +90,7 @@
     .tit{
         overflow: hidden;
         box-sizing: border-box;
-        padding: 3%;
-        background-color: #f5f5f5;
+        background-color: #fff;
         margin-top: 20px;
     }
     .tit>p{

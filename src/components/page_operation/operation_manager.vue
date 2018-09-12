@@ -12,7 +12,7 @@
                 <el-button type="info"  class="button" @click="managerAdd">新增管理员</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
-                <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
+                <el-button plain class="button" @click="search_change(true)">收起</el-button>
                 <div v-if="accountType == 0">
                   <p class="grey">帐号类型</p>
                   <p class="black" :class="{worker_active:type == null}" @click="type_change(null)">全部</p>
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="zhankai" v-if="search_state">
-                <el-button type="info" plain class="button" @click="search_change(false)">展开</el-button>
+                <el-button plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="grey">筛选条件</p>
                     <p class="black worker_active" v-show="worker_state==''">全部</p>

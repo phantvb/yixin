@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="dialog">
       <el-dialog title="导入客户" :visible.sync="leading" @close="close" @open="open">
         <el-steps :active="dialog_active" align-center>
           <el-step title="上传客户数据"></el-step>
@@ -42,13 +42,13 @@
           <div class="mission" :style="{margin:'0 0 10%'}" v-show="!confirm_loading">
             <p>关联客户标签</p>
             <el-checkbox-group v-model="tagIds" size="mini" name="mission_tag">
-              <el-checkbox :label="item.id" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px'}">{{item.tagName}}</el-checkbox>
+              <el-checkbox :label="item.id" border v-for="item in taglist" :key="item.id" :style="{'margin':'6px 4px','background-color': '#f8f8f8'}">{{item.tagName}}</el-checkbox>
             </el-checkbox-group>
           </div>
           <el-button type="primary" v-show="!confirm_loading"  class="dialog_next" @click="mission_confirm">确认信息</el-button>
         </div>
         <div  v-show="dialog_active==3">
-          <div class="data_num"><i class="el-icon-success"></i>{{result[0]}}<br>{{result[1]}}</div>
+          <div class="data_num"><i class="el-icon-success"></i><br>{{result[0]}}<br>{{result[1]}}</div>
           <el-button type="primary" class="dialog_next" @click="complete">完成</el-button>
         </div>
       </el-dialog>
@@ -56,6 +56,7 @@
 
 </template>
 <style scoped>
+
     .upfiles{
       position: relative;
       border-bottom: 1px solid #e4e4e4;
@@ -99,7 +100,7 @@
     .data_num{
       font-size: 16px;
       margin:10% auto;
-      text-align: left;
+      text-align: center;
        width: fit-content;
     }
     .mission{
@@ -112,9 +113,9 @@
       margin: 0;
     }
     .el-icon-success{
-      font-size: 26px;
-      float: left;
+      font-size: 72px;
       line-height: 41px;
+      margin-bottom: 41px;
     }
 </style>
 <script>

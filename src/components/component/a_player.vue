@@ -1,7 +1,7 @@
 <template>
     <div ref="content">
        <el-row> 
-            <el-col :span="4"> 
+            <el-col :span="size=='mini'?2:4" style="text-align: center"> 
                 <el-popover placement="top-start" trigger="hover"> 
                     <div style="text-align: center"> 
                         <el-progress color="#67C23A" type="circle" :percentage="music.volume"></el-progress><br> <el-button @click="changeVolume(-10)" icon="el-icon-minus" circle></el-button> 
@@ -11,21 +11,21 @@
                     </el-button> 
                 </el-popover> 
             </el-col> 
-            <el-col :span="14" style="padding-left: 20px" v-show="cWidth>800"> 
-                <el-slider :format-tooltip="formatTime" :max="music.maxTime" @change="changeTime" v-model="music.currentTime" style="width: 100%;"></el-slider> 
+            <el-col :span="14" style="padding-left: 20px" v-show="cWidth>160"> 
+                <el-slider :format-tooltip="formatTime" :max="music.maxTime" @change="changeTime" v-model="music.currentTime" style="width: 100%;margin:-0.0625rem 0;"></el-slider> 
             </el-col> 
-            <el-col :span="6" style="padding: 9px 0px 0px 10px;color:#909399;font-size: 13px"> {{formatTime(music.currentTime)}}/{{formatTime(music.maxTime)}} </el-col> 
+            <el-col :span="cWidth>160?6:20" class="time" style="color:#909399;font-size: 13px"> {{formatTime(music.currentTime?music.currentTime:0)}}/{{formatTime(music.maxTime?music.maxTime:0)}} </el-col> 
         </el-row> 
         <audio :ref="name" loop> 
-        <source src="http://sc1.111ttt.cn:8282/2018/1/03m/13/396131232171.m4a?tflag=1519095601&pin=6cd414115fdb9a950d827487b16b5f97#.mp3" type="audio/mpeg"> 
+        <source :src="music_url" type="audio/mpeg"> 
         </audio> 
     </div> 
 </template>
     
 <script>
 export default {
-    name: 'test',
-    data(){ return { music:{ isPlay:false, currentTime:0, maxTime:0, volume:100 },timer:null,cWidth:null } },
+    name: 'Aplayer',
+    data(){ return { music:{ isPlay:false, currentTime:0, maxTime:0, volume:100 },timer:null,cWidth:null,music:'http://sc1.111ttt.cn:8282/2018/1/03m/13/396131232171.m4a?tflag=1519095601&pin=6cd414115fdb9a950d827487b16b5f97#.mp3' } },
 	mounted(){
         var _this=this;
         this.$nextTick(()=>{
@@ -38,9 +38,8 @@ export default {
             }
         });
         this.cWidth=this.$refs.content.clientWidth;
-        console.log(this.$refs.content,this.$refs.content.clientWidth);
     },
-    props:['name'],
+    props:['name','music_url','size'],
 	methods: {
 		listenMusic(){ 
             if(!this.$refs[this.name]){ return } 

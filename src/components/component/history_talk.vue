@@ -1,13 +1,13 @@
 <template>
     <div class="container">
-        <div class="head">历史通话记录<i class="el-icon-close" @click="close"></i></div>
-        <div id="line" v-if="!head"></div>
-        <div class="body" v-if="head">
+        <div class="head" style="padding-left:1.7%">历史通话记录<i class="el-icon-d-arrow-right" @click="close"></i></div>
+        <div id="line" style="padding-left:1.7%" v-if="!head"></div>
+        <div class="body" style="padding-left:1.7%" v-if="head">
             <div class="mes2">
                 <p>{{taskMes.userName}}</p>
                 <p>{{taskMes.userNumber}}</p>
             </div>
-            <div class="mes">
+            <div class="mes" v-show="taskMes.userGender||taskMes.userJob||taskMes.userCompany||taskMes.userEmail||taskMes.desc">
                 <p v-if="taskMes.userGender">性别：{{taskMes.userGender==0?'男':'女'}}</p>
                 <p v-if="taskMes.userJob">职业：{{taskMes.userJob}}</p>
                 <p v-if="taskMes.userCompany">公司：{{taskMes.userCompany}}</p>
@@ -16,23 +16,25 @@
             </div>
         </div>
         <div class="history">
+            <span class="black" v-if="head" style="float:left;font-size:16px;">历史通话记录&#12288;</span><span class='grey' style="float:left;margin-top: 2px;">总联系{{details.totalContactNum}}次，有效联系<span class="light-blue">{{details.effectiveContactNum}}</span>次</span>
             <div class="line"></div>
             <div class="record">
-                <div class="record_list black" v-for="(item,index) in details" :key="index">
-                    <p class="grey">{{item.callEndTime}}</p>
-                    {{item.shortName}} <span class="black">{{item.callReault==22?'呼叫':'通话'}}</span> {{item.callReault==22?item.callReaultString:item.callDuration}}
+                <div class="record_list black" v-for="(item,index) in details.details" :key="index">
+                    <p class="grey record_list_title">{{item.callEndTime}}<span>&#12288;<span class="black">{{item.shortName}}</span>&#12288;<span style="font-size:12px;">{{item.callReault==22?'呼叫':'通话'}}</span>&#12288;<span class="black">{{item.callReault==22?item.callReaultString:item.callDuration}}</span></span></p>
+                    
                     <div class="line_content">
-                        <p class="grey" v-if="item.userResultStr">客户状态&#12288;<span class="black">{{item.userResultStr}}</span></p>
-                        <p class="grey" :style="{'float':'right'}">下次联系时间&#12288;<span class="black">{{item.nextContactTime?item.nextContactTime:'无'}}</span></p>
-                        <p class="grey" v-if="item.desc">详情备注&#12288;<span class="black">{{item.desc}}</span></p>
-                        <div class="tag" v-if="item.taglist">
-                            <el-button type="primary" size="mini" v-for="(_item,index) in item.taglist" :key="index">{{_item}}</el-button>
+                        <div style="overflow: hidden;">
+                            <p class="grey" v-if="item.userResultStr">客户状态&#12288;<span class="blue">{{item.userResultStr}}</span></p>
+                            <p class="grey" :style="{'float':'right'}">下次联系时间&#12288;<span class="blue">{{item.nextContactTime?item.nextContactTime.substr(0,item.nextContactTime.length-3):'无'}}</span></p>
                         </div>
                         
-                        <p class="grey" :style="{'width':'100%'}" v-if="item.recordFilePath">通话录音&#12288;
-                            <a-player :music="{
-                            src: baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session
-                            }"></a-player>
+                        <div class="history_talk_tag" v-if="item.taglist">
+                            <el-button type="primary" style="background-color:#ECF2FF;border-color:#7496F2;color:#7496F2;" size="mini" v-for="(_item,index) in item.taglist" :key="index">{{_item}}</el-button>
+                        </div>
+                        <p class="grey" v-if="item.desc">详情备注&#12288;<span class="black">{{item.desc}}</span></p>
+                        
+                        <p class="grey" :style="{'width':'100%'}" v-if="item.recordFilePath"><span style="float:left;margin-top:2px;">通话录音</span>&#12288;
+                            <a-player class="Aplay" :music_url="baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session" :name='"music_hitory"+index' size='mini'></a-player>
                         </p>
                     </div>
                 </div>
@@ -41,44 +43,59 @@
     </div>
 </template>
 <style scoped>
-    .tag{
-        margin-top: 30px;
+    .Aplay{
+        display: inline-block;
+        width: 234px;
+        padding: 2px 10px;
+        background-color: rgba(0,0,0,0.02);
+        border: 1px solid #7496F2;
+        border-radius: 16px;
+    }
+    .history_talk_tag{
+        margin-top: 20px;
+        margin-bottom: 10px;
     }
     #line{
         width: 100%;
         height: 1px;
         background-color: #e4e4e4;
     }
+    .blue{
+        font-size: 14px;
+    }
     div{
         
         font-size: 13px;
     }
     .container{
-        width: 400px;
+        width: 450px;
         overflow: hidden;
         height: 100vh;
         min-width: 400px;
-        z-index: 2;
+        z-index: 9999;
     }
     .head{
         margin: 10px 0;
+        font-size: 16px;
+        font-weight: 700;
     }
     .body{
-        background-color: #f5f5f5;
+        border-top: 1px solid #F0F2F5;
+        border-bottom: 1px solid #F0F2F5;
     }
-    .el-icon-close{
-        float: right;
+    .el-icon-d-arrow-right{
+        float: left;
     }
     .mes2{
         overflow: hidden;
         margin: 10px;
         text-align: left;
-        border-bottom: 1px solid #ccc;
     }
     .mes{
         overflow: hidden;
         padding: 10px 0;
         text-align: left;
+        border-top: 1px solid #F0F2F5;
     }
     .mes p{
         float: left;
@@ -86,21 +103,22 @@
     }
     .history{
         position: relative;
+        left: 1.7%;
         margin-top: 12px;
     }
     .line{
         width: 1px;
-        background-color: #ccc;
+        background-color: #7496F2 ;
         height: 100vh;
         position: absolute;
-        top: 0;
+        top: 36px;
         left: 8px;
     }
     .record{
         width: 400px;
         min-width: 400px;
         position: absolute;
-        top: 0;
+        top: 36px;
         left: 0;
         padding-left: 18px;
         box-sizing: border-box;
@@ -122,14 +140,20 @@
     .record_list::before{
         content: '';
         position: absolute;
-        top: 0;
+        top: 4px;
         left: -16px;
         width: 15px;
         height: 15px;
         box-sizing: border-box;
-        border: 1px solid #ccc;
+        border: 1px solid #7496F2;
         border-radius: 100%;
         background-color: #fff;
+    }
+    .record_list_title{
+        display: inline-block;
+        background-color: #ECF2FF ;
+        border-radius: 16px;
+        padding: 2px 8px;
     }
     .record::-webkit-scrollbar-track
     {
@@ -150,7 +174,6 @@
     }
     .line_content{
         overflow: hidden;
-        border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
         padding: 7px;
@@ -161,7 +184,7 @@
     }
 </style>
 <script>
-import VueAplayer from 'vue-aplayer'
+import VueAplayer from './a_player.vue'
 export default {
     name:'history_talk',
     data:function(){

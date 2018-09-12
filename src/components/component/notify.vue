@@ -6,7 +6,7 @@
               {{identity}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <router-link :to="{path:'/manager/userInfo'}">
+              <router-link :to="{path:'/'+parent+'/userInfo'}">
                 <el-dropdown-item>{{identity}}</el-dropdown-item>
               </router-link>
               <el-dropdown-item command="loginout">
@@ -62,7 +62,7 @@
   float: right;
 }
 .unsee{
-    background-color: #ccc;
+    background-color: #ECF2FF ;
     border-radius: 3px;
     padding: 5px;
 }
@@ -91,6 +91,7 @@ export default {
             notify:0
 		};
     },
+    props:['parent'],
     methods:{
         visible(visible){
         if(visible){
@@ -104,12 +105,15 @@ export default {
                 })
             }
         },
-        handleloginout(){
-            this.$ajax.post(this.$preix+'/new/logout').then(res=>{
-                if(res.data.code==200){
-                    this.$router.push({ path: '/login'})
-                }
-            })
+        handleloginout(command){
+            console.log(command)
+            if(command=='loginout'){
+                this.$ajax.post(this.$preix+'/new/logout').then(res=>{
+                    if(res.data.code==200){
+                        this.$router.push({ path: '/login'})
+                    }
+                })
+            }
         },
         handlecommand(command){
             this.$ajax.post(this.$preix+'/new/notify/mark-msg-readed').then(res=>{

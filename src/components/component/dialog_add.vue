@@ -9,15 +9,15 @@
                         prefix-icon="el-icon-search"
                         v-model="search" class="search" size="mini">
                     </el-input>
-                    <el-button type="info" class="button" :style="{float:'left'}" @click="missoin_search">搜索</el-button>
+                    <el-button type="primary" class="button" :style="{float:'left'}" @click="missoin_search">搜索</el-button>
                 </div>
                 <div class="zhankai" v-if="search_state==false">
-                    <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
+                    <el-button plain class="button" @click="search_change(true)">收起</el-button>
                     <div>
                         <p class="grey">任务名称&#12288;&#12288;</p>
                         <!-- <p class="black" v-for=" (item,index) in mission_list" :key="item.taskId" :class="{see_active:mission_state==index}" @click="mission_change(index)">{{item.taskName}}</p> -->
                         <p class="black" v-for=" (item,index) in mission_list" :key="index" v-if="index < 7" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
-                        <p class="black" v-if="mission_list.length > 7" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
+                        <p class="black item_more" v-if="mission_list.length > 7" @click="mission_more=!mission_more">更多</p>
                         <el-select v-show="mission_more" id="taskId" v-if="mission_list.length > 7" v-model="taskIdsTmp" @change="mission_change2" filterable multiple size='mini' placeholder="请选择" collapse-tags>
                             <el-option
                                 v-if="index >=7"
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="zhankai shouqi" v-if="search_state">
-                    <el-button type="info" plain class="button" @click="search_change(false)">展开</el-button>
+                    <el-button plain class="button" @click="search_change(false)">展开</el-button>
                     <div>
                         <p class="grey">筛选条件</p>
                         <!-- <p class="black see_active">任务名称：{{mission_list[mission_state].taskName}}</p> -->
@@ -73,7 +73,7 @@
                         <!-- <p class="black see_active">最近通话情况：{{call_list[call_state].value}}</p> -->
                         <p class="black see_active">最近通话情况：<span v-for="(item,index) in call_state" :key="index">{{call_list[item].value}};</span></p>
                         <p class="black see_active">联系情况：{{link_list[link_state].value}}</p>
-                        <p class="black see_active" v-if="tags.length>0">客户标签：<span  v-for="item in tags" :key="item">{{item.value}}&#12288;</span></p>
+                        <!-- <p class="black see_active" v-if="tags.length>0">客户标签：<span  v-for="item in tags" :key="item">{{item}}&#12288;</span></p> -->
                     </div>
                 </div>
                 <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
@@ -101,13 +101,13 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+                <el-pagination background layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
                 </el-pagination>
             </div>
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="see=false" size="small">&#12288;&#12288;取消&#12288;&#12288;</el-button>
-            <el-button type="info" @click="save" size="small" :disabled="cansave">生成临时任务</el-button>
+            <el-button type="primary" @click="save" size="small" :disabled="cansave">生成临时任务</el-button>
         </span>
       </el-dialog>
     </div>
@@ -130,10 +130,6 @@
         float: left;
         width: 200px;
         font-size: 12px;
-    }
-    .see_active{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
     }
     .tag{
         background-color: rgba(153, 153, 153, 1);

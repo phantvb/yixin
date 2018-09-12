@@ -25,7 +25,7 @@
                 <el-button type="primary" class="button" :style="{float:'left'}" @click="missoin_search">搜索</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
-                <el-button type="primary" class="button" @click="search_change(true)">收起</el-button>
+                <el-button class="button" @click="search_change(true)">收起</el-button>
                
                 <div>
                     <p class="grey">创建时间</p>
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="zhankai" v-if="search_state">
-                <el-button type="primary" plain class="button" @click="search_change(false)">展开</el-button>
+                <el-button plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="grey">筛选条件</p>
                     <el-tag type="info" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
@@ -123,14 +123,6 @@
         padding: 6px 14px;
         font-size: 12px;
         margin: 0 14px;
-    }
-    .tag{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
-        font-size: 12px;
-        border-radius: 0;
-        height: 26px;
-        line-height: 26px;
     }
     .date_picker{
         position: relative;

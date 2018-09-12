@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="part1">
-            <p>今日剩余任务</p>
+            <p class="p_tit">今日剩余任务</p>
             <ul>
                 <li>
                     <p class="black">{{datas.seatTaskLeftTodayDto.taskNum}}</p>
@@ -21,39 +21,105 @@
             </ul>
         </div>
         <div class="part2">
-            <p>今日完成情况</p>
-            <ul>
+            <p class="p_tit">今日完成情况</p>
+            <ul style="margin:0px">
                 <li>
-                    <p class="black">{{todayCompleteDto?todayCompleteDto.calledNumTotal:0}}</p>
-                    <p class="grey">已呼人数</p>
+                    <el-card shadow="hover">
+                        <el-row :gutter="12" style="margin:0">
+                            <el-col :span="6" style="border-right:0.015625rem solid #ebeef5">  
+                                <i class="el-icon-solution"></i>
+                            </el-col>  
+                            <el-col :span="9">
+                                <span class="black">已呼人数(人)</span>
+                            </el-col> 
+                            <el-col :span="9" style="text-align:left">  
+                                <span class="blue">{{todayCompleteDto?todayCompleteDto.calledNumTotal:0}}</span> 
+                            </el-col>  
+                        </el-row>
+                    </el-card>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto?Math.floor(todayCompleteDto.callTalkedDuration/60):0}}</p>
-                    <p class="grey">呼通时长(min)</p>
+                    <el-card shadow="hover">
+                        <el-row :gutter="12" style="margin:0">
+                            <el-col :span="6" style="border-right:0.015625rem solid #ebeef5">  
+                                <i class="el-icon-fileDone"></i>
+                            </el-col>  
+                            <el-col :span="9">
+                                <span class="black">呼通时长(min)</span>
+                            </el-col> 
+                            <el-col :span="9" style="text-align:left">  
+                                <span class="blue">{{todayCompleteDto?Math.floor(todayCompleteDto.callTalkedDuration/60):0}}</span> 
+                            </el-col>  
+                        </el-row>
+                    </el-card>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto?todayCompleteDto.successNum:0}}</p>
-                    <p class="grey">发展成功</p>
+                    <el-card shadow="hover">
+                        <el-row :gutter="12" style="margin:0">
+                            <el-col :span="6" style="border-right:0.015625rem solid #ebeef5">  
+                                <i class="el-icon-fileDone"></i>
+                            </el-col>  
+                            <el-col :span="9">
+                                <span class="black">发展成功(人)</span>
+                            </el-col> 
+                            <el-col :span="9" style="text-align:left">  
+                                <span class="blue">{{todayCompleteDto?todayCompleteDto.successNum:0}}</span> 
+                            </el-col>  
+                        </el-row>
+                    </el-card>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto?todayCompleteDto.failureNum:0}}</p>
-                    <p class="grey">发展失败</p>
+                    <el-card shadow="hover">
+                        <el-row :gutter="12" style="margin:0">
+                            <el-col :span="6" style="border-right:0.015625rem solid #ebeef5">  
+                                <i class="el-icon-fileException"></i>
+                            </el-col>  
+                            <el-col :span="9">
+                                <span class="black">发展失败(人)</span>
+                            </el-col> 
+                            <el-col :span="9" style="text-align:left">  
+                                <span class="blue">{{todayCompleteDto?todayCompleteDto.failureNum:0}}</span> 
+                            </el-col>  
+                        </el-row>
+                    </el-card>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto?todayCompleteDto.progressingNum:0}}</p>
-                    <p class="grey">继续跟进</p>
+                    <el-card shadow="hover">
+                        <el-row :gutter="12" style="margin:0">
+                            <el-col :span="6" style="border-right:0.015625rem solid #ebeef5">  
+                                <i class="el-icon-fileSync"></i>
+                            </el-col>  
+                            <el-col :span="9">
+                                <span class="black">继续跟进(人)</span>
+                            </el-col> 
+                            <el-col :span="9" style="text-align:left">  
+                                <span class="blue">{{todayCompleteDto?todayCompleteDto.progressingNum:0}}</span> 
+                            </el-col>  
+                        </el-row>
+                    </el-card>
                 </li>
                 <li>
-                    <p class="black">{{todayCompleteDto&&todayCompleteDto.calledNumTotal!=0?Math.ceil(todayCompleteDto.successNum/todayCompleteDto.calledNumTotal*100):0}}%</p>
-                    <p class="grey">成功率(成功/已呼)</p>
+                    <el-card shadow="hover">
+                        <el-row :gutter="12" style="margin:0">
+                            <el-col :span="6" style="border-right:0.015625rem solid #ebeef5">  
+                                <i class="el-icon-fileProtect"></i>
+                            </el-col>  
+                            <el-col :span="12">
+                                <span class="black">成功率(成功/已呼)</span>
+                            </el-col> 
+                            <el-col :span="6" style="text-align:left">  
+                                <span class="blue">{{todayCompleteDto&&todayCompleteDto.calledNumTotal!=0?Math.ceil(todayCompleteDto.successNum/todayCompleteDto.calledNumTotal*100):0}}%</span> 
+                            </el-col>  
+                        </el-row>
+                    </el-card>
                 </li>
             </ul>
         </div>
         <div class="part3">
-            <div class="p2_tit">
-                <p>进行中任务</p>
+            <div class="p2_tit p_tit">
+                <p style="margin:0px;">进行中任务</p>
                 <router-link :to="{path:'/staff/follow'}">
-                <p class="grey">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
+                <p class="grey" style="margin:0px">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
             <div class="svg"></div>
@@ -67,8 +133,9 @@
     .part1,.part2,.part3{
         text-align: left;
         padding-left: 5vw;
-        border-bottom: 1px solid #eee;
         overflow: hidden;
+        margin: 8px 0;
+        border-radius: 4px;
     }
     .part1 li{
         width: 16%;
@@ -78,21 +145,18 @@
         box-sizing: border-box;
     }
     .part2 li{
-        width: 16%;
+        width: 33%;
         text-align: center;
         float: left;
-        padding-right: 5vw;
+        padding-right: 10px;
+        margin: 20px 0px;
         box-sizing: border-box;
+    }
+    .part2 li span{
+        line-height: 68px;
     }
     .part2{
         max-height: 290px;
-    }
-    ul{
-        padding: 0;
-        overflow: hidden;
-    }
-    li{
-        list-style: none;
     }
     .grey{
         color: #999;
@@ -102,7 +166,11 @@
         color: #444;
         font-size: 18px;
     }
-    .p2_tit{
+    span.black{
+        font-size: 12px;
+    }
+    .p_tit{
+        margin: 0 0 0 -4vw;
         overflow: hidden;
     }
     .p2_tit>p:nth-child(1){
@@ -110,9 +178,6 @@
     }
     .p2_tit>a>p{
         float: right;
-    }
-    .p3_tit{
-        overflow: hidden;
     }
     .p3_radio{
         float: left;

@@ -20,17 +20,9 @@
             </div>
             <div class="tit staff_stage_tit">
                 <el-button type="info" size="mini" icon="el-icon-sort" :style="{'float':'left','margin':'8px 5%','border-color':'#fff'}" @click="online_change" :class="{call_active:online_state==0}"><span v-show="online_state==0">在线</span><span v-show="online_state==0.5">......</span><span v-show="online_state==1">离线</span></el-button>
-                <div id="auto_call" @click.stop="call_set=true">
-                    <el-button type="info" size="mini" :style="{'float':'right','margin':'8px 5%','border-color':'#fff'}" :class="{call_active:call_auto=='true'}">{{call_auto=='true'?'自动呼叫':'手动呼叫'}}<i @click.stop="call_set=!call_set" class="el-icon-arrow-down el-icon--right"></i></el-button>
+                <div id="auto_call">
+                    <button type="button" class="el-button el-button--info el-button--mini" style="float: right; margin: 8px 5%; border-color: rgb(255, 255, 255);" :class="{active_blue:call_auto==true}"><span  @click="call_auto=!call_auto">{{call_auto==true?'自动呼叫':'手动呼叫'}}</span><i @click="call_set=!call_set" class="el-icon-arrow-down el-icon--right"></i></button>
                     <div v-show="call_set">
-                        <el-switch
-                            v-model="call_auto"
-                            active-color="#409EFF"
-                            active-value="true"
-                            inactive-value="false">
-                            开启自动呼叫
-                        </el-switch>
-                        开启自动呼叫
                         <p class="black">每隔&nbsp;<el-input-number v-model="call_during" controls-position="right" :min="1" :max="10" size="mini"></el-input-number>&nbsp;秒自动呼叫下一位</p>
                     </div>
                 </div>
@@ -90,7 +82,7 @@
                         <span>{{item.depName}}{{item.areaName}}</span>
                     </div>
                 </div>
-                
+
             </div>
             <ul class="foot" @click="see=true">
                 <li class="grey"><i class="el-icon-plus"></i>新增临时任务</li>
@@ -196,7 +188,7 @@
                         </div> -->
                     </div>
                 </div>
-                
+
             </div>
             <div class="summary">
                 <p class="black tit">通话小结 <span class="grey" v-show="taskName_str
@@ -204,11 +196,11 @@
                 <div>
                     <div class="state">
                         <p class="grey">跟进状态</p>
-                        <p class="black see" v-for=" item in worker_list" :key="item.key" :class="{see_active:worker_state==item.key}" @click="worker_change(item.key)">{{item.value}}</p>
+                        <p class="grey see" v-for=" item in worker_list" :key="item.key" :class="{see_active:worker_state==item.key}" @click="worker_change(item.key)">{{item.value}}</p>
                         <div class="grey">下次联系时间：<el-date-picker v-model="time_next" type="datetime" placeholder="无" size="mini" prefix-icon="date_icon el-icon-date" class="date_picker" value-format="yyyy-MM-dd HH:mm:ss"> </el-date-picker></div>
                     </div>
                 </div>
-                <div class="tag">
+                <div class="summary_tag">
                     <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">客户标签</p>
                     <el-dropdown v-for="(item,index) in history.summaryDto.tags" :key="index"  @command="handleCommand" :style="{'float':'left','line-height':'26px'}">
                         <span class="el-dropdown-link">
@@ -229,45 +221,38 @@
                     </el-input>
                 </div>
                 <div class="submit">
-                    <p class="grey">提交小结后将自动呼叫下一位客户</p>
+                    <p class="grey" v-show="call_auto" style="margin:0">提交小结后将自动呼叫下一位客户</p>
                     <el-button :type="call_state==4?'primary':'info'" size="mini" :style="{'border-color':'#fff'}" @click="update">提交小结</el-button>
                 </div>
             </div>
             <div class="history">
                 <div :style="{'overflow':'hidden'}">
-                    <p class="black tit" :style="{'float':'left'}">历史通话记录&#12288;<span class='grey'>总联系{{history.historyDto?history.historyDto.totalContactNum:0}}次，有效联系{{history.historyDto?history.historyDto.effectiveContactNum:0}}次</span></p>
+                    <p class="black tit" :style="{'float':'left'}">历史通话记录&#12288;<span class='grey'>总联系{{history.historyDto?history.historyDto.totalContactNum:0}}次，有效联系<span class="light-blue">{{history.historyDto?history.historyDto.effectiveContactNum:0}}</span>次</span></p>
                 <p class="grey curson" :style="{'float':'right'}" @click="enter(history.summaryDto)">查看更多<i class="el-icon-d-arrow-right"></i></p>
                 </div>
-                <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;{{history.historyDto.details[0].shortName}} <span class="black">{{history.historyDto.details[0].callReaultString}}</span> {{history.historyDto.details[0].callDuration}}</p>
+                <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0"><span style="float:left;">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;<span class="black">{{history.historyDto.details[0].shortName}}</span> {{history.historyDto.details[0].callReaultString}} {{history.historyDto.details[0].callDuration}}</span>&#12288;<a-player id="Aplay" music_url="
+                    baseUrl+recordFilePath+'?callSessionId='+callSeesionId+'&sessionId='+session" name="music_hitory" size='mini'></a-player></p>
                 <div v-if="history.historyDto">
                     <div class="state">
                         <p class="grey">客户状态</p>
-                        <el-button type="info" size="mini" :style="{'background':'#f4f4f4','border-color':'#f4f4f4','color':'#7496F2','float':'left'}" round>{{history.historyDto.details[0].userResultStr}}</el-button>
+                        <p class="blue">{{history.historyDto.details[0].userResultStr}}</p>
                         <!-- <p class="black">{{history.custom_state}}</p> -->
-                        <div class="grey" :style="{'margin-left':'45%'}" v-if="history.historyDto.details[0].nextContactTime"><p :style="{'float':'left'}">下次联系时间：</p><el-button type="info" size="mini" :style="{'background':'#f4f4f4','border-color':'#f4f4f4','color':'#7496F2','float':'left'}" round>{{history.historyDto.details[0].nextContactTime}}</el-button></div>
+                        <div class="grey" :style="{'margin-left':'45%'}" v-if="history.historyDto.details[0].nextContactTime"><p :style="{'float':'left'}">下次联系时间：</p><p class="blue">{{history.historyDto.details[0].nextContactTime}}</p></div>
                     </div>
                 </div>
                 <div class="tag" v-if="history.summaryDto.tags.length>0&&history.summaryDto.tags.taglist!=[]">
-                    <el-button type="info" size="mini" v-for="item in history.summaryDto.tags.taglist" :key="item" :style="{'background':'#7496F2','border-color':'#fff'}" round>{{item}}</el-button>
+                    <el-button type="info" size="mini" v-for="item in history.summaryDto.tags.taglist" :key="item" :style="{'background':'#ECF2FF','border-color':'#7496F2','color':'#7496F2'}">{{item}}</el-button>
                 </div>
-                <div class="note" v-if="history.historyDto">
+                <div class="note" v-if="history.historyDto&&history.historyDto.details[0].desc">
                     <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">详情备注</p>
                     <p :style="{'margin':'3px 7px','text-align':'left'}">{{history.historyDto.details[0].desc}}</p>
                 </div>
-                <p class="grey" :style="{'width':'100%'}" v-if="recordFilePath">通话录音&#12288;
-                    <a-player :music="{
-                    src: baseUrl+recordFilePath+'?callSessionId='+callSeesionId+'&sessionId='+session
-                    }"></a-player>
-                </p>
             </div>
         </div>
         <DialogAdd v-bind:see="see" @reset="reset"></DialogAdd>
         <transition name="slide">
             <history id="history" v-if="show" :head='false' :details='history_detail' @close="history_close" :taskMes="history_taskId"></history>
         </transition>
-        <div>
-            <audio id="audioView" width="420px" height="320px" autoplay ></audio>
-        </div>
     </div>
 </template>
 <style scoped>
@@ -295,11 +280,18 @@
     }
 </style>
 <style scoped>
+    #Aplay{
+        min-width: 300px;
+        display: inline-block;
+    }
+    .active_blue{
+        background-color:#7496F2;
+    }
     .red{
         color:#e3170d!important;
     }
     .call_active{
-        background-color:#7496F2;
+        background-color:#4CD864;
     }
     .high_hover:hover{
         transform: scale(1.1);
@@ -358,7 +350,7 @@
         text-align: left;
     }
     .custom-tree-node p{
-        
+
     }
     .custom-tree-node span{
         color: #999;
@@ -412,6 +404,7 @@
         box-sizing:border-box;
     }
     .tit ul li.active{
+        color:#7496F2;
         border-bottom:1px solid #7496F2;
     }
     .aside .foot{
@@ -554,15 +547,18 @@
         font-size:16px;
     }
     .see{
-        background: #CDCDCD;
-        color: #fff;
+        background-color: #fff;
         border-radius: 3px;
         padding: 0 4px;
+        border:1px solid #D8D8D8;
+        cursor: pointer;
     }
     .see_active{
-        background: #7496F2;
+        background-color: #7496F2;
+        border-color:#7496F2;
+        color:#fff;
     }
-    .summary .state,.summary .tag{
+    .summary .state,.summary .summary_tag{
         overflow: hidden;
         padding: 8px 0;
     }
@@ -593,10 +589,12 @@
     }
     #talk{
         text-align: left;
-        background-color: #f5f5f5;
+        background-color: #fff;
+        border:1px solid #7496F2;
         padding: 4px 8px;
         display: inline-block;
         border-radius: 16px;
+        overflow: hidden;
     }
     #history{
         position: fixed;
@@ -668,7 +666,7 @@
     border-radius: 1px;
 }
 .search>input{
-    background: #F4F4F4;
+    background: #fff;
 }
 </style>
 
@@ -680,7 +678,7 @@ import sockjs from '../js/sockjs.js'
 import stomp from '../js/stomp.js'
 import jssip from '../js/jssip-3.0.27.js'
 import md5 from '../js/md5.js'
-import VueAplayer from 'vue-aplayer'
+import VueAplayer from '../component/a_player.vue'
 export default {
     name:'Staff_stage',
     data:function(){
@@ -777,7 +775,7 @@ export default {
             call_during:5,
             call_during_copy:5,
             call_remin:2,
-            call_auto:'false',
+            call_auto:false,
             call_auto_init:false,
             call_timer:null,
             time_error:null,
@@ -875,7 +873,7 @@ export default {
             }
             var wsProt = fsDto.wsProt;
             var sessionTimers = fsDto.sessionTimers;
-    
+
             var uri = "sip:"+this.from_name+"@"+realm;
             var freeswitchProtocol = workbenchRst.freeswitchProtocol;
             var wsURL = freeswitchProtocol+"://"+realm+":"+wsProt;
@@ -890,7 +888,7 @@ export default {
             };
             this.ua = new JsSIP.UA(configuration);
             //JsSIP.debug.enable('JsSIP:*');JsSIP.debug.disable('JsSIP:*');
-    
+
             //WebSocket连接事件
             this.ua.on('connected',function(data){
                 console.log("onConnected- ",data);
@@ -903,7 +901,7 @@ export default {
             });
             //WebSocket连接事件
             this.ua.on('disconnected',function(data){
-                
+
                 console.log("onDisconnected- ",data);
             });
             //注册事件
@@ -916,7 +914,7 @@ export default {
                 console.log("onUnregistered- ",data);
                 _this.online_state=1;
             });
-    
+
             /*新的传入或传出呼叫事件*/
             this.ua.on('newRTCSession', function (data) {
                 console.log('incoming or outgoing call event :', data);
@@ -984,7 +982,7 @@ export default {
                     _this.stopTimer();
                 });
             });
-    
+
             this.ua.start();
         },
         //判断当前浏览器是否支持
@@ -1021,7 +1019,7 @@ export default {
 
                 }
             });
-        
+
         },
         connect:function () {
             var _this=this;
@@ -1041,7 +1039,7 @@ export default {
         disconnect:function () {
             if (this.stompClient != null) {
                 this.stompClient.disconnect();
-                
+
             console.log('关闭websocket')
             }
             console.log("Disconnected");
@@ -1123,10 +1121,11 @@ export default {
                 let data={'nameOrNumber':this.search,'requireTotalCount':true};
                 this.BookedList_init(data);
             }
-            
+
         },
         //初始化呼叫列表
         TaskList_init(data){
+            data.pageSize = 50;
             //初始化数据
             this.task_state=0;
             this.TaskBySeat_init(data);
@@ -1258,7 +1257,7 @@ export default {
                         this.note=res.data.historyDto.details[0].desc;
                         this.recordFilePath=res.data.historyDto.details[0].recordFilePath;
                         this.callSeesionId=res.data.historyDto.details[0].callSeesionId;
-                        
+
                     }else{
                         this.note='';
                     }
@@ -1269,6 +1268,7 @@ export default {
         //设置呼叫任务计划
         TaskBySeat_init(data){
             var arr=[];
+            var _this=this;
             this.$ajax.post(this.$preix+'/new/seatWorkbench/queryTaskIntroBySeat',data
             ).then( res=>{
             if(res.data.code==200){
@@ -1289,11 +1289,11 @@ export default {
                                 res.data.rows.map(item=>{item.label=item.userName;item.taskId=id;item.id=item.taskClientId});
                                 //res.data.rows.map(item=>item.taskId=id);
                                 obj.children=res.data.rows;
-                                arr.push(obj);
+                                //_this.TaskBySeat_data[i]=obj;
+                                _this.$set(_this.TaskBySeat_data,i,obj);
                             }
                         });
                     }
-                    _this.TaskBySeat_data=arr;
                 }
             })
         },
@@ -1322,11 +1322,10 @@ export default {
                                     item.id=item.id;
                                 });
                                 obj.children=res.data.rows;
-                                arr.push(obj);
+                                _this.$set(_this.DialPlanIntroWithPage_data,i,obj)
                             }
                         });
                     }
-                    _this.DialPlanIntroWithPage_data=arr;
                 }
             })
         },
@@ -1408,7 +1407,7 @@ export default {
                             }
                         }
                     })
-                    this.history_detail=res.data.info.details;
+                    this.history_detail=res.data.info;
                 }
             });
         },
@@ -1501,51 +1500,28 @@ export default {
                         })
                         this.DialPlanIntroWithPage_data.map((items,index)=>{
                             let i=items.children.indexOf(_this.active_data);
-                            if(i<items.children.length-1&&i!=-1){
-                                if(_this.worker_state!='1'){
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                    _this.detail_init(items.children[i],2,items);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    _this.detail_init(items.children[i+1],2,items);
-                                }else{
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                    _this.detail_init(items.children[i],2,items);
+                            if(i != -1){
+                                items.processingNum--;
+                                items.label=items.taskName+'('+items.processingNum+')';
+                                items.children.splice(i,1);
+                                if(i < items.children.length){
+                                  _this.detail_init(items.children[i],2,items);
+                                  if(_this.call_auto=='true'){
+                                      _this.call_state=5;
+                                      _this.call_auto_init=true;
+                                      _this.call_timer=setTimeout(function(){
+                                          _this.call_state=0;
+                                          _this.startCallTimeOut();
+                                      },_this.call_remin*1000)
+                                  }
                                 }
-                                // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
-                                if(_this.call_auto=='true'){
-                                    _this.call_state=5;
-                                    _this.call_auto_init=true;
-                                    _this.call_timer=setTimeout(function(){
-                                        _this.call_state=0;
-                                        _this.startCallTimeOut();
-                                    },_this.call_remin*1000)
+                                console.log("i:"+i+";children.length:"+items.children.length);
+                                if(i == items.children.length){
+                                  console.log("call_hidden=true");
+                                  _this.call_hidden=true;
                                 }
-                            }else if(i==(items.children.length-1)&&items.children.length==1){
-                                _this.call_hidden=true;
-                                if(_this.worker_state!='1'){
-                                    _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    return;
-                                }else{
-                                    _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }
-                            }else if(i==(items.children.length-1)&&items.children.length>1){
-                                console.log('到底了')
-                                _this.call_hidden=true;
-                                if(_this.worker_state!='1'){
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    return;
-                                }else{
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
+                                if(items.children.length == 0){
+                                  _this.DialPlanIntroWithPage_data.splice(index,1);
                                 }
                             }
                         });
@@ -1555,7 +1531,7 @@ export default {
                                 if(i==index&&i!=(_this.booklist.length-1)){
                                     if(_this.time_next==''){
                                         // setTimeout(function(){
-                                            
+
                                         // _this.booklist.splice(index,1);
                                         // },200)
                                         _this.booklist.splice(index,1,{});

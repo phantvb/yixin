@@ -14,7 +14,7 @@
                 <el-button type="info" class="button" :style="{float:'left'}" @click="missoin_search">搜索</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
-                <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
+                <el-button plain class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">客户状态</p>
                     <p class="black" v-for=" (item,index) in custom_list" :key="index" :class="{see_active:custom_state==index}" @click="custom_change(index)">{{item.value}}</p>
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="zhankai" v-if="search_state">
-                <el-button type="info" plain class="button" @click="search_change(false)">展开</el-button>
+                <el-button plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="grey">筛选条件</p>
                     <p class="black see_active">客户状态：{{custom_state==''?custom_list[0].value:custom_list[custom_state].value}}</p>
@@ -146,10 +146,6 @@
         padding: 6px 14px;
         font-size: 12px;
         margin: 0 14px;
-    }
-    .see_active{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
     }
     .tag{
         background-color: rgba(153, 153, 153, 1);

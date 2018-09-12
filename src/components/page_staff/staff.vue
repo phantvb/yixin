@@ -10,7 +10,7 @@
           <div class="nav title">猎客呼叫中心</div>
           <i class="el-icon-toggle" @click="isCollapse=!isCollapse"></i>
         </div>
-        <notify></notify>
+        <notify parent="staff"></notify>
       </el-row>
     </el-header>
     <el-container>

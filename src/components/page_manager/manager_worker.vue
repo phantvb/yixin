@@ -3,15 +3,19 @@
         
         <div class="part1">
             <div class="part1_tit">
+                <div id="operate">
+                    <p>选中{{multipleSelection.length}}个坐席</p>
+                    <el-button type="primary" size="mini" class="button" @click="selectreset">重置密码</el-button>
+                </div>
                 <el-input
                     placeholder="按坐席昵称或帐号搜索"
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
-                <el-button type="info" class="button" :style="{float:'left'}" @click="findSeat">搜索</el-button>
+                <el-button type="primary" class="button" :style="{float:'left'}" @click="findSeat">搜索</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
-                <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
+                <el-button plain class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">客户状态</p>
                     <p class="black" :class="{worker_active:worker_state==''}" @click="worker_change('')">全部</p>
@@ -32,7 +36,7 @@
                 </div>
             </div>
             <div class="zhankai" v-if="search_state">
-                <el-button type="info" plain class="button" @click="search_change(false)">展开</el-button>
+                <el-button plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="grey">筛选条件</p>
                     <p class="black worker_active" v-show="worker_state==''">全部</p>
@@ -41,10 +45,6 @@
                     <p class="black worker_active" v-show="worker_state==1">激活</p>
                     <el-tag type="info" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
                 </div>
-            </div>
-            <div id="operate">
-                <p>选中{{multipleSelection.length}}个坐席</p>
-                <el-button type="info" size="mini" class="button" @click="selectreset">重置密码</el-button>
             </div>
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
                 <el-table-column type="selection" width="55"></el-table-column>
@@ -117,10 +117,6 @@
         padding: 6px 14px;
         font-size: 12px;
         margin: 0 14px;
-    }
-    .worker_active{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
     }
     .tag{
         background-color: rgba(153, 153, 153, 1);

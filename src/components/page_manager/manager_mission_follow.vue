@@ -24,17 +24,17 @@
         </div>
         <div class="part2">
             <div class="part2_tit">
+                <el-button type="primary"  class="button" @click="lead_in">导入客户</el-button>
+                <el-button type="primary" class="button" :style="{float:'right'}" @click="missoin_search">搜索</el-button>
                 <el-input
                     placeholder="按任务名称搜索"
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
-                <el-button type="primary" class="button" :style="{float:'left'}" @click="missoin_search">搜索</el-button>
-                <el-button type="primary"  class="button" @click="lead_in">导入客户</el-button>
                 <Dialog v-bind:leading="leading" @reset="reset" :data="lead_data"></Dialog>
             </div>
             <div class="zhankai" v-if="search_state==false">
-                <el-button type="primary" class="button" @click="search_change(true)">收起</el-button>
+                <el-button class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">可见状态</p>
                     <p class="black" :class="{see_active:see_state==''}" @click="see_change('')">全部</p>
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="zhankai" v-if="search_state">
-                <el-button type="primary" plain class="button" @click="search_change(false)">展开</el-button>
+                <el-button plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="grey">筛选条件</p>
                     <el-tag type="info" class="tag" v-show="see_state=='1'">所有人可见</el-tag>
@@ -185,23 +185,15 @@
         overflow: hidden;
     }
     .search{
-        float: left;
+        float: right;
         width: 200px;
         font-size: 12px;
     }
     .part2_tit .button{
-        float: right;
+        float: left;
         padding: 6px 14px;
         font-size: 12px;
         margin: 0 14px;
-    }
-    .tag{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
-        font-size: 12px;
-        border-radius: 0;
-        height: 26px;
-        line-height: 26px;
     }
     .date_picker{
         position: relative;

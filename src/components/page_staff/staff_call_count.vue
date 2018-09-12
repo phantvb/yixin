@@ -50,11 +50,11 @@
             </ul>
         </div>
         <div class="zhankai" v-if="search_state==false">
-            <el-button type="info" plain class="button" @click="search()">搜索收起</el-button>
+            <el-button plain class="button" @click="search_change(true)">收起</el-button>
             <div>
                 <p class="grey">任务名称&#12288;&#12288;</p>
                 <p v-if="index < 10" v-for="(item,index) in mission_list" :key="index" class="black" :class="{worker_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
-                <p class="black" v-if="mission_list.length > 10" :style="{'border':'1px solid #666','padding':'2px 6px'}" @click="mission_more=!mission_more">更多</p>
+                <p class="black item_more" v-if="mission_list.length > 10"  @click="mission_more=!mission_more">更多</p>
                 <el-select id="taskId" v-show="mission_more" size="mini" v-if="mission_list.length > 6" v-model="taskIdsTmp" @change="mission_change2" filterable placeholder="请选择">
                   <el-option
                     v-if="index >=10"
@@ -75,7 +75,7 @@
             </div>
         </div>
         <div class="zhankai" v-if="search_state">
-            <el-button type="info" plain class="button" @click="search_change(false)">展开</el-button>
+            <el-button plain class="button" @click="search_change(false)">展开</el-button>
             <div>
                 <p class="grey">筛选条件</p>
                 <p class="black worker_active">任务名称：{{mission_list[mission_active].taskName}}</p>
@@ -118,7 +118,7 @@
             <el-table-column prop="nextContactTime" label="下次联系时间" class-name="line9" :show-overflow-tooltip=true min-width="120"> </el-table-column>
             <el-table-column prop="recordFilePath" label="通话录音" class-name="line10" :show-overflow-tooltip=true min-width="100">
                 <template slot-scope="scope">
-                    <a-player v-if="scope.row.recordFilePath" :music="{
+                    <a-player v-if="scope.row.recordFilePath" :name="scope.row.callSessionId.replace(/-/g,'')" :music_url="{
                     src: baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session
                     }"></a-player>
                 </template>
@@ -188,40 +188,11 @@
     .p2_tit>p:nth-child(2){
         float: right;
     }
-    .zhankai{
-        background-color: rgba(242, 242, 242, 1);
-        text-align: left;
-        overflow: hidden;
-    }
-    .zhankai>div{
-        overflow: hidden;
-        margin: 10px 0;
-    }
-    .zhankai>div>p{
-        float: left;
-        padding: 4px 2px;
-    }
-    .zhankai>div>p.grey{
-        margin: 0 14px;
-    }
-    .zhankai>div>p.black{
-        margin: 0 10px;
-        font-size: 12px;
-    }
-    .zhankai .button{
-        float: right;
-        padding: 6px 14px;
-        font-size: 12px;
-        margin-top: 10px;
-    }
-    .worker_active{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
-    }
 </style>
 
 <script>
-import VueAplayer from 'vue-aplayer'
+// import VueAplayer from 'vue-aplayer'
+import Aplayer from '../component/a_player.vue'
 export default {
     name:'Staff_call_count',
     data:function(){
@@ -265,7 +236,7 @@ export default {
         }
     },
     components: {
-        'a-player': VueAplayer
+        'a-player': Aplayer
     },
     mounted() {
         this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{

@@ -9,11 +9,11 @@
         </div>
         <div class="part2">
             <div class="zhankai" v-if="search_state==false">
-                <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
+                <el-button plain class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">任务名称&#12288;&#12288;</p>
                     <p class="black" v-if="index < 10" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
-                    <p class="black" v-if="mission_list.length > 10" :style="{'border':'1px solid #666'}" @click="mission_more=!mission_more">更多</p>
+                    <p class="black item_more" v-if="mission_list.length > 10" @click="mission_more=!mission_more">更多</p>
                     <el-select v-show="mission_more" id="taskId" v-if="mission_list.length > 10" v-model="taskIdsTmp" @change="mission_change2" filterable size='mini' placeholder="请选择">
                       <el-option
                         v-if="index >=10"
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="zhankai" v-if="search_state">
-                <el-button type="info" plain class="button" @click="search_change(false)">展开</el-button>
+                <el-button plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="black">筛选条件&#12288;&#12288;</p>
                     <!-- <p class="black see_active">任务名称：<span v-for="(item,index) in mission_state" :key="index">{{mission_list[item].taskName}};</span></p> -->
@@ -89,9 +89,7 @@
                 </el-table-column>
                  <el-table-column prop="recordFilePath" class-name="line11" label="通话录音"  min-width="160">
                     <template slot-scope="scope">
-                        <a-player v-if="scope.row.recordFilePath" :music="{
-                        src: baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session
-                        }"></a-player>
+                        <a-player class="Aplay" v-if="scope.row.recordFilePath" music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session" name="scope.row.recordFilePath"></a-player>
                     </template>
                 </el-table-column>
             </el-table>
@@ -150,18 +148,6 @@
         font-size: 12px;
         margin: 0 14px;
     }
-    .see_active{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
-    }
-    .tag{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
-        font-size: 12px;
-        border-radius: 0;
-        height: 26px;
-        line-height: 26px;
-    }
     .date_picker{
         position: relative;
     }
@@ -184,7 +170,7 @@
 </style>
 
 <script>
-import VueAplayer from 'vue-aplayer'
+import VueAplayer from '../component/a_player.vue'
 export default {
     name:'call_detail',
     data:function(){

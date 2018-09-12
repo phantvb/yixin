@@ -5,11 +5,11 @@
             <ul>
                 <li>
                     <p class="grey">剩余通话资源</p>
-                    <p class="grey"><span class="black">{{time.remin}}分钟</span></p>
+                    <p class="grey"><span class="blue">{{time.remin}}</span>分钟</p>
                     </li>
                 <li>
                     <p class="grey">企业坐席</p>
-                    <p class="grey"><span class="black">{{worker.num}}人</span>/{{worker.all}}人</p>
+                    <p class="grey"><span class="blue">{{worker.num}}</span>人/{{worker.all}}人</p>
                     <el-progress :percentage="worker_scale" :show-text='false' :color="worker_scale>20?'#7496F2':'#EF5679'"></el-progress>
                 </li>
             </ul>
@@ -45,6 +45,9 @@
     </div>
 </template>
 <style scoped>
+    .blue{
+        font-size: 24px;
+    }
     .part1,.part2,.part3{
         text-align: left;
         padding-left: 5vw;

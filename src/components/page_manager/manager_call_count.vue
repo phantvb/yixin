@@ -7,7 +7,7 @@
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
-                <el-button type="info" class="button" :style="{float:'left'}" @click="mission_search">搜索</el-button>
+                <el-button type="primary" class="button" :style="{float:'left'}" @click="mission_search">搜索</el-button>
                 <div class="time">
                     <p class="grey">查询时间</p>
                     <el-date-picker

@@ -3,7 +3,7 @@
     <el-header>
       <el-row height="auto" class="header">
         <div class="nav title">猎客呼叫中心</div>
-        <notify></notify>
+        <notify parent="operation"></notify>
       </el-row>
     </el-header>
     <el-container>

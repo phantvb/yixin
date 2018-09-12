@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" id="manager_misssion_detail">
         <div class="nav">
             <router-link :to="{path:'./follow'}">
                 外呼任务跟踪
@@ -11,17 +11,27 @@
             <div class="part2_tit">
                 <el-input placeholder="按客户姓名或手机号码搜索" prefix-icon="el-icon-search" v-model="search" class="search" size="mini">
                 </el-input>
-                <el-button type="info" class="button" :style="{float:'left'}" @click="mission_search">搜索</el-button>
+                <el-button type="primary" class="button" :style="{float:'left'}" @click="mission_search">搜索</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
-                <el-button type="info" plain class="button" @click="search_change(true)">收起</el-button>
+                <el-button plain class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">客户状态</p>
                     <p class="black" v-for=" (item,index) in custom_list" :key="index" :class="{see_active:custom_state==index}" @click="custom_change(index)">{{item.value}}</p>
                 </div>
                 <div>
                     <p class="grey">跟进坐席</p>
-                    <p class="black" v-for=" (item,index) in worker_list" :key="index" :class="{see_active:worker_state==index}" @click="worker_change(index,item.id)">{{item.shortName}}</p>
+                    <p class="black" v-if="index < 8" v-for=" (item,index) in worker_list" :key="index" :class="{see_active:worker_state==index}" @click="worker_change(index,item.id)">{{item.shortName}}</p>
+                    <p class="black item_more" v-if="worker_list.length > 8" @click="mission_more=!mission_more">更多</p>
+                    <el-select id="taskId" v-show="mission_more" size="mini" v-if="worker_list.length > 8" v-model="taskIdsTmp" @change="worker_change2" filterable placeholder="请选择">
+                        <el-option
+                            v-if="index >=8"
+                            v-for="(item,index) in worker_list"
+                            :key="item.id"
+                            :label="item.shortName"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
                 </div>
                 <div>
                     <p class="grey">导入时间</p>
@@ -42,7 +52,7 @@
                 </div>
             </div>
             <div class="zhankai" v-if="search_state">
-                <el-button type="info" plain class="button" @click="search_change(false)">展开</el-button>
+                <el-button plain class="button" @click="search_change(false)">展开</el-button>
                 <div>
                     <p class="grey">筛选条件</p>
                     <p class="black see_active">客户状态：{{custom_state==''?custom_list[0].value:custom_list[custom_state].value}}</p>
@@ -102,7 +112,7 @@
         </transition>
         <el-dialog title="分配客户" :visible.sync="assign" center>
             <div class="con">
-                <p>您要将 {{worker_fp.userName}}({{worker_fp.userNumber}})分配给坐席</p>
+                <p>您要将<span class="blue">{{worker_fp.userName}}({{worker_fp.userNumber}})</span>分配给坐席</p>
                 <el-select v-model="worker_fp.seatId" placeholder="请选择坐席" size="mini">
                     <el-option
                     v-for="item in worker_list2"
@@ -113,8 +123,8 @@
                 </el-select>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="assign=false">&#12288;取消&#12288;</el-button>
-                <el-button type="info" @click="assign_com">完成分配</el-button>
+                <button class="button" @click="assign=false">&#12288;取消&#12288;</button>
+                <button class="button" @click="assign_com" style="background-color:#7496F2;color:#fff;border-color:#7496F2;">完成分配</button>
             </span>
         </el-dialog>
     </div>
@@ -122,6 +132,23 @@
 <style scoped>
     .container{
         position: relative;
+    }
+    .con{
+        text-align: center;
+        margin: 60px 0 40px;
+    }
+    .button{
+        width: 135px;
+        height: 32px;
+        background-color: #fff;
+        border:1px solid #D8D8D8;
+        border-radius: 2px;
+    }
+    .blue{
+        font-size: 14px;
+    }
+    .dialog-footer{
+        border-top:unset;
     }
     .nav{
         line-height: 30px;
@@ -176,10 +203,6 @@
         padding: 6px 14px;
         font-size: 12px;
         margin: 0 14px;
-    }
-    .see_active{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
     }
     .tag{
         background-color: rgba(153, 153, 153, 1);
@@ -268,7 +291,9 @@ export default {
             pageNum:1,
             orderWay:null,
             orderField:null,
-            history_taskId:null
+            history_taskId:null,
+            taskIdsTmp:null,
+            mission_more:false
         }
     },
     components:{history},
@@ -300,6 +325,11 @@ export default {
             // }
             this.mission_search();
         },
+        worker_change2:function(){
+            this.worker_state=11;
+            this.seat=this.taskIdsTmp;
+            this.mission_search();
+        },
         date_change(){
             this.mission_search();
         },
@@ -322,7 +352,7 @@ export default {
                         }
                     });
                     console.log(res.data.info.details);
-                    this.history_detail=res.data.info.details;
+                    this.history_detail=res.data.info;
                     this.show=true;
                 }
             });
@@ -359,7 +389,7 @@ export default {
         },
         //页码改变
         page_change(val){
-            let seatAccountIds=this.worker_list[this.worker_state].id;
+            let seatAccountIds=this.seat;
             this.pageNum=val;
             var data={'taskId':this.$route.query.id,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
@@ -377,7 +407,7 @@ export default {
         },
         //排序搜索
         sort_change({column, prop, order} ){
-            let seatAccountIds=this.worker_list[this.worker_state].id;
+            let seatAccountIds=this.seat;
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
             var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
@@ -396,7 +426,7 @@ export default {
         },
         //条件搜索
         mission_search:function(){
-            let seatAccountIds=this.worker_list[this.worker_state].id;
+            let seatAccountIds=this.seat;
             //let seatAccountIds=this.worker_state.map(item=>this.worker_list[item].id);
             var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds};
             for(let i=0;i<this.tags.length;i++){
