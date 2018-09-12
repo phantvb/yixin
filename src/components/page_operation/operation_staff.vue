@@ -129,11 +129,11 @@
                             </el-select>
                         </el-form-item>
                         <ul>
-                            <li>
+                            <li v-if="accountType != 2">
                               <p class="black">合作商ID：</p>
                               <div class="grey">{{Form.partnerAccountId}}</div>
                             </li>
-                            <li>
+                            <li v-if="accountType != 2">
                                 <p class="black">id：</p>
                                 <div class="grey">{{Form.id}}</div>
                             </li>
@@ -145,7 +145,7 @@
                                 <p class="black">更新日期：</p>
                                 <div class="grey">{{Form.update}}</div>
                             </li>
-                          <li>
+                          <li v-if="accountType != 2">
                             <p class="black">realm：</p>
                             <div class="grey">{{Form.realm}}</div>
                           </li>
@@ -153,15 +153,15 @@
                             <p class="black">呼叫间隔(秒)：</p>
                             <div class="grey">{{Form.sessiontimers}}</div>
                           </li>
-                          <li>
+                          <li v-if="accountType != 2">
                             <p class="black">socket：</p>
                             <div class="grey">{{Form.socket}}</div>
                           </li>
-                          <li>
+                          <li v-if="accountType != 2">
                             <p class="black">uri：</p>
                             <div class="grey">{{Form.uri}}</div>
                           </li>
-                          <li>
+                          <li v-if="accountType != 2">
                             <p class="black">wsProt：</p>
                             <div class="grey">{{Form.wsProt}}</div>
                           </li>
