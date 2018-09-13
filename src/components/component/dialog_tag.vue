@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="dialog_tag_dialog">
       <el-dialog title="新增客户标签" :visible.sync="see" @close="close" center @open="open">
         <el-form ref="form" :model="form" label-position="top" :rules="rules">
             <el-form-item label="标签名称"  class="tit" prop="tag_name">
@@ -30,8 +30,8 @@
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="see=false" size="small">&#12288;&#12288;取消&#12288;&#12288;</el-button>
-            <el-button type="primary" @click="save_tag('form')" size="small">&#12288;保存&#12288;</el-button>
+            <el-button size="mini" style="width:165px;margin-right:20px;" @click="see=false">&#12288;&#12288;取消&#12288;&#12288;</el-button>
+            <el-button size="mini" style="width:165px;" type="primary" @click="save_tag('form')">&#12288;保存&#12288;</el-button>
         </span>
       </el-dialog>
     </div>

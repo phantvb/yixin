@@ -213,6 +213,7 @@ let echarts = require('echarts/lib/echarts')
   require('echarts/lib/component/tooltip')
   require('echarts/lib/component/legend')
   require('echarts/lib/component/title')
+  require('echarts/lib/component/graphic')
   import Dialog from "../component/dialog.vue"
   import assign from "../component/dialog_assign.vue"
 export default {
@@ -238,7 +239,8 @@ export default {
             lead_data:null,
             blank:false,
             allTagList:[],
-            upTagTimer:null
+            upTagTimer:null,
+            myChart:[]
         }
     },
     components:{
@@ -251,8 +253,7 @@ export default {
             // })
         },
         //画饼图
-        drawPie:function(item){
-            var myChart = echarts.init(document.getElementsByClassName('svg')[item.id_num]);
+        drawPie:function(item,clear){
             var option = {
                 tooltip: {
                     trigger: 'item',
@@ -265,6 +266,21 @@ export default {
                     orient:'vertical',
                     top:'14%',
                     icon:'circle'
+                },
+                graphic:{  
+                    type:'text',  
+                    left:'center',  
+                    top:'center',  
+                    z:2,  
+                    zlevel:100,  
+                    style: {              
+                        x: 0,  
+                        y: 0, 
+                        text: item.process!==undefined?(item.process+'%'):null,  
+                        textAlign: 'center',   
+                        textFont : '14px Arial'  ,
+                        fill:'#666'
+                    }  
                 },
                 title:{
                     text:item.id,
@@ -291,16 +307,22 @@ export default {
                     }
                 ]
             };
-            myChart.setOption(option);
+            this.myChart[item.id_num].setOption(option);
+            clear==true?this.myChart[item.id_num].clear():'';
         },
         //初始化饼图数据
         missoin_init:function(item){
+            this.myChart.map((item,index)=>{
+                item.clear();
+                console.log(item);
+            })
             for(let i=0;i<4;i++){
                 if(i<item.length){
-                    let obj={'id_num':i,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
+                    var process=item[i].calledNum!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].calledNum):0;
+                    let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
                     this.drawPie(obj);
                 }else{
-                    let obj={'id_num':i};
+                    let obj={'id_num':i,clear:true};
                     this.drawPie(obj);
                 }
 
@@ -418,7 +440,6 @@ export default {
         },
         //排序搜索
         sort_change({column, prop, order} ){
-            console.log({column, prop, order});
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
             var data={
@@ -456,6 +477,9 @@ export default {
         }
     },
     mounted:function(){
+        for(var i=0;i<document.getElementsByClassName('svg').length;i++){
+            this.myChart.push(echarts.init(document.getElementsByClassName('svg')[i]))
+        }
         //标签数据
         this.$ajax.post(this.$preix+'/new/tag/findTagList')
           .then( (res) => {

@@ -210,6 +210,7 @@ require('echarts/lib/chart/pie')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/title')
+  require('echarts/lib/component/graphic')
 export default {
     name:'Staff_index',
     data:function(){
@@ -246,6 +247,21 @@ export default {
                 tooltip: {
                     trigger: 'item',
                     formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                graphic:{  
+                    type:'text',  
+                    left:'center',  
+                    top:'center',  
+                    z:2,  
+                    zlevel:100,  
+                    style: {              
+                        x: 0,  
+                        y: 0, 
+                        text: item.process!==undefined?(item.process+'%'):null,  
+                        textAlign: 'center',   
+                        textFont : '14px Arial'  ,
+                        fill:'#666'
+                    }  
                 },
                 legend: {
                     x: 'left',
@@ -291,7 +307,8 @@ export default {
         mission_init:function(item){
             for(let i=0;i<4;i++){
                 if(i<item.length){
-                    let obj={'id_num':i,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum}]}
+                    var process=item[i].calledNum!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].calledNum):0;
+                    let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum}]}
                     this.drawPie(obj);
                 }
             }

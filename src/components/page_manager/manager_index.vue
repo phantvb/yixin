@@ -156,21 +156,22 @@ export default {
                     trigger: 'item',
                     formatter: "{a} <br/>{b}: {c} ({d}%)"
                 },
-                legend: {
-                    x: 'left',
-                    data:['发展成功','发展失败','未分配','继续跟进'],
-                    show:item.showLegend,
-                    orient:'vertical',
-                    top:'14%',
-                    icon:'circle'
-                },
+                // legend: {
+                //     x: 'left',
+                //     data:['发展成功','发展失败','未分配','继续跟进'],
+                //     show:item.showLegend,
+                //     orient:'vertical',
+                //     top:'14%',
+                //     icon:'circle'
+                // },
+                 
                 title:{
                     text:item.id,
                     top:'0px',
                     left:'center',
                     textStyle:{
                         fontSize:14,
-                        color:'#999'
+                        color:'#333'
                     }
                 },
                 series: [
@@ -190,6 +191,19 @@ export default {
                 ]
             };
             myChart.setOption(option);
+            var _zr = myChart.getZr();  
+            _zr.add(new echarts.graphic.Text({
+                style: {              
+                    x: _zr.getWidth() / 2,  
+                    y: _zr.getHeight() / 2-7,  
+                    color:'red',  
+                    text: item.process!==undefined?item.process+'%':'',  
+                    textAlign: 'center',   
+                    textFont : '14px Arial'  ,
+                    fill:'#666'
+                }  
+                }    
+            )); 
         },
         //画第一张柱图
         drawLine:function(item){
@@ -411,9 +425,11 @@ export default {
         },
         //处理饼图数据
         mission_init:function(item){
+            console.log(item);
             for(let i=0;i<4;i++){
                 if(i<item.length){
-                    let obj={'id_num':i,'id':item[i].taskName,'key':item[i].taskId,'showLegend':i==0,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
+                    var process=Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].calledNum);
+                    let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,'showLegend':i==0,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
                     this.drawPie(obj);
                 }else{
                     item.showLegend=false;

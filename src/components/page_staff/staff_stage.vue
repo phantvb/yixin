@@ -22,7 +22,7 @@
                 <el-button type="info" size="mini" icon="el-icon-sort" :style="{'float':'left','margin':'8px 5%','border-color':'#fff'}" @click="online_change" :class="{call_active:online_state==0}"><span v-show="online_state==0">在线</span><span v-show="online_state==0.5">......</span><span v-show="online_state==1">离线</span></el-button>
                 <div id="auto_call">
                     <button type="button" class="el-button el-button--info el-button--mini" style="float: right; margin: 8px 5%; border-color: rgb(255, 255, 255);" :class="{active_blue:call_auto==true}"><span  @click="call_auto=!call_auto">{{call_auto==true?'自动呼叫':'手动呼叫'}}</span><i @click="call_set=!call_set" class="el-icon-arrow-down el-icon--right"></i></button>
-                    <div v-show="call_set">
+                    <div v-show="call_set" @click.stop="call_set=true">
                         <p class="black">每隔&nbsp;<el-input-number v-model="call_during" controls-position="right" :min="1" :max="10" size="mini"></el-input-number>&nbsp;秒自动呼叫下一位</p>
                     </div>
                 </div>

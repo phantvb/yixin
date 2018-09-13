@@ -272,7 +272,11 @@ li{
   min-width: unset;
   width: 400px;
 }
-#manager_misssion_detail .el-dialog__footer{
+#dialog_worker_dialog .el-dialog,#dialog_tag_dialog .el-dialog{
+  min-width: unset;
+  width: 450px;
+}
+#manager_misssion_detail .el-dialog__footer,#dialog_worker_dialog .el-dialog__footer,#dialog_tag_dialog .el-dialog__footer{
   border-top: unset;
 }
 .el-dialog{

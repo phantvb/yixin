@@ -1,24 +1,27 @@
 <template>
-    <el-dialog :title="title[type].tit" :visible.sync="show" @close="close" center>
+    <el-dialog :title="title[type].tit" :visible.sync="show" @close="close" center id="dialog_worker_dialog">
         <div :style="{'text-align':'left'}">{{title[type].con}}</div>
         <div class="con">
             <ul>
                 <li v-for="(item,index) in messages" :key="item.id">
                     <div class="list">
-                        <p>坐席账号：{{item.loginName}}</p>
-                        <p>坐席昵称：{{item.shortName}}</p>
-                        <p>坐席密码：{{item.password2}}</p>
+                        <div style="float:left;">
+                            <p>坐席账号：{{item.loginName}}</p>
+                            <p>坐席昵称：{{item.shortName}}</p>
+                            <p>坐席密码：{{item.password2}}</p>
+                        </div>
+                        <el-button size="mini" class="copy" v-show="checkall==true" @click="copy(index)" style="float:right;">复制信息</el-button>
                         <div class="mask" v-show="copy_success==index">
                             <i class="el-icon-success"></i>坐席信息已复制
                         </div>
                     </div>
-                    <el-button type="info" class="copy" @click="copy(index)">复制信息</el-button>
                 </li>
             </ul>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="show=false">&#12288;关闭&#12288;</el-button>
-            <el-button @click="copyall" v-show="checkall==true" type="info">复制全部</el-button>
+            <el-button size="mini" style="width:165px;margin-right:20px;" @click="show=false">&#12288;关闭&#12288;</el-button>
+            <el-button size="mini" style="width:165px;" @click="copyall" v-show="checkall==true" type="primary">复制全部</el-button>
+            <el-button size="mini" style="width:165px;" @click="copy(0)" v-show="!checkall" type="primary">复制信息</el-button>
         </span>
       </el-dialog>
 </template>
@@ -53,22 +56,23 @@
     }
     li{
         overflow: hidden;
-        margin: 8px 0;
+        margin: 10px 0;
     }
     .list{
-        border: 1px solid #ccc;
+        border: 1px solid #D8D8D8;
         border-radius: 4px;
-        width: 60%;
+        width: 350px;
         float: left;
         position: relative;
+        overflow: hidden;
     }
     .list p{
-        margin:8px;
+        margin:8px 10px;
     }
     .copy{
         float: left;
         min-width: 98px;
-        margin: 21px;
+        margin: 30px 21px;
     }
     .mask{
         position: absolute;
