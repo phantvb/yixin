@@ -240,7 +240,7 @@
                         <div class="grey" :style="{'margin-left':'45%'}" v-if="history.historyDto.details[0].nextContactTime"><p :style="{'float':'left'}">下次联系时间：</p><p class="blue">{{history.historyDto.details[0].nextContactTime}}</p></div>
                     </div>
                 </div>
-                <div class="tag" v-if="history.summaryDto.tags.length>0&&history.summaryDto.tags.taglist!=[]">
+                <div class="history_tag" v-if="history.summaryDto.tags.length>0&&history.summaryDto.tags.taglist!=[]">
                     <el-button type="info" size="mini" v-for="item in history.summaryDto.tags.taglist" :key="item" :style="{'background':'#ECF2FF','border-color':'#7496F2','color':'#7496F2'}">{{item}}</el-button>
                 </div>
                 <div class="note" v-if="history.historyDto&&history.historyDto.details[0].desc">
@@ -562,7 +562,7 @@
         overflow: hidden;
         padding: 8px 0;
     }
-    .history .state,.history .tag{
+    .history .state,.history .history_tag{
         overflow: hidden;
         padding: 8px 0;
         text-align: left;
@@ -803,7 +803,7 @@ export default {
         if(this.$route.query.id||this.$route.query.taskClientId){
             this.task_state=1;
         }
-        //录音基础
+        //录音基础url
         this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
             if(res.data.code){
                 this.baseUrl=res.data.info.iccStaticContextPath;
@@ -1444,102 +1444,19 @@ export default {
                     }else{
                         console.log('提交小结');
                         _this.call_state=0;
-                        this.TaskBySeat_data.map((items,index)=>{
-                            let i=items.children.indexOf(_this.active_data);
-                            if(i<(items.children.length-1)&&i!=-1){
-                                if(_this.worker_state!='1'){
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                    console.log('当前：',items.children[i])
-                                    _this.detail_init(items.children[i],1,items);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    console.log('当前：',items.children[i+1])
-                                    _this.detail_init(items.children[i+1],1,items);
-                                }else if(_this.worker_state=='1'&&_this.time_next!=''){
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                    console.log('当前：',items.children[i])
-                                    _this.detail_init(items.children[i],1,items);
-                                }
-                                // _this.$refs.tree.setCheckedKeys([items.children[i+1].id]);
-                                if(_this.call_auto=='true'){
-                                    _this.call_state=5;
-                                    _this.call_auto_init=true;
-                                    _this.call_timer=setTimeout(function(){
-                                        _this.call_state=0;
-                                        _this.startCallTimeOut();
-                                    },_this.call_remin*1000)
-                                }
-                            }else if(i==(items.children.length-1)&&items.children.length==1){
-                                console.log('到底了')
-                                _this.call_hidden=true;
-                                if(_this.worker_state!='1'){
-                                    _this.TaskBySeat_data.splice(index,1);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    return;
-                                }else{
-                                    _this.TaskBySeat_data.splice(index,1);
-                                }
-                            }else if(i==(items.children.length-1)&&items.children.length>1){
-                                console.log('到底了')
-                                _this.call_hidden=true;
-                                if(_this.worker_state!='1'){
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                }else if(_this.worker_state=='1'&&_this.time_next==''){
-                                    return;
-                                }else{
-                                    items.processingNum--;
-                                    items.label=items.taskName+'('+items.processingNum+')';
-                                    items.children.splice(i,1);
-                                }
-                            }
-                        })
-                        this.DialPlanIntroWithPage_data.map((items,index)=>{
-                            let i=items.children.indexOf(_this.active_data);
-                            if(i != -1){
-                                items.processingNum--;
-                                items.label=items.taskName+'('+items.processingNum+')';
-                                items.children.splice(i,1);
-                                if(i < items.children.length){
-                                  _this.detail_init(items.children[i],2,items);
-                                  if(_this.call_auto=='true'){
-                                      _this.call_state=5;
-                                      _this.call_auto_init=true;
-                                      _this.call_timer=setTimeout(function(){
-                                          _this.call_state=0;
-                                          _this.startCallTimeOut();
-                                      },_this.call_remin*1000)
-                                  }
-                                }
-                                console.log("i:"+i+";children.length:"+items.children.length);
-                                if(i == items.children.length){
-                                  console.log("call_hidden=true");
-                                  _this.call_hidden=true;
-                                }
-                                if(items.children.length == 0){
-                                  _this.DialPlanIntroWithPage_data.splice(index,1);
-                                }
-                            }
-                        });
+                        _this.update_TaskBySeat_data();
+                        _this.update_DialPlanIntroWithPage_data();
                         if(this.booklist.length>0&&this.booklist[0].taskClientId!='string'){
                             let i=this.booklist.indexOf(_this.active_data);
                             this.booklist.map((items,index)=>{
                                 if(i==index&&i!=(_this.booklist.length-1)){
                                     if(_this.time_next==''){
-                                        // setTimeout(function(){
-
-                                        // _this.booklist.splice(index,1);
-                                        // },200)
                                         _this.booklist.splice(index,1,{});
                                         _this.detail_init(_this.booklist[index+1],3,items);
                                     }else if(_this.time_next!=''){
                                         _this.detail_init(_this.booklist[index+1],3,items);
                                     }
-                                    if(_this.call_auto=='true'){
+                                    if(_this.call_auto){
                                         _this.call_state=5;
                                         _this.call_auto_init=true;
                                         _this.call_timer=setTimeout(function(){
@@ -1561,6 +1478,93 @@ export default {
                     }
                 });
             }
+        },
+        update_TaskBySeat_data(){
+            var _this=this;
+            this.TaskBySeat_data.map((items,index)=>{
+                let i=items.children.indexOf(_this.active_data);
+                if(i!=-1){
+                    if(_this.time_next!=''){
+                        items.processingNum--;
+                        items.label=items.taskName+'('+items.processingNum+')';
+                        items.children.splice(i,1);
+                        console.log('当前：',items.children[i])
+                        _this.update_DialPlanIntroWithPage_data_detail(_this.active_data.taskClientId);
+                        _this.detail_init(items.children[i],1,items);
+                    }else{
+                        if(_this.worker_state!='1'){
+                            items.processingNum--;
+                            items.label=items.taskName+'('+items.processingNum+')';
+                            items.children.splice(i,1);
+                            console.log('当前：',items.children[i])
+                            _this.detail_init(items.children[i],1,items);
+                        }else{
+                            console.log('当前：',items.children[i+1])
+                            _this.detail_init(items.children[i+1],1,items);
+                        }
+                    };
+                    if(i<(items.children.length-1)){
+                        if(_this.call_auto){
+                            _this.call_state=5;
+                            _this.call_auto_init=true;
+                            _this.call_timer=setTimeout(function(){
+                                _this.call_state=0;
+                                _this.startCallTimeOut();
+                            },_this.call_remin*1000);
+                        }
+                    }else{
+                        _this.call_hidden=true;
+                    };
+                    if(items.children.length==0){
+                        _this.TaskBySeat_data.splice(index,1);
+                    }
+                }
+            })
+        },
+        update_DialPlanIntroWithPage_data(){
+            var _this=this;
+            this.DialPlanIntroWithPage_data.map((items,index)=>{
+                var i=items.children.indexOf(_this.active_data);
+                if(i != -1){
+                    items.processingNum--;
+                    items.label=items.taskName+'('+items.processingNum+')';
+                    items.children.splice(i,1);
+                    if(i < items.children.length){
+                        _this.detail_init(items.children[i],2,items);
+                        if(_this.call_auto==true){
+                            _this.call_state=5;
+                            _this.call_auto_init=true;
+                            _this.call_timer=setTimeout(function(){
+                                _this.call_state=0;
+                                _this.startCallTimeOut();
+                            },_this.call_remin*1000)
+                        }
+                    }
+                    if(i == items.children.length){
+                        console.log("call_hidden=true");
+                        _this.call_hidden=true;
+                    }
+                    if(items.children.length == 0){
+                        _this.DialPlanIntroWithPage_data.splice(index,1);
+                    }
+                }
+            });
+        },
+        update_DialPlanIntroWithPage_data_detail(taskClientId){
+            var _this=this;
+            this.DialPlanIntroWithPage_data.map((item,index)=>{
+                item.children.map((_item,_index)=>{
+                    if(taskClientId==_item.taskClientId){
+                        console.log(index,_index);
+                        item.processingNum--;
+                        item.label=item.taskName+'('+item.processingNum+')';
+                        item.children.splice(_index-1,1);
+                        if(item.children.length == 0){
+                            _this.DialPlanIntroWithPage_data.splice(index,1);
+                        }
+                    }
+                })
+            })
         },
         online_change(){
             if(this.online_state==0){
@@ -1635,7 +1639,7 @@ export default {
         stopCall(){
             this.call_state=0;
             clearTimeout(this.call_timer);
-            this.call_auto='false';
+            this.call_auto=false;
         },
         //修改基本信息
         upSeat(){

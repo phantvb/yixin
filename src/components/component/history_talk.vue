@@ -34,7 +34,7 @@
                         <p class="grey" v-if="item.desc">详情备注&#12288;<span class="black">{{item.desc}}</span></p>
                         
                         <p class="grey" :style="{'width':'100%'}" v-if="item.recordFilePath"><span style="float:left;margin-top:2px;">通话录音</span>&#12288;
-                            <a-player class="Aplay" :music_url="baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session" :name='"music_hitory"+index' size='mini'></a-player>
+                            <a-player class="Aplay history_aplay" :music_url="baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session" :name='"music_hitory"+index' size='mini'></a-player>
                         </p>
                     </div>
                 </div>

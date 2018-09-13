@@ -104,7 +104,7 @@ export default {
         close:function(){
             this.copy_success=-1;
             this.show=false;
-            this.$emit("reset");
+            this.$emit("close");
         },
         copy:function(index){
             let message='坐席账号：'+this.message[index].loginName+'\n坐席昵称：'+this.message[index].shortName+'\n坐席密码：'+this.message[index].password2;

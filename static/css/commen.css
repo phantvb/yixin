@@ -355,41 +355,6 @@ li{
 .curson{
   cursor: pointer;
 }
-.aplayer{
-  overflow: unset!important;
-}
-.aplayer-music{
-  display: none;
-}
-.aplayer-info{
-  padding: 0 4px!important;
-  height: auto!important;
-  overflow: unset!important;
-}
-.aplayer-pic{
-  background-image: unset!important;
-  height: 18px!important;
-  width: 18px!important;
-}
-.aplayer-pause,.aplayer-play{
-  width: 16px!important;
-  height: 16px!important;
-  border: unset!important; 
-  bottom: 1px!important; 
-  right: 1px!important;
-  margin: 0!important;
-}
-.aplayer-icon-play{
-  position: absolute!important;
-  top: 2px!important;
-  left: 2px!important;
-  height: 12px!important;
-  width: 12px!important;
-}
-.aplayer-volume-bar-wrap{
-  z-index: 9!important;
-}
-
 .el-icon-index:before {
   content: '';
   width: 18px;
@@ -586,15 +551,6 @@ li{
   top:50%;
   transform:translate3d(-50%,-50%,0);
 }
-#staff_call_count .aplayer-bar-wrap{
-  display: none;
-}
-#staff_call_count .aplayer-body{
-  overflow: hidden;
-}
-#manager_call_detail .aplayer-bar-wrap{
-  display: none;
-}
 .sel{
   min-width: 140px!important;
 }
@@ -627,7 +583,7 @@ form{
 #Aplay .el-slider__runway,.Aplay .el-slider__runway{
   margin: 10px 0;
 }
-#Aplay .time{
+#Aplay .time,.history_aplay .time{
   padding: 3px 0 0 10px;
 }
 #Aplay .el-slider__button-wrapper .el-tooltip, .el-slider__button-wrapper::after,.Aplay .el-slider__button-wrapper .el-tooltip, .el-slider__button-wrapper::after{

@@ -25,7 +25,7 @@
 <script>
 export default {
     name: 'Aplayer',
-    data(){ return { music:{ isPlay:false, currentTime:0, maxTime:0, volume:100 },timer:null,cWidth:null,music:'http://sc1.111ttt.cn:8282/2018/1/03m/13/396131232171.m4a?tflag=1519095601&pin=6cd414115fdb9a950d827487b16b5f97#.mp3' } },
+    data(){ return { music:{ isPlay:false, currentTime:0, maxTime:0, volume:100 },timer:null,cWidth:null,s_url:'http://sc1.111ttt.cn:8282/2018/1/03m/13/396131232171.m4a?tflag=1519095601&pin=6cd414115fdb9a950d827487b16b5f97#.mp3' } },
 	mounted(){
         var _this=this;
         this.$nextTick(()=>{

@@ -219,7 +219,7 @@ export default {
             })
         },
         open(){
-            this.$ajax.post(this.$preix+'/new/account/findSeatList',{'state':1})
+            this.$ajax.post(this.$preix+'/new/account/findSeatList',{'state':1,'pageSize':500})
             .then( (res) => {
                 if(res.data.code==200){
                     this.worker=res.data.rows;

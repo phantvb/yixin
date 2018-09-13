@@ -182,6 +182,7 @@ export default {
             this.search_state=value;
         },
         close(){
+            console.log('close');
             this.dialog_show=false;
         },
         //
