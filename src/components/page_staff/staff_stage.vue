@@ -1276,7 +1276,7 @@ export default {
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
                         let id=res.data.rows[i].taskId;
-                        obj.id=res.data.rows[i].taskClientId;
+                        obj.taskId=res.data.rows[i].taskId;
                         obj.processingNum=res.data.rows[i].processingNum
                         obj.taskName=res.data.rows[i].taskName;
                         obj.label=res.data.rows[i].taskName+'('+obj.processingNum+')';
@@ -1521,6 +1521,25 @@ export default {
                 }
             })
         },
+        update_TaskBySeat_data_detail(active_data){
+            var _this=this;
+            this.TaskBySeat_data.map((item,index)=>{
+                console.log(active_data,item);
+                if(item.taskId==active_data.taskId){
+                    item.children.map((_item,_index)=>{
+                        if(active_data.taskClientId==_item.taskClientId){
+                            item.processingNum--;
+                            item.label=item.taskName+'('+item.processingNum+')';
+                            item.children.splice(_index,1);
+                            if(item.children.length == 0){
+                                _this.DialPlanIntroWithPage_data.splice(index,1);
+                            }
+                        }
+                    })
+                }
+                
+            })
+        },
         update_DialPlanIntroWithPage_data(){
             var _this=this;
             this.DialPlanIntroWithPage_data.map((items,index)=>{
@@ -1529,6 +1548,9 @@ export default {
                     items.processingNum--;
                     items.label=items.taskName+'('+items.processingNum+')';
                     items.children.splice(i,1);
+                    if(_this.worker_state!='1'||_this.time_next!=''){
+                        _this.update_TaskBySeat_data_detail(_this.active_data);
+                    };
                     if(i < items.children.length){
                         _this.detail_init(items.children[i],2,items);
                         if(_this.call_auto==true){
@@ -1558,7 +1580,7 @@ export default {
                         console.log(index,_index);
                         item.processingNum--;
                         item.label=item.taskName+'('+item.processingNum+')';
-                        item.children.splice(_index-1,1);
+                        item.children.splice(_index,1);
                         if(item.children.length == 0){
                             _this.DialPlanIntroWithPage_data.splice(index,1);
                         }
