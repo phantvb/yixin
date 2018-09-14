@@ -89,7 +89,7 @@
                 </el-table-column>
                  <el-table-column prop="recordFilePath" class-name="line11" label="通话录音"  min-width="160">
                     <template slot-scope="scope">
-                        <a-player class="Aplay" v-if="scope.row.recordFilePath" music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session" name="scope.row.recordFilePath"></a-player>
+                        <a-player class="Aplay" v-if="scope.row.recordFilePath" :music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session" name="scope.row.recordFilePath"></a-player>
                     </template>
                 </el-table-column>
             </el-table>

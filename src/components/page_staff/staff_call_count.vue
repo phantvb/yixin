@@ -118,9 +118,7 @@
             <el-table-column prop="nextContactTime" label="下次联系时间" class-name="line9" :show-overflow-tooltip=true min-width="120"> </el-table-column>
             <el-table-column prop="recordFilePath" label="通话录音" class-name="line10" :show-overflow-tooltip=true min-width="100">
                 <template slot-scope="scope">
-                    <a-player class="Aplay" v-if="scope.row.recordFilePath" :name="scope.row.callSessionId.replace(/-/g,'')" :music_url="{
-                    src: baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session
-                    }"></a-player>
+                    <a-player class="Aplay" v-if="scope.row.recordFilePath" :name="scope.row.callSessionId.replace(/-/g,'')" :music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session"></a-player>
                 </template>
             </el-table-column>
         </el-table>

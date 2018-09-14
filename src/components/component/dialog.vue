@@ -33,7 +33,7 @@
           <div v-loading="confirm_loading"></div>
           <div class="mission" :style="{margin:'5% 0'}" v-show="!confirm_loading">
             <p>任务名称</p>
-            <el-select id="taskName" v-model="mission_value" placeholder="请输入任务名称，若名称不存在视为创建新任务" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' :disabled="data!=null"
+            <el-select id="taskName" style="width:300px;" v-model="mission_value" placeholder="请输入任务名称，若名称不存在视为创建新任务" size="mini" :filterable='true' :allow-create='true' :default-first-option='true' :disabled="data!=null"
                        @focus="queryCallTaskNameList" @keyup.native="queryCallTaskNameList" @change="checkedTags(mission_value)">
               <el-option v-for="item in mission_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>

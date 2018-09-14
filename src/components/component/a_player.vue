@@ -11,7 +11,7 @@
                     </el-button> 
                 </el-popover> 
             </el-col> 
-            <el-col :span="14" style="padding-left: 20px" v-show="cWidth>160"> 
+            <el-col :span="11" style="padding-left:6px;" v-show="cWidth>160"> 
                 <el-slider :format-tooltip="formatTime" :max="music.maxTime" @change="changeTime" v-model="music.currentTime" style="width: 100%;margin:-0.0625rem 0;"></el-slider> 
             </el-col> 
             <el-col :span="cWidth>160?6:20" class="time" style="color:#909399;font-size: 13px"> {{formatTime(music.currentTime?music.currentTime:0)}}/{{formatTime(music.maxTime?music.maxTime:0)}} </el-col> 

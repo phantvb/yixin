@@ -183,9 +183,6 @@
                                 <input type="text" v-model="company" @blur="upSeat">
                             </div>
                         </div>
-                        <!-- <div class="grey" v-show="taskName_str">所属：
-                            <span class="black">{{taskName_str}}</span>
-                        </div> -->
                     </div>
                 </div>
 
@@ -230,7 +227,7 @@
                     <p class="black tit" :style="{'float':'left'}">历史通话记录&#12288;<span class='grey'>总联系{{history.historyDto?history.historyDto.totalContactNum:0}}次，有效联系<span class="light-blue">{{history.historyDto?history.historyDto.effectiveContactNum:0}}</span>次</span></p>
                 <p class="grey curson" :style="{'float':'right'}" @click="enter(history.summaryDto)">查看更多<i class="el-icon-d-arrow-right"></i></p>
                 </div>
-                <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0"><span style="float:left;">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;<span class="black">{{history.historyDto.details[0].shortName}}</span> {{history.historyDto.details[0].callReaultString}} {{history.historyDto.details[0].callDuration}}</span>&#12288;<a-player id="Aplay" music_url="
+                <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0"><span style="float:left;">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;<span class="black">{{history.historyDto.details[0].shortName}}</span> {{history.historyDto.details[0].callReaultString}} {{history.historyDto.details[0].callDuration}}</span>&#12288;<a-player id="Aplay" :music_url="
                     baseUrl+recordFilePath+'?callSessionId='+callSeesionId+'&sessionId='+session" name="music_hitory" size='mini'></a-player></p>
                 <div v-if="history.historyDto">
                     <div class="state">
@@ -795,13 +792,8 @@ export default {
       DialogAdd,history,'a-player': VueAplayer
     },
     mounted() {
-        // window.onbeforeunload=function(e){
-
-        //     return false;
-
-        // }
-        if(this.$route.query.id||this.$route.query.taskClientId){
-            this.task_state=1;
+        if(this.$route.query.taskClientId){
+            this.BookedList_init({'requireTotalCount':true,'pageSize':'300'});
         }
         //录音基础url
         this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
@@ -1184,13 +1176,6 @@ export default {
             this.right.taskListId=item.id;
             this.right.taskId=item.taskId;
             this.left.taskClientId=item.taskClientId;
-            if(node==undefined){
-                this.taskName_str=null;
-            }else if(node.parent){
-                this.taskName_str=node.parent.data.taskName;
-            }else{
-                this.taskName_str=node.taskName;
-            }
             if(type==1){
                 if(this.$refs[item.taskClientId+item.taskId].style.backgroundColor=='rgb(204, 255, 255)'){
                     this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#fff';
@@ -1215,13 +1200,6 @@ export default {
                 }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
-                // $('.node').map((index,items)=>{
-                //     console.log(item.taskClientId)
-                //     if($(items).attr('id')==item.taskClientId){
-                //         console.log(items,$(items),$('#'+item.taskClientId));
-                //         $('#'+item.taskClientId).css('backgroundColor','#ccffff');
-                //     }
-                // })
             }
             this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':item.taskClientId})
             .then( (res) => {
@@ -1237,6 +1215,7 @@ export default {
                     this.taskClientId=item.taskClientId;
                     this.taskId=item.taskId;
                     this.partnerAccountId=res.data.info.partnerAccountId;
+                    this.taskName_str=res.data.info.taskName;
                 }
             });
             this.$ajax.post(this.$preix+'/new/seatWorkbench/findSummaryAndHistoryDetail',{'taskClientId':item.taskClientId,'taskId':item.taskId})
