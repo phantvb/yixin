@@ -142,6 +142,7 @@ let echarts = require('echarts/lib/echarts')
   require('echarts/lib/component/tooltip')
   require('echarts/lib/component/legend')
   require('echarts/lib/component/title')
+  require('echarts/lib/component/graphic')
 export default {
     name:'staff_follow',
     data:function(){
@@ -178,6 +179,21 @@ export default {
                     top:'14%',
                     icon:'circle'
                 },
+                graphic:{  
+                    type:'text',  
+                    left:'center',  
+                    top:'center',  
+                    z:2,  
+                    zlevel:100,  
+                    style: {              
+                        x: 0,  
+                        y: 0, 
+                        text: item.process!==undefined?(item.process+'%'):null,  
+                        textAlign: 'center',   
+                        textFont : '14px Arial'  ,
+                        fill:'#666'
+                    }  
+                },
                 title:{
                     text:item.id,
                     top:'0px',
@@ -209,7 +225,8 @@ export default {
         missoin_init:function(item){
             for(let i=0;i<4;i++){
                 if(i<item.length){
-                    let obj={'id_num':i,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
+                    var process=item[i].numberTotal!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].numberTotal):0;
+                    let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
                     this.drawPie(obj);
                 }else{
                     let obj={'id_num':i};

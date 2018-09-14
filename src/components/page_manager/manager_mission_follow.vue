@@ -318,7 +318,7 @@ export default {
             })
             for(let i=0;i<4;i++){
                 if(i<item.length){
-                    var process=item[i].calledNum!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].calledNum):0;
+                    var process=item[i].numberTotal!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].numberTotal):0;
                     let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}
                     this.drawPie(obj);
                 }else{

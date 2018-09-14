@@ -123,8 +123,8 @@
                 </el-select>
             </div>
             <span slot="footer" class="dialog-footer">
-                <button class="button" @click="assign=false">&#12288;取消&#12288;</button>
-                <button class="button" @click="assign_com" style="background-color:#7496F2;color:#fff;border-color:#7496F2;">完成分配</button>
+                <button class="assign_button" @click="assign=false">&#12288;取消&#12288;</button>
+                <button class="assign_button" @click="assign_com" style="background-color:#7496F2;color:#fff;border-color:#7496F2;">完成分配</button>
             </span>
         </el-dialog>
     </div>
@@ -137,7 +137,7 @@
         text-align: center;
         margin: 60px 0 40px;
     }
-    .button{
+    .assign_button{
         width: 135px;
         height: 32px;
         background-color: #fff;
@@ -443,7 +443,6 @@ export default {
             this.mission_init(data);
         },
         handleCommand(command) {
-            console.log(command);
             if(this.tags[command.index]==undefined||this.tags[command.index].value==null){
                 this.tags[command.index].value=command.value;
             }else if(this.tags[command.index].value==command.value){
@@ -451,7 +450,6 @@ export default {
             }else{
                 this.tags[command.index].value=command.value;
             }
-            console.log(this.tags);
             this.mission_search();
         },
         //完成分配

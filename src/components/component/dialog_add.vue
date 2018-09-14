@@ -16,11 +16,11 @@
                     <div>
                         <p class="grey">任务名称&#12288;&#12288;</p>
                         <!-- <p class="black" v-for=" (item,index) in mission_list" :key="item.taskId" :class="{see_active:mission_state==index}" @click="mission_change(index)">{{item.taskName}}</p> -->
-                        <p class="black" v-for=" (item,index) in mission_list" :key="index" v-if="index < 7" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
-                        <p class="black item_more" v-if="mission_list.length > 7" @click="mission_more=!mission_more">更多</p>
-                        <el-select v-show="mission_more" id="taskId" v-if="mission_list.length > 7" v-model="taskIdsTmp" @change="mission_change2" filterable multiple size='mini' placeholder="请选择" collapse-tags>
+                        <p class="black" v-for=" (item,index) in mission_list" :key="index" v-if="index < 4" :class="{see_active:mission_state.indexOf(index)!=-1}" @click="mission_change(index)">{{item.taskName}}</p>
+                        <p class="black item_more" v-if="mission_list.length > 4" @click="mission_more=!mission_more">更多</p>
+                        <el-select v-show="mission_more" id="taskId" v-if="mission_list.length > 4" v-model="taskIdsTmp" @change="mission_change2" filterable multiple size='mini' placeholder="请选择" collapse-tags>
                             <el-option
-                                v-if="index >=7"
+                                v-if="index >=4"
                                 v-for="(item,index) in mission_list"
                                 :key="item.taskId"
                                 :label="item.taskName"
@@ -209,6 +209,9 @@ export default {
         },
         mission_change2:function () {
             this.pageNum=1;
+            if(this.mission_state[0]==0){
+                this.mission_state=[];
+            }
             this.missoin_search();
         },
         //多选标签选中改变颜色
@@ -264,6 +267,7 @@ export default {
                             }
                         }
                     }
+                    console.log(res.data.rows);
                     this.tableData=res.data.rows;
                     if(res.data.totalCount){
                         this.page_count=res.data.totalCount;

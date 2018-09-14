@@ -11,7 +11,7 @@
             <div class="part2_tit">
                 <el-input placeholder="按任务名称搜索" prefix-icon="el-icon-search" v-model="search" class="search" size="mini">
                 </el-input>
-                <el-button type="info" class="button" :style="{float:'left'}" @click="missoin_search">搜索</el-button>
+                <el-button type="primary" class="button" :style="{float:'left'}" @click="missoin_search">搜索</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
                 <el-button plain class="button" @click="search_change(true)">收起</el-button>
@@ -33,10 +33,10 @@
                      <!-- :hide-on-click="false" -->
                     <el-dropdown v-for="(item,index) in data" :key="index"  @command="handleCommand">
                         <span class="el-dropdown-link">
-                            {{item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            {{tags[index]&&tags[index].value?tags[index].value:item.tagName}}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item}">{{_item}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(_item,_index) in item.tags" :key="_index" :command="{'index':index,'value':_item,'order':item.tagOrder}">{{_item}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -340,7 +340,15 @@ export default {
             this.mission_init(data);
         },
         handleCommand(command) {
-            this.tags[command.index]={'value':command.value};
+            console.log(command,this.tags);
+            if(this.tags[command.index]==undefined||this.tags[command.index].value==null){
+                this.tags[command.index].value=command.value;
+            }else if(this.tags[command.index].value==command.value){
+                this.tags[command.index].value=null;
+            }else{
+                this.tags[command.index].value=command.value;
+            }
+            console.log(this.tags);
             this.missoin_search();
         }
     },
@@ -353,6 +361,8 @@ export default {
             if(res.data.code==200){
                 for(let i=0;i<res.data.info.length;i++){
                     res.data.info[i].tags=res.data.info[i].tagValue.split(';');
+                    this.tags[i]={};
+                    this.tags[i].order=res.data.info[i].tagOrder;
                 }
                 this.data=res.data.info;
             }
