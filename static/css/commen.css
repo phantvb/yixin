@@ -268,14 +268,6 @@ li{
 .el-tree-node__content{
   height: unset;
 }
-#manager_misssion_detail .el-dialog{
-  min-width: unset;
-  width: 400px;
-}
-#dialog_worker_dialog .el-dialog,#dialog_tag_dialog .el-dialog,#dialog_assign_dialog .el-dialog{
-  min-width: unset;
-  width: 450px;
-}
 #manager_misssion_detail .el-dialog__footer,#dialog_worker_dialog .el-dialog__footer,#dialog_tag_dialog .el-dialog__footer,#dialog_assign_dialog .el-dialog__footer{
   border-top: unset;
 }
