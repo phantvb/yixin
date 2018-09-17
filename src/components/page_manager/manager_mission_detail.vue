@@ -115,7 +115,8 @@
                 <p>您要将<span class="blue">{{worker_fp.userName}}({{worker_fp.userNumber}})</span>分配给坐席</p>
                 <el-select v-model="worker_fp.seatId" placeholder="请选择坐席" size="mini">
                     <el-option
-                    v-for="item in worker_list2"
+                    v-for="(item,index) in worker_list2"
+                    v-if="index>0"
                     :key="item.id"
                     :label="item.shortName"
                     :value="item.id">

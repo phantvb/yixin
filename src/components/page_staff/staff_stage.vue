@@ -1252,6 +1252,7 @@ export default {
             ).then( res=>{
             if(res.data.code==200){
                     let _this=this;
+                    var arr=[]
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
                         let id=res.data.rows[i].taskId;
@@ -1269,10 +1270,11 @@ export default {
                                 //res.data.rows.map(item=>item.taskId=id);
                                 obj.children=res.data.rows;
                                 //_this.TaskBySeat_data[i]=obj;
-                                _this.$set(_this.TaskBySeat_data,i,obj);
+                                _this.$set(arr,i,obj);
                             }
                         });
                     }
+                    _this.TaskBySeat_data=arr;
                 }
             })
         },
@@ -1301,10 +1303,11 @@ export default {
                                     item.id=item.id;
                                 });
                                 obj.children=res.data.rows;
-                                _this.$set(_this.DialPlanIntroWithPage_data,i,obj)
+                                _this.$set(arr,i,obj);
                             }
                         });
                     }
+                    _this.DialPlanIntroWithPage_data=arr;
                 }
             })
         },
@@ -1463,37 +1466,34 @@ export default {
             this.TaskBySeat_data.map((items,index)=>{
                 let i=items.children.indexOf(_this.active_data);
                 if(i!=-1){
+                    var iLen=items.children.length;
                     if(_this.time_next!=''){
                         items.processingNum--;
                         items.label=items.taskName+'('+items.processingNum+')';
                         items.children.splice(i,1);
-                        console.log('当前：',items.children[i])
                         _this.update_DialPlanIntroWithPage_data_detail(_this.active_data.taskClientId);
-                        _this.detail_init(items.children[i],1,items);
+                        items.children[i]?_this.detail_init(items.children[i],1,items):'';
                     }else{
                         if(_this.worker_state!='1'){
                             items.processingNum--;
                             items.label=items.taskName+'('+items.processingNum+')';
                             items.children.splice(i,1);
-                            console.log('当前：',items.children[i])
-                            _this.detail_init(items.children[i],1,items);
+                            items.children[i]?_this.detail_init(items.children[i],1,items):'';
                         }else{
-                            console.log('当前：',items.children[i+1])
-                            _this.detail_init(items.children[i+1],1,items);
+                            items.children[i+1]?_this.detail_init(items.children[i+1],1,items):'';
                         }
                     };
-                    if(i<(items.children.length-1)){
-                        if(_this.call_auto){
-                            _this.call_state=5;
-                            _this.call_auto_init=true;
-                            _this.call_timer=setTimeout(function(){
-                                _this.call_state=0;
-                                _this.startCallTimeOut();
-                            },_this.call_remin*1000);
-                        }
-                    }else{
+                    if(_this.call_auto){
+                        _this.call_state=5;
+                        _this.call_auto_init=true;
+                        _this.call_timer=setTimeout(function(){
+                            _this.call_state=0;
+                            _this.startCallTimeOut();
+                        },_this.call_remin*1000);
+                    }
+                    if(i == (iLen-1)){
                         _this.call_hidden=true;
-                    };
+                    }
                     if(items.children.length==0){
                         _this.TaskBySeat_data.splice(index,1);
                     }
@@ -1523,6 +1523,7 @@ export default {
             var _this=this;
             this.DialPlanIntroWithPage_data.map((items,index)=>{
                 var i=items.children.indexOf(_this.active_data);
+                var iLen=items.children.length;
                 if(i != -1){
                     items.processingNum--;
                     items.label=items.taskName+'('+items.processingNum+')';
@@ -1541,8 +1542,7 @@ export default {
                             },_this.call_remin*1000)
                         }
                     }
-                    if(i == items.children.length){
-                        console.log("call_hidden=true");
+                    if(i == (iLen-1)){
                         _this.call_hidden=true;
                     }
                     if(items.children.length == 0){
@@ -1638,6 +1638,7 @@ export default {
         },
         //停止自动呼叫
         stopCall(){
+            this.call_auto_init=false;
             this.call_state=0;
             clearTimeout(this.call_timer);
             this.call_auto=false;
