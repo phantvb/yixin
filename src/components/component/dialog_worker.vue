@@ -4,7 +4,7 @@
         <div class="con">
             <ul>
                 <li v-for="(item,index) in messages" :key="item.id">
-                    <div class="list">
+                    <div :class="checkall?'list':'list_noborder'">
                         <div style="float:left;">
                             <p>坐席账号：{{item.loginName}}</p>
                             <p>坐席昵称：{{item.shortName}}</p>
@@ -57,6 +57,13 @@
     li{
         overflow: hidden;
         margin: 10px 0;
+    }
+    .list_noborder{
+        border-radius: 4px;
+        width: 350px;
+        float: left;
+        position: relative;
+        overflow: hidden;
     }
     .list{
         border: 1px solid #D8D8D8;

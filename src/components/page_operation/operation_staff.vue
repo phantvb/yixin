@@ -42,7 +42,7 @@
                     <p class="black worker_active" v-show="worker_state==3">停用</p>
                     <p class="black worker_active" v-show="worker_state==2">冻结</p>
                     <p class="black worker_active" v-show="worker_state==1">激活</p>
-                    <p size="mini" type="info" class="worker_active black" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</p>
+                    <p size="mini" type="primary" class="worker_active black" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</p>
                 </div>
             </div>
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
@@ -170,7 +170,7 @@
                 </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="see=false">&#12288;取消&#12288;</el-button>
-                    <el-button type="info" @click="submitForm('Form')">&#12288;提交&#12288;</el-button>
+                    <el-button type="primary" @click="submitForm('Form')">&#12288;提交&#12288;</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -321,7 +321,6 @@ export default {
                 this.$ajax.post(this.$preix+'/new/account/batchUpdateSeat',data)
                 .then( (res) => {
                     if(res.data.code==200){
-                        console.log(res.data.info)
                         this.message=res.data.info;
                         this.dialog_type=1;
                         this.checkbox=true;

@@ -308,6 +308,7 @@ export default {
             this.mission_search();
         },
         worker_change:function(value,id){
+            this.taskIdsTmp=null;
             this.worker_state=value;
             this.seat=id;
             // if(this.worker_state.indexOf(value)==-1&&value!=0){

@@ -144,7 +144,7 @@
                     </div>
                     <p class="black">{{phone}}</p>
                 </div>
-                <div class="mes3">
+                <div class="mes3" style="height:110px;">
                     <div class="mes">
                         <div class="grey">性别：
                             <div class="father">
@@ -160,13 +160,13 @@
                         <div class="grey">职业：
                             <div class="father">
                                 <span class="black">{{job?job:'不详（点击补充）'}}</span>
-                                <input type="text" v-model="job" @blur="upSeat">
+                                <input type="text" v-model="job" @blur="upSeat" onfocus="this.select()">
                             </div>
                         </div>
                         <div class="grey">意向：
                             <div class="father">
                                 <span class="black">{{think?think:'不详（点击补充）'}}</span>
-                                <input type="text" v-model="think" @blur="upSeat">
+                                <input type="text" v-model="think" @blur="upSeat" onfocus="this.select()">
                             </div>
                         </div>
                     </div>
@@ -174,13 +174,13 @@
                         <div class="grey">邮箱：
                             <div class="father">
                                 <span class="black">{{email?email:'不详（点击补充）'}}</span>
-                                <input type="text" v-model="email" @blur="upSeat">
+                                <input type="text" v-model="email" @blur="upSeat" onfocus="this.select()">
                             </div>
                         </div>
                         <div class="grey">公司：
                             <div class="father">
                                 <span class="black">{{company?company:'不详（点击补充）'}}</span>
-                                <input type="text" v-model="company" @blur="upSeat">
+                                <input type="text" v-model="company" @blur="upSeat" onfocus="this.select()">
                             </div>
                         </div>
                     </div>
@@ -1483,16 +1483,18 @@ export default {
                             items.children[i+1]?_this.detail_init(items.children[i+1],1,items):'';
                         }
                     };
-                    if(_this.call_auto){
-                        _this.call_state=5;
-                        _this.call_auto_init=true;
-                        _this.call_timer=setTimeout(function(){
-                            _this.call_state=0;
-                            _this.startCallTimeOut();
-                        },_this.call_remin*1000);
-                    }
+                    
                     if(i == (iLen-1)){
                         _this.call_hidden=true;
+                    }else{
+                        if(_this.call_auto){
+                            _this.call_state=5;
+                            _this.call_auto_init=true;
+                            _this.call_timer=setTimeout(function(){
+                                _this.call_state=0;
+                                _this.startCallTimeOut();
+                            },_this.call_remin*1000);
+                        }
                     }
                     if(items.children.length==0){
                         _this.TaskBySeat_data.splice(index,1);

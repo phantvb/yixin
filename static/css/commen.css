@@ -237,7 +237,7 @@ li{
   display: inline-block;
   margin: 0;
 }
-.father:hover input,.father:hover select{
+.father:hover input,.father:hover select,.father:focus input,.father:focus select{
   display:inline-block ;
 }
 .father:hover p,.father:hover span{

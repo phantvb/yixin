@@ -7,9 +7,9 @@
                     prefix-icon="el-icon-search"
                     v-model="search" class="search" size="mini">
                 </el-input>
-                <el-button type="info" class="button" :style="{float:'left'}" @click="findSeat">搜索</el-button>
-                <el-button type="info" plain class="button" @click="fsAdd">新增FS帐号</el-button>
-                <el-button type="info"  class="button" @click="managerAdd">新增管理员</el-button>
+                <el-button type="primary" class="button" :style="{float:'left'}" @click="findSeat">搜索</el-button>
+                <el-button type="primary" plain class="button" @click="fsAdd">新增FS帐号</el-button>
+                <el-button type="primary"  class="button" @click="managerAdd">新增管理员</el-button>
             </div>
             <div class="zhankai" v-if="search_state==false">
                 <el-button plain class="button" @click="search_change(true)">收起</el-button>
@@ -45,7 +45,7 @@
                     <p class="black worker_active" v-show="worker_state==3">停用</p>
                     <p class="black worker_active" v-show="worker_state==2">冻结</p>
                     <p class="black worker_active" v-show="worker_state==1">激活</p>
-                    <el-tag type="info" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
+                    <el-tag type="primary" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
                 </div>
             </div>
             <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" header-row-class-name="table_head">
@@ -143,7 +143,7 @@
                             <li v-if="Form.type == 2">
                                 <p class="black">实时资源：</p>
                                 <div class="grey charge">{{Form.callCredit+Form.callRemaining}}分钟
-                                    <el-button type="info" plain size="mini" id="charge" @click="charges=true">充值</el-button>
+                                    <el-button type="primary" plain size="mini" id="charge" @click="charges=true">充值</el-button>
                                 </div>
                             </li>
                             <li>
@@ -171,7 +171,7 @@
                 </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="resetForm('Form')" v-show="detail_type!=0">&#12288;重置&#12288;</el-button>
-                    <el-button type="info" @click="submitForm('Form')">&#12288;提交&#12288;</el-button>
+                    <el-button type="primary" @click="submitForm('Form')">&#12288;提交&#12288;</el-button>
                 </span>
             </el-dialog>
             <el-dialog title="充值" :visible.sync="charges" width="30%" center>
@@ -182,7 +182,7 @@
                 </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="charges = false">取 消</el-button>
-                    <el-button type="info" @click="charge">充 值</el-button>
+                    <el-button type="primary" @click="charge">充 值</el-button>
                 </span>
             </el-dialog>
         </div>

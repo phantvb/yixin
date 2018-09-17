@@ -89,7 +89,7 @@
                 </el-table-column>
                  <el-table-column prop="recordFilePath" class-name="line11" label="通话录音"  min-width="180">
                     <template slot-scope="scope">
-                        <a-player class="Aplay" v-if="scope.row.recordFilePath" :music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session" name="scope.row.recordFilePath"></a-player>
+                        <a-player class="Aplay" v-if="scope.row.recordFilePath&&Aplay" :music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session" name="scope.row.recordFilePath"></a-player>
                     </template>
                 </el-table-column>
             </el-table>
@@ -204,7 +204,8 @@ export default {
             orderField:null,
             baseUrl:null,
             session:null,
-            mission_more:false
+            mission_more:false,
+            Aplay:true
         }
     },
     components: {
@@ -268,9 +269,11 @@ export default {
             });
         },
         mission_init(data){
+            this.Aplay=false;
             this.$ajax.post(this.$preix+'/new/callstatistics/findCallStatisticsDetailList',data)
             .then( (res) => {
                 if(res.data.code==200){
+                    this.Aplay=true;
                     if(res.data.totalCount){
                         this.page_count=res.data.totalCount;
                     }

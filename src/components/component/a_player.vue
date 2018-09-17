@@ -17,7 +17,7 @@
             <el-col :span="cWidth>240?6:20" class="time" style="color:#909399;font-size: 13px"> {{formatTime(music.currentTime?music.currentTime:0)}}/{{formatTime(music.maxTime?music.maxTime:0)}} </el-col> 
         </el-row> 
         <audio :ref="name" loop> 
-        <source :src="music_url" type="audio/mpeg"> 
+        <source :src="music_url" type="audio/mpeg" @change="change">  
         </audio> 
     </div> 
 </template>
@@ -29,6 +29,7 @@ export default {
 	mounted(){
         var _this=this;
         this.$nextTick(()=>{
+            this.listenMusic();
             this.timer=setInterval(this.listenMusic,1000)
         });
         eventBus.$on('music_play',(currentName)=>{
@@ -37,10 +38,14 @@ export default {
                 _this.$refs[_this.name].pause()
             }
         });
+        console.log('change');
         this.cWidth=this.$refs.content.clientWidth;
     },
     props:['name','music_url','size'],
 	methods: {
+        change(){
+            console.log('change')
+        },
 		listenMusic(){ 
             if(!this.$refs[this.name]){ return } 
             if(this.$refs[this.name].readyState){ this.music.maxTime = this.$refs[this.name].duration }
@@ -56,7 +61,7 @@ export default {
                 eventBus.$emit('music_play',this.name);
                 this.timer=setInterval(this.listenMusic,1000)
             }
-            else{ this.$refs[this.name].pause() } 
+            else{ this.$refs[this.name].pause(); clearInterval(this.timer);} 
             this.music.isPlay=!this.$refs[this.name].paused 
             this.$nextTick(()=>{ document.getElementById('play').blur() }) 
         },
