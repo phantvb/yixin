@@ -127,7 +127,7 @@ a{
 
 .ul{
   width: 150px;
-  height: 164px;
+  height: 144px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -143,12 +143,13 @@ a{
 .ul::-webkit-scrollbar
 {
 width: 3px;
-  background-color: rgba(153, 153, 153, 0.8);
+  background-color: #7496F2;
+  opacity: 0.8;
 }
 /*定义滚动条*/
 .ul::-webkit-scrollbar-thumb
 {
-background-color: #8b8b8b;
+background-color: #7496F2;
 border-radius: 1px;
 }
 li{

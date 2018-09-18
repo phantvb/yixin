@@ -21,10 +21,12 @@
                 <p class="grey">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
-            <div class="svg" id="svg"></div>
             <div class="svg"></div>
             <div class="svg"></div>
             <div class="svg"></div>
+            <div class="svg"></div>
+            <div class="svg"></div>
+            <img src="../../../static/icon/legend_manager.png" alt="" style="height:1vw;">
         </div>
         <div class="part3">
             <div class="p3_tit">
@@ -62,6 +64,7 @@
     }
     .part2{
         max-height: 290px;
+        text-align: center;
     }
     .p2_tit{
         overflow: hidden;
@@ -86,11 +89,8 @@
     .p3_tit>a>p.grey{
         float: right;
     }
-    #svg{
-        width: 31%
-    }
     .svg{
-        width: 23%;
+        width: 20%;
         height: 230px;
         float: left;
     }
@@ -212,9 +212,9 @@ export default {
                 var val1 = obj1.talkedDuration;
                 var val2 = obj2.talkedDuration;
                 if (val1 < val2) {
-                    return -1;
-                } else if (val1 > val2) {
                     return 1;
+                } else if (val1 > val2) {
+                    return -1;
                 } else {
                     return 0;
                 }            
@@ -237,7 +237,7 @@ export default {
                         fontWeight:'100'
                     }
                 },
-                barMaxWidth:'5%',
+                barWidth:'5%',
                 barMinHeight :'12px',
                 grid: {
                     left: '3%',
@@ -272,7 +272,7 @@ export default {
                         },
                         itemStyle:{
                             normal:{
-                                color:'rgba(153, 153, 153, 1)'
+                                color:'#7496F2'
                             }
                         },
                         data: arr_time
@@ -288,9 +288,9 @@ export default {
                 var val1 = obj1.failureNum+obj1.progressingNum+obj1.shortName;
                 var val2 = obj2.failureNum+obj2.progressingNum+obj2.shortName;
                 if (val1 < val2) {
-                    return -1;
-                } else if (val1 > val2) {
                     return 1;
+                } else if (val1 > val2) {
+                    return -1;
                 } else {
                     return 0;
                 }            
@@ -317,7 +317,7 @@ export default {
                         fontWeight:'100'
                     }
                 },
-                barMaxWidth:'5%',
+                barWidth:'5%',
                 barMinHeight :'12px',
                 legend: {
                     data:['发展成功', '发展失败','继续跟进'],
@@ -392,7 +392,7 @@ export default {
                     },{
                         type: 'bar',
                         name:'继续跟进',
-                        color:'#D4D4D4',
+                        color:'#7496F2',
                         stack: '总量',
                         label: {
                             normal: {
@@ -402,7 +402,7 @@ export default {
                         },
                         itemStyle:{
                             normal:{
-                                color:'#D4D4D4'
+                                color:'#7496F2'
                             }
                         },
                         data: arr_doing
@@ -426,7 +426,7 @@ export default {
         //处理饼图数据
         mission_init:function(item){
             console.log(item);
-            for(let i=0;i<4;i++){
+            for(let i=0;i<5;i++){
                 if(i<item.length){
                     var process=item[i].numberTotal!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].numberTotal):0;
                     let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,'showLegend':i==0,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}

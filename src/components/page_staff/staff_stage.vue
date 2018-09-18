@@ -97,6 +97,20 @@
             </div>
             <div class="head">
                 <div class="mes2">
+                    <div id="call_father">
+                        <br><br>
+                        <div class="father">
+                            <p class="black" :style="{'font-weight':'700'}">{{name}}</p>
+                            <!-- <el-tooltip class="item" effect="dark"  placement="right" @click.native="test" v-show="name_change">
+                                <div slot="content" :style="{'min-width':'200px'}">{{name}}</div>
+                                <p class="black" :style="{'font-weight':'700'}">{{name}}</p>
+                            </el-tooltip> -->
+                            <!-- <input type="text" v-model="name" @blur="upSeat" v-show="!name_change"> -->
+                            <input type="text" v-model="name" @blur="upSeat">
+                        </div>
+                        <p class="black">{{phone}}</p>
+                    </div>
+                    
                     <div id="call">
                         <div class="call_state high_hover"  v-show="call_state==0" @click="startCall">
                             <i class="el-icon-phone call_icon" id="call_icon"></i>
@@ -132,22 +146,11 @@
                             </div>
                         </div>
                     </div>
-                    <br><br>
-                    <div class="father">
-                        <p class="black" :style="{'font-weight':'700'}">{{name}}</p>
-                        <!-- <el-tooltip class="item" effect="dark"  placement="right" @click.native="test" v-show="name_change">
-                            <div slot="content" :style="{'min-width':'200px'}">{{name}}</div>
-                            <p class="black" :style="{'font-weight':'700'}">{{name}}</p>
-                        </el-tooltip> -->
-                        <!-- <input type="text" v-model="name" @blur="upSeat" v-show="!name_change"> -->
-                        <input type="text" v-model="name" @blur="upSeat">
-                    </div>
-                    <p class="black">{{phone}}</p>
                 </div>
                 <div class="mes3" style="height:110px;">
                     <div class="mes">
-                        <div class="grey">性别：
-                            <div class="father">
+                        <div class="grey"><span style="float:left">性别：</span>
+                            <div class="father" style="float:left">
                                 <span class="black" v-show="sex==undefined">不详</span>
                                 <span class="black" v-show="sex==0">男</span>
                                 <span class="black" v-show="sex==1">女</span>
@@ -157,28 +160,28 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="grey">职业：
-                            <div class="father">
+                        <div class="grey"><span style="float:left">职业：</span>
+                            <div class="father" style="float:left">
                                 <span class="black">{{job?job:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="job" @blur="upSeat" onfocus="this.select()">
                             </div>
                         </div>
-                        <div class="grey">意向：
-                            <div class="father">
+                        <div class="grey"><span style="float:left">意向：</span>
+                            <div class="father" style="float:left">
                                 <span class="black">{{think?think:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="think" @blur="upSeat" onfocus="this.select()">
                             </div>
                         </div>
                     </div>
                     <div class="mes">
-                        <div class="grey">邮箱：
-                            <div class="father">
+                        <div class="grey"><span style="float:left">邮箱：</span>
+                            <div class="father" style="float:left">
                                 <span class="black">{{email?email:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="email" @blur="upSeat" onfocus="this.select()">
                             </div>
                         </div>
-                        <div class="grey">公司：
-                            <div class="father">
+                        <div class="grey"><span style="float:left">公司：</span>
+                            <div class="father" style="float:left">
                                 <span class="black">{{company?company:'不详（点击补充）'}}</span>
                                 <input type="text" v-model="company" @blur="upSeat" onfocus="this.select()">
                             </div>
@@ -227,8 +230,7 @@
                     <p class="black tit" :style="{'float':'left'}">历史通话记录&#12288;<span class='grey'>总联系{{history.historyDto?history.historyDto.totalContactNum:0}}次，有效联系<span class="light-blue">{{history.historyDto?history.historyDto.effectiveContactNum:0}}</span>次</span></p>
                 <p class="grey curson" :style="{'float':'right'}" @click="enter(history.summaryDto)">查看更多<i class="el-icon-d-arrow-right"></i></p>
                 </div>
-                <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0"><span style="float:left;">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;<span class="black">{{history.historyDto.details[0].shortName}}</span> {{history.historyDto.details[0].callReaultString}} {{history.historyDto.details[0].callDuration}}</span>&#12288;<a-player id="Aplay" :music_url="
-                    baseUrl+recordFilePath+'?callSessionId='+callSeesionId+'&sessionId='+session" name="music_hitory" size='mini'></a-player></p>
+                <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0"><span style="float:left;">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;<span class="black">{{history.historyDto.details[0].shortName}}</span> {{history.historyDto.details[0].callReaultString}} {{history.historyDto.details[0].callDuration}}</span>&#12288;<a-player id="Aplay" :music_url="baseUrl+recordFilePath+'?callSessionId='+callSeesionId+'&sessionId='+session" name="music_hitory" size='mini' v-if="a_play"></a-player></p>
                 <div v-if="history.historyDto">
                     <div class="state">
                         <p class="grey">客户状态</p>
@@ -464,13 +466,20 @@
     }
     .mes2>div.father>p{
         padding:0 10px;
-        width: 98px;
+        width: 12vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .father>span{
+        width: 12vw;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     .mes2>div.father>input{
         transform:translateX(10px);
+        width:12vw;
     }
     #call{
         float: right;
@@ -530,11 +539,16 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    .father{
+        display: inline-block;
+    }
     .father:hover input,.father:hover select{
         width: auto;
     }
-    .father{
-        display: inline;
+    #call_father{
+        float: left;
+        padding-left:10px;
+        width:18vw;
     }
     .summary .tit{
         font-weight: 700;
@@ -680,6 +694,7 @@ export default {
     name:'Staff_stage',
     data:function(){
         return {
+            a_play:true,
             name_change:true,
             show:false,
             see:false,
@@ -1157,6 +1172,7 @@ export default {
                 }
             }
             var _this=this;
+            this.a_play=false;
             this.tags=[];
             this.show=false;
             this.time_next='';
@@ -1221,6 +1237,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/seatWorkbench/findSummaryAndHistoryDetail',{'taskClientId':item.taskClientId,'taskId':item.taskId})
             .then( (res) => {
                 if(res.status==200){
+                    this.a_play=true;
                     if(res.data.summaryDto.tags!=undefined){
                         res.data.summaryDto.tags.taglist=[];
                         for(var i=0;i<res.data.summaryDto.tags.length;i++){

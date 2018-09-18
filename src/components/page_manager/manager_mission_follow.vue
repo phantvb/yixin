@@ -14,10 +14,12 @@
                 <div class="svg"></div>
                 <div class="svg"></div>
                 <div class="svg"></div>
+                <div class="svg"></div>
+                <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;">
             </div>
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
-                <el-checkbox-group v-model="checkedlist" :min="0" :max="4" class="ul" :style="{'text-align':'left','padding':'0 8px','background-color':'#FBFBFB'}" @change="show_mission">
+                <el-checkbox-group v-model="checkedlist" :min="0" :max="5" class="ul" :style="{'text-align':'left','padding':'0 8px','background-color':'#FBFBFB'}" @change="show_mission">
                     <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li">{{item.taskName}}</el-checkbox>
                 </el-checkbox-group>
             </div>
@@ -164,8 +166,8 @@
         margin: 14px 10px 5px 0;
     }
     .svg{
-        width: 25%;
-        height: 200px;
+        width: 20%;
+        height: 180px;
         float: left;
     }
     .part1_nav{
@@ -295,7 +297,7 @@ export default {
                     {
                         name:'客户状态',
                         type:'pie',
-                        radius: ['50px', '72px'],
+                        radius: ['40px', '62px'],
                         color: ['#83CA0D', '#EF5679', '#7496F2', '#D4D4D4'],
                         label: {
                             normal: {
@@ -316,7 +318,7 @@ export default {
                 item.clear();
                 console.log(item);
             })
-            for(let i=0;i<4;i++){
+            for(let i=0;i<5;i++){
                 if(i<item.length){
                     var process=item[i].numberTotal!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].numberTotal):0;
                     let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum},{'name':'未分配','value':item[i].unallocatedNum}]}

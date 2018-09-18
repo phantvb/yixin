@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="history">
-            <span class="black" v-if="head" style="float:left;font-size:16px;">历史通话记录&#12288;</span><span class='grey' style="float:left;margin-top: 2px;">总联系{{details.totalContactNum}}次，有效联系<span class="light-blue">{{details.effectiveContactNum}}</span>次</span>
+            <span class="black" v-if="head" style="float:left;font-size:16px;">历史通话记录&#12288;</span><span class='grey' style="float:left;margin-top: 2px;">总联系{{details.totalContactNum?details.totalContactNum:0}}次，有效联系<span class="light-blue">{{details.effectiveContactNum?details.effectiveContactNum:0}}</span>次</span>
             <div class="line"></div>
             <div class="record">
                 <div class="record_list black" v-for="(item,index) in details.details" :key="index">

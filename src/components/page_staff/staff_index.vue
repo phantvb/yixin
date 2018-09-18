@@ -126,6 +126,8 @@
             <div class="svg"></div>
             <div class="svg"></div>
             <div class="svg"></div>
+            <div class="svg"></div>
+            <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;">
         </div>
     </div>
 </template>
@@ -136,6 +138,9 @@
         overflow: hidden;
         margin: 8px 0;
         border-radius: 4px;
+    }
+    .part3{
+        text-align: center;
     }
     .part1 li{
         width: 16%;
@@ -191,7 +196,7 @@
         float: right;
     }
     .svg{
-        width: 25%;
+        width: 20%;
         height: 230px;
         float: left;
     }
@@ -305,7 +310,7 @@ export default {
             return year+'-'+month+'-'+day+' 00:00:00';
         },
         mission_init:function(item){
-            for(let i=0;i<4;i++){
+            for(let i=0;i<5;i++){
                 if(i<item.length){
                     var process=item[i].numberTotal!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].numberTotal):0;
                     let obj={'id_num':i,'process':process,'id':item[i].taskName,'key':item[i].taskId,data:[{'name':'发展成功','value':item[i].successNum},{'name':'发展失败','value':item[i].failureNum},{'name':'继续跟进','value':item[i].processingNum}]}
