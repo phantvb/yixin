@@ -129,7 +129,7 @@
         left:0;
         top:0;
         width:100%;
-        height: 100%;
+        height: 180vh;
         z-index:99;
         background-color: #fff;
         pointer-events: all;

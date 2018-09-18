@@ -481,6 +481,9 @@
         transform:translateX(10px);
         width:12vw;
     }
+    .father>input,.father>select{
+        width:12vw!important;
+    }
     #call{
         float: right;
         padding: 0 2%;

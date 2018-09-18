@@ -5,9 +5,9 @@
             <div id="mask" v-show="tableData.length===0">
                 <div>
                     <p><i class="el-icon-noMission"></i></p>
-                    <el-button type="primary" class="button" :style="{float:'left'}" @click="add">新增客户标签组</el-button>
+                    <el-button size="mini" type="primary" class="button" :style="{margin:'0 auto'}" @click="add">新增客户标签组</el-button>
                     <div>
-                        <el-tooltip class="item" effect="dark"  placement="right">
+                        <el-tooltip class="item" effect="dark"  placement="bottom">
                             <div slot="content" :style="{'min-width':'200px'}">客户标签可以与外呼任务关联，让坐席在与客户沟通时快速标记用户，以便后续的客户分类与跟进。</div>
                             <el-button type="text" :style="{'color':'#999'}" size="mini"><i class="el-icon-question"></i>什么是客户标签组</el-button>
                         </el-tooltip>
@@ -95,7 +95,7 @@
         left:0;
         top:0;
         width:100%;
-        height: 100%;
+        height: 80vh;
         z-index:99;
         background-color: #fff;
         pointer-events: all;
