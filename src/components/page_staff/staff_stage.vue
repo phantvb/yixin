@@ -548,7 +548,7 @@
     #call_father{
         float: left;
         padding-left:10px;
-        width:18vw;
+        width:8vw;
     }
     .summary .tit{
         font-weight: 700;
@@ -1522,7 +1522,6 @@ export default {
         update_TaskBySeat_data_detail(active_data){
             var _this=this;
             this.TaskBySeat_data.map((item,index)=>{
-                console.log(active_data,item);
                 if(item.taskId==active_data.taskId){
                     item.children.map((_item,_index)=>{
                         if(active_data.taskClientId==_item.taskClientId){
@@ -1531,6 +1530,9 @@ export default {
                             item.children.splice(_index,1);
                             if(item.children.length == 0){
                                 _this.DialPlanIntroWithPage_data.splice(index,1);
+                            }
+                            if(item.children.length==0){
+                                _this.TaskBySeat_data.splice(index,1);
                             }
                         }
                     })
@@ -1575,10 +1577,12 @@ export default {
             this.DialPlanIntroWithPage_data.map((item,index)=>{
                 item.children.map((_item,_index)=>{
                     if(taskClientId==_item.taskClientId){
-                        console.log(index,_index);
                         item.processingNum--;
                         item.label=item.taskName+'('+item.processingNum+')';
                         item.children.splice(_index,1);
+                        if(item.children.length == 0){
+                            _this.DialPlanIntroWithPage_data.splice(index,1);
+                        }
                         if(item.children.length == 0){
                             _this.DialPlanIntroWithPage_data.splice(index,1);
                         }
