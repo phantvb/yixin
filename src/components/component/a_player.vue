@@ -16,7 +16,7 @@
             </el-col> 
             <el-col :span="cWidth>240?6:20" class="time" style="color:#909399;font-size: 13px"> {{formatTime(music.currentTime?music.currentTime:0)}}/{{formatTime(music.maxTime?music.maxTime:0)}} </el-col> 
         </el-row> 
-        <audio :ref="name" loop> 
+        <audio :ref="name" preload="meta"> 
         <source :src="music_url" type="audio/mpeg" @change="change">  
         </audio> 
     </div> 

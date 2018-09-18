@@ -12,7 +12,7 @@
             </div>
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
-                <el-checkbox-group v-model="checkedlist" :min="0" :max="5" class="ul" :style="{'text-align':'left','margin':'10px auto','padding':'0 8px','overflow-x': 'hidden'}" @change="show_mission">
+                <el-checkbox-group v-model="checkedlist" :min="1" class="ul" :style="{'text-align':'left','margin':'10px auto','padding':'0 8px','overflow-x': 'hidden'}" @change="show_mission">
                     <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li">{{item.taskName}}</el-checkbox>
                 </el-checkbox-group>
             </div>
@@ -246,6 +246,9 @@ export default {
             this.missoin_search();
         },
         show_mission(){
+            if(this.checkedlist.length>5){
+                this.checkedlist.shift();
+            }
             //选择展示任务
             this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat',
                 this.checkedlist

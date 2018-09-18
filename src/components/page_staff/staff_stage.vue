@@ -1078,6 +1078,7 @@ export default {
         //通话计时
         startTimer:function () {
             var _this=this;
+            _this.n=0;
             this.timer=setInterval(function () {
                 _this.n++;
                 var h = parseInt(_this.n/60/60);
@@ -1138,6 +1139,10 @@ export default {
         },
         //初始化呼叫列表
         TaskList_init(data){
+            if(this.booklist.length==0){
+                this.TaskBySeat_data=[];
+                this.DialPlanIntroWithPage_data=[]; 
+            }
             data.pageSize = 50;
             //初始化数据
             this.task_state=0;
@@ -1146,6 +1151,10 @@ export default {
         },
         //初始化预约列表
         BookedList_init(data){
+            if(this.TaskBySeat_data.length==0&&this.DialPlanIntroWithPage_data.length==0){
+                this.booklist=[];
+            }
+            this.booklist=[];
             this.call_auto=false;
             this.$ajax.post(this.$preix+'/new/seatWorkbench/queryBookedTaskListBySeat',data)
             .then( (res) => {
