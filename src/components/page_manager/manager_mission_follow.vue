@@ -129,7 +129,7 @@
         left:0;
         top:0;
         width:100%;
-        height: 180vh;
+        height: 80vh;
         z-index:99;
         background-color: #fff;
         pointer-events: all;
@@ -138,6 +138,7 @@
     }
     #mask .button{
         display: block;
+        margin: 10px auto;
     }
     .nav{
         line-height: 30px;

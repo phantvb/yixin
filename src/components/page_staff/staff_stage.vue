@@ -279,6 +279,9 @@
     }
 </style>
 <style scoped>
+    .el-icon-noMission{
+        transform: scale(0.5);
+    }
     #Aplay{
         min-width: 300px;
         display: inline-block;

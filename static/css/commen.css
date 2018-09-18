@@ -446,11 +446,11 @@ li{
 }
 .el-icon-noMission:before {
   content: '';
-  background-size: 12vw 11vw;
   width: 12vw;
   height: 11vw;
   display: block;
   background: url('../icon/no_mission.png');
+  background-size: 12vw 11vw;
 }
 .el-icon-login:before {
   content: '';
