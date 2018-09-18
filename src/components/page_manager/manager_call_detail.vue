@@ -286,10 +286,10 @@ export default {
 //            let taskIds=this.mission_list[this.mission_state].taskId;
             //let taskIds=this.mission_state.map(item=>this.mission_list[item].taskId);
             if(this.close_date!=undefined||this.close_date!=null){
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0]+' 00:00:00',endDay:this.close_date[1]+' 23:59:59','taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
 
             }else{
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0]+' 00:00:00',endDay:this.$route.query.days[1]+' 23:59:59','taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key};
 
             }
             for (let key in data){
@@ -304,10 +304,10 @@ export default {
             this.pageNum=val;
 //            let taskIds=this.mission_list[this.mission_state].taskId;
             if(this.close_date!=undefined||this.close_date!=null){
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0]+' 00:00:00',endDay:this.close_date[1]+' 23:59:59','taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
 
             }else{
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0]+' 00:00:00',endDay:this.$route.query.days[1]+' 23:59:59','taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
 
             }
             for (let key in data){
@@ -323,10 +323,10 @@ export default {
             this.orderField=prop;
 //            let taskIds=this.mission_list[this.mission_state].taskId;
             if(this.close_date!=undefined||this.close_date!=null){
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0],endDay:this.close_date[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.close_date[0]+' 00:00:00',endDay:this.close_date[1]+' 23:59:59','taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
 
             }else{
-                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1],'taskIds':this.taskIds,userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+                var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0]+' 00:00:00',endDay:this.$route.query.days[1]+' 23:59:59',userResults:this.custom_list[this.custom_state].key,callResults:this.call_list[this.call_state].key,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
 
             }
             for (let key in data){
@@ -344,7 +344,7 @@ export default {
                 this.session=res.data.info.sessionId;
             }
         })
-        var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0],endDay:this.$route.query.days[1]};
+        var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0]+' 00:00:00',endDay:this.$route.query.days[1]+' 23:59:59'};
         this.task_init();
         this.mission_init(data);
     }

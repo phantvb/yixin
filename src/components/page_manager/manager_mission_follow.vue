@@ -413,7 +413,7 @@ export default {
         //页码改变
         page_change(val){
             this.pageNum=val;
-            var data={startTime:this.search_date!=null?this.search_date[0]:'',endTime:this.search_date!=null?this.search_date[1]:'',nameLike:this.search,visibleState:this.see_state,pageNum:val,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={startTime:this.search_date!=null?this.search_date[0]+' 00:00:00':'',endTime:this.search_date!=null?this.search_date[1]+' 23:59:59':'',nameLike:this.search,visibleState:this.see_state,pageNum:val,"orderWay":this.orderWay,'orderField':this.orderField};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];
@@ -429,7 +429,7 @@ export default {
         },
         //条件搜索
         missoin_search:function(){
-            var data={startTime:this.search_date!=null?this.search_date[0]:'',endTime:this.search_date!=null?this.search_date[1]:'',nameLike:this.search,visibleState:this.see_state,requireTotalCount:true};
+            var data={startTime:this.search_date!=null?this.search_date[0]+' 00:00:00':'',endTime:this.search_date!=null?this.search_date[1]+' 23:59:59':'',nameLike:this.search,visibleState:this.see_state,requireTotalCount:true};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];
@@ -449,7 +449,7 @@ export default {
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
             var data={
-                startTime:this.search_date!=null?this.search_date[0]:'',endTime:this.search_date!=null?this.search_date[1]:'',nameLike:this.search,visibleState:this.see_state,"orderWay":order.split('ending')[0],'orderField':prop,'pageNum':this.pageNum
+                startTime:this.search_date!=null?this.search_date[0]+' 00:00:00':'',endTime:this.search_date!=null?this.search_date[1]+' 23:59:59':'',nameLike:this.search,visibleState:this.see_state,"orderWay":order.split('ending')[0],'orderField':prop,'pageNum':this.pageNum
             };
             for (let key in data){
                 if(data[key]==''){

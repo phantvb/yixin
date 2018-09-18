@@ -350,7 +350,7 @@ export default {
         //条件搜索
         findSeat:function(){
             var data={
-                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'loginOrShortName':this.search,'partnerAccountId':this.$route.query.partnerAccountId
+                'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]+' 23:59:59':"",'endTime':this.search_date!=null?this.search_date[1]+' 23:59:59':"",'requireTotalCount':true,'loginOrShortName':this.search,'partnerAccountId':this.$route.query.partnerAccountId
             };
             for (let key in data){
                 if(data[key]==''){
@@ -363,7 +363,7 @@ export default {
         sort_change({column, prop, order} ){
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
-            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField,'partnerAccountId':this.$route.query.partnerAccountId};
+            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]+' 23:59:59':"",'endTime':this.search_date!=null?this.search_date[1]+' 23:59:59':"",'requireTotalCount':true,'fullNameOrEmail':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField,'partnerAccountId':this.$route.query.partnerAccountId};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];
@@ -374,7 +374,7 @@ export default {
         //页码改变
         page_change(val){
             this.pageNum=val;
-            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]:"",'endTime':this.search_date!=null?this.search_date[1]:"",'requireTotalCount':true,'fullNameOrEmail':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField,'partnerAccountId':this.$route.query.partnerAccountId};
+            var data={'state':this.worker_state,'startTime':this.search_date!=null?this.search_date[0]+' 23:59:59':"",'endTime':this.search_date!=null?this.search_date[1]+' 23:59:59':"",'requireTotalCount':true,'fullNameOrEmail':this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField,'partnerAccountId':this.$route.query.partnerAccountId};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];

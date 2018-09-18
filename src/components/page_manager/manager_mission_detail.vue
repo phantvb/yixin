@@ -393,7 +393,7 @@ export default {
         page_change(val){
             let seatAccountIds=this.seat;
             this.pageNum=val;
-            var data={'taskId':this.$route.query.id,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'taskId':this.$route.query.id,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+' 23:59:59':'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+this.tags[i].order;
@@ -412,7 +412,7 @@ export default {
             let seatAccountIds=this.seat;
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
-            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+' 23:59:59':'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+this.tags[i].order;
@@ -430,7 +430,7 @@ export default {
         mission_search:function(){
             let seatAccountIds=this.seat;
             //let seatAccountIds=this.worker_state.map(item=>this.worker_list[item].id);
-            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds};
+            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_list[this.custom_state].key,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+' 23:59:59':'',nameOrNumber:this.search,'seatAccountIds':seatAccountIds};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+this.tags[i].order;

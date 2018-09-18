@@ -1079,6 +1079,7 @@ export default {
         startTimer:function () {
             var _this=this;
             _this.n=0;
+            _this.timestr='00:00:00';
             this.timer=setInterval(function () {
                 _this.n++;
                 var h = parseInt(_this.n/60/60);

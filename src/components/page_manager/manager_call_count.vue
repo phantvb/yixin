@@ -134,7 +134,7 @@ export default {
         //时间改变
         date_change(){
             this.leading_record=this.leading_date;
-            var data={'pageSize':10,beginDay:this.leading_date?this.leading_date[0]:null,endDay:this.leading_date?this.leading_date[1]:null,'requireTotalCount':true,'shortOrLoginName':this.search};
+            var data={'pageSize':10,beginDay:this.leading_date?this.leading_date[0]+' 00:00:00':null,endDay:this.leading_date?this.leading_date[1]+' 23:59:59':null,'requireTotalCount':true,'shortOrLoginName':this.search};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];
@@ -170,7 +170,7 @@ export default {
         //条件搜索
         mission_search(){
             this.leading_record=this.leading_date;
-            var data={'pageSize':10,beginDay:this.leading_date[0],endDay:this.leading_date[1],'requireTotalCount':true,'shortOrLoginName':this.search};
+            var data={'pageSize':10,beginDay:this.leading_date[0]+' 00:00:00',endDay:this.leading_date[1]+' 23:59:59','requireTotalCount':true,'shortOrLoginName':this.search};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];
@@ -181,7 +181,7 @@ export default {
         //页码改变
         page_change(val){
             this.pageNum=val;
-            var data={'pageSize':10,beginDay:this.leading_record[0],endDay:this.leading_record[1],'shortOrLoginName':this.search,'pageNum':val,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'pageSize':10,beginDay:this.leading_date[0]+' 00:00:00',endDay:this.leading_date[1]+' 23:59:59','shortOrLoginName':this.search,'pageNum':val,"orderWay":this.orderWay,'orderField':this.orderField};
             for (let key in data){
                 if(data[key]==''){
                     delete data[key];
@@ -193,7 +193,7 @@ export default {
         sort_change({column, prop, order} ){
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
-            var data={'pageSize':10,beginDay:this.leading_record[0],endDay:this.leading_record[1],'shortOrLoginName':this.search,'pageNum':val,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'pageSize':10,beginDay:this.leading_date[0]+' 00:00:00',endDay:this.leading_date[1]+' 23:59:59','shortOrLoginName':this.search,'pageNum':val,"orderWay":this.orderWay,'orderField':this.orderField};
             //删除空属性
             for (let key in data){
                 if(data[key]==''){

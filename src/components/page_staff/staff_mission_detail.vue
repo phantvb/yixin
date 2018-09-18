@@ -291,7 +291,7 @@ export default {
         //页码改变
         page_change(val){
             this.pageNum=val;
-            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ '23:59:59':'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+(i+1);
@@ -309,7 +309,7 @@ export default {
         sort_change({column, prop, order} ){
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
-            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ '23:59:59':'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+(i+1);
@@ -325,7 +325,7 @@ export default {
         },
         //条件搜索
         missoin_search:function(){
-            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]:'',createEndTime:this.leading_date!=null?this.leading_date[1]:'',nameOrNumber:this.search};
+            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ '23:59:59':'',nameOrNumber:this.search};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+(i+1);
