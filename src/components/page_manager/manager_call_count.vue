@@ -114,12 +114,12 @@ export default {
     data:function(){
         return {
             search:'',
-            leading_date:[],
+            leading_date:null,
             tableData: [],
             label_list:[],
             tag_list:[],
             page_count:1,
-            leading_record:[],
+            leading_record:null,
             pageNum:1,
             orderWay:null,
             orderField:null,

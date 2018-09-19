@@ -277,7 +277,7 @@ export default {
             type:null,
             worker_state:'',
             search_state:false,
-            search_date:[],
+            search_date:null,
             search:'',
             tableData:[],
             message:[],

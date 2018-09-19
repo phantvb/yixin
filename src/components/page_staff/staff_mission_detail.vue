@@ -212,7 +212,7 @@ export default {
             search_state:false,
             custom_state:'',
             worker_state:0,
-            leading_date:[],
+            leading_date:null,
             page_count:10,
             //0：预留 1：继续跟进 2：发展成功 3：发展失败
             custom_list:[{'key':'','value':'全部'},{'key':'1','value':'持续跟进'},{'key':'2','value':'发展成功'},{'key':'3','value':'发展失败'}],
