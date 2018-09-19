@@ -1176,14 +1176,15 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
+            //初始化状态
             if(this.active_data&&this.active_data.type==2){
-                if(this.$refs[this.active_data.taskClientId+this.active_data.id]&&this.$refs[this.active_data.taskClientId+this.active_data.id].style&&this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor=='rgb(204, 255, 255)'){
+                if(this.$refs[this.active_data.taskClientId+this.active_data.id]&&this.$refs[this.active_data.taskClientId+this.active_data.id].style&&this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor=='rgb(404, 445, 445)'){
                     this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor='#fff';
                 }
             }else{
-                if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor=='rgb(204, 255, 255)'){
+                if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor=='rgb(404, 445, 445)'){
                     this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor='#fff';
-                }else if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor=='rgb(204, 255, 255)'){
+                }else if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor=='rgb(404, 445, 445)'){
                     this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor='#fff';
                 }
             }
@@ -1209,26 +1210,26 @@ export default {
             this.right.taskId=item.taskId;
             this.left.taskClientId=item.taskClientId;
             if(type==1){
-                if(this.$refs[item.taskClientId+item.taskId].style.backgroundColor=='rgb(204, 255, 255)'){
+                if(this.$refs[item.taskClientId+item.taskId].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#fff';
                 }else{
-                    this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#ccffff';
+                    this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#f4f4f4';
                 }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
             }else if(type==2){
-                if(this.$refs[item.taskClientId+item.id].style.backgroundColor=='rgb(204, 255, 255)'){
+                if(this.$refs[item.taskClientId+item.id].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[item.taskClientId+item.id].style.backgroundColor='#fff';
                 }else{
-                    this.$refs[item.taskClientId+item.id].style.backgroundColor='#ccffff';
+                    this.$refs[item.taskClientId+item.id].style.backgroundColor='#f4f4f4';
                 }
                 this.left.taskId=null;
                 this.left.taskListId=item.id;
             }else{
-                if(this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor=='rgb(204, 255, 255)'){
+                if(this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor='#fff';
                 }else{
-                    this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor='#ccffff';
+                    this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor='#f4f4f4';
                 }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
