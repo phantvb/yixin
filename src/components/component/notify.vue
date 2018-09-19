@@ -7,7 +7,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <router-link :to="{path:'/'+parent+'/userInfo'}">
-                <el-dropdown-item>{{identity}}</el-dropdown-item>
+                <el-dropdown-item>账号设置</el-dropdown-item>
               </router-link>
               <el-dropdown-item command="loginout">
                   登出
