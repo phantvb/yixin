@@ -156,7 +156,7 @@ export default {
             checkedlist:[],
             search:'',
             search_state:false,
-            search_date:[],
+            search_date:null,
             tableData: [],
             page_count:1,
             pageNum:1,

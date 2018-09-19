@@ -219,7 +219,7 @@ export default {
                 "progressingNum" : 0,
                 "successNum" : 0
             },
-            leading_date:[],
+            leading_date:null,
             page_count:0,
             pickerOptions:{
                 disabledDate:(time)=>{

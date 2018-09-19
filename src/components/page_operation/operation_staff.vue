@@ -244,7 +244,7 @@ export default {
         return {
             worker_state:'',
             search_state:false,
-            search_date:[],
+            search_date:null,
             search:'',
             tableData:[],
             multipleSelection: [],

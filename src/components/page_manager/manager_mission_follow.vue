@@ -229,7 +229,7 @@ export default {
             search:'',
             search_state:false,
             see_state:'',
-            search_date:[],
+            search_date:null,
             leading:false,
             assign:false,
             p_assign:'',
