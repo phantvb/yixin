@@ -18,7 +18,7 @@
         <div class="history">
             <span class="black" v-if="head" style="float:left;font-size:16px;">历史通话记录&#12288;</span><span class='grey' style="float:left;margin-top: 2px;">总联系{{details.totalContactNum?details.totalContactNum:0}}次，有效联系<span class="light-blue">{{details.effectiveContactNum?details.effectiveContactNum:0}}</span>次</span>
             <div class="line"></div>
-            <div class="record">
+            <div class="record" ref="record">
                 <div class="record_list black" v-for="(item,index) in details.details" :key="index">
                     <p class="grey record_list_title">{{item.callEndTime}}<span>&#12288;<span class="black">{{item.shortName}}</span>&#12288;<span style="font-size:12px;">{{item.callReault==22?'呼叫':'通话'}}</span>&#12288;<span class="black">{{item.callReault==22?item.callReaultString:item.callDuration}}</span></span></p>
                     
@@ -39,7 +39,6 @@
                     </div>
                 </div>
             </div>
-            <el-button size="mini" type="primary">加载更多</el-button>
         </div>
     </div>
 </template>
@@ -216,7 +215,11 @@ export default {
                 this.baseUrl=res.data.info.iccStaticContextPath;
                 this.session=res.data.info.sessionId;
             }
-        })
+        });
+        //监听滚动
+        this.$refs.record.addEventListener('scroll', () => {
+            console.log(this.$refs.record.scrollTop)
+        }, false)
     }
 }
 </script>
