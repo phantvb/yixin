@@ -110,7 +110,7 @@
                         </div>
                         <p class="black">{{phone}}</p>
                     </div>
-                    
+
                     <div id="call">
                         <div class="call_state high_hover"  v-show="call_state==0" @click="startCall">
                             <i class="el-icon-phone call_icon" id="call_icon"></i>
@@ -228,7 +228,7 @@
             <div class="history">
                 <div :style="{'overflow':'hidden'}">
                     <p class="black tit" :style="{'float':'left'}">历史通话记录&#12288;<span class='grey'>总联系{{history.historyDto?history.historyDto.totalContactNum:0}}次，有效联系<span class="light-blue">{{history.historyDto?history.historyDto.effectiveContactNum:0}}</span>次</span></p>
-                <p class="grey curson" :style="{'float':'right'}" @click="enter(history.summaryDto)">查看更多<i class="el-icon-d-arrow-right"></i></p>
+                <p class="grey curson" :style="{'float':'right'}" @click="enter(true)">查看更多<i class="el-icon-d-arrow-right"></i></p>
                 </div>
                 <p class="grey" id="talk" v-if="history.historyDto&&history.historyDto.totalContactNum!=0"><span style="float:left;">{{history.historyDto.details[0].callEndTime}}&#12288;&#12288;<span class="black">{{history.historyDto.details[0].shortName}}</span> {{history.historyDto.details[0].callReaultString}} {{history.historyDto.details[0].callDuration}}</span>&#12288;<a-player id="Aplay" :music_url="baseUrl+recordFilePath+'?callSessionId='+callSeesionId+'&sessionId='+session" name="music_hitory" size='mini' v-if="a_play"></a-player></p>
                 <div v-if="history.historyDto">
@@ -250,7 +250,7 @@
         </div>
         <DialogAdd v-bind:see="see" @reset="reset"></DialogAdd>
         <transition name="slide">
-            <history id="history" v-if="show" :head='false' :details='history_detail' @close="history_close" :taskMes="history_taskId"></history>
+            <history id="history" v-if="show" :head='false' :details='history_detail' @enter="enter" @close="history_close" :taskMes="history_taskId"></history>
         </transition>
     </div>
 </template>
@@ -753,7 +753,9 @@ export default {
             },
             contextmenu:{state:false,left:'',top:'',target:''},
             tags:[],
-            history_detail:[],
+            history_detail:{},
+            history_page_num : 1,
+            history_has_next_page : true,
             taskClientId:'',
             taskId:'',
             partnerAccountId:null,
@@ -1142,7 +1144,7 @@ export default {
         TaskList_init(data){
             if(this.booklist.length==0){
                 this.TaskBySeat_data=[];
-                this.DialPlanIntroWithPage_data=[]; 
+                this.DialPlanIntroWithPage_data=[];
             }
             data.pageSize = 50;
             //初始化数据
@@ -1407,24 +1409,46 @@ export default {
             this.see=false;
         },
         //设置历史记录信息
-        enter(item){
+        enter(newRecord){
+            //是否重置数据查找新的记录
+            if(newRecord){
+              this.history_page_num = 1;
+              this.history_detail = {};
+            }else{//判断是否有下一页
+              if(this.history_detail.totalContactNum <= this.history_page_num * 10){
+                return;
+              }else{
+                this.history_page_num++;
+              }
+            }
+            var item = this.history.summaryDto;
             this.show=true;
-            this.$ajax.post(this.$preix+'/new/seatWorkbench/queryResultHistoryEntity',{'taskId':item.taskId,'taskClientId':item.taskClientId}
-            ).then( res=>{
-                if(res.status==200){
-                    res.data.info.details.map(item=>{
-                        item.taglist=[];
-                        if(item.tags){
-                            for(var i=0;i<item.tags.length;i++){
-                                if(item.tags[i].lastTagValue!=undefined){
-                                    item.taglist=item.taglist.concat(item.tags[i].lastTagValue.split(';'));
+            if(this.history_has_next_page){
+                this.$ajax.post(this.$preix+'/new/seatWorkbench/queryResultHistoryEntity',
+                  {'taskId':item.taskId,'taskClientId':item.taskClientId,"pageNum":this.history_page_num,"requireTotalCount":true}
+                ).then( res=>{
+                    if(res.status==200 && res.data.info!=null){
+                        res.data.info.details.map(item=>{
+                            item.taglist=[];
+                            if(item.tags){
+                                for(var i=0;i<item.tags.length;i++){
+                                    if(item.tags[i].lastTagValue!=undefined){
+                                        item.taglist=item.taglist.concat(item.tags[i].lastTagValue.split(';'));
+                                    }
                                 }
                             }
+                        })
+                        var info = res.data.info;
+                        if(this.history_page_num == 1){
+                          this.history_detail = info;
+                        }else{
+                            info.details.map(item=>{
+                              this.history_detail.details.push(item);
+                            });
                         }
-                    })
-                    this.history_detail=res.data.info;
-                }
-            });
+                    }
+                });
+            }
         },
         //关闭历史记录
         history_close(){
@@ -1516,7 +1540,7 @@ export default {
                             items.children[i+1]?_this.detail_init(items.children[i+1],1,items):'';
                         }
                     };
-                    
+
                     if(i == (iLen-1)){
                         _this.call_hidden=true;
                     }else{
@@ -1553,7 +1577,7 @@ export default {
                         }
                     })
                 }
-                
+
             })
         },
         update_DialPlanIntroWithPage_data(){
