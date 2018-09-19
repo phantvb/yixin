@@ -1180,13 +1180,13 @@ export default {
         detail_init(item,type,node){
             //初始化状态
             if(this.active_data&&this.active_data.type==2){
-                if(this.$refs[this.active_data.taskClientId+this.active_data.id]&&this.$refs[this.active_data.taskClientId+this.active_data.id].style&&this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor=='rgb(404, 445, 445)'){
+                if(this.$refs[this.active_data.taskClientId+this.active_data.id]&&this.$refs[this.active_data.taskClientId+this.active_data.id].style&&this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor='#fff';
                 }
             }else{
-                if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor=='rgb(404, 445, 445)'){
+                if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[this.active_data.taskClientId+this.active_data.taskId][0].style.backgroundColor='#fff';
-                }else if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor=='rgb(404, 445, 445)'){
+                }else if(this.active_data&&this.$refs[this.active_data.taskClientId+this.active_data.taskId]&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style&&this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.backgroundColor='#fff';
                 }
             }
