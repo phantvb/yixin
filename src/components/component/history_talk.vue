@@ -21,18 +21,18 @@
             <div class="record" ref="record">
                 <div class="record_list black" v-for="(item,index) in details.details" :key="index">
                     <p class="grey record_list_title">{{item.callEndTime}}<span>&#12288;<span class="black">{{item.shortName}}</span>&#12288;<span style="font-size:12px;">{{item.callReault==22?'呼叫':'通话'}}</span>&#12288;<span class="black">{{item.callReault==22?item.callReaultString:item.callDuration}}</span></span></p>
-                    
+
                     <div class="line_content">
                         <div style="overflow: hidden;">
                             <p class="grey" v-if="item.userResultStr">客户状态&#12288;<span class="blue">{{item.userResultStr}}</span></p>
                             <p class="grey" :style="{'float':'right'}">下次联系时间&#12288;<span class="blue">{{item.nextContactTime?item.nextContactTime.substr(0,item.nextContactTime.length-3):'无'}}</span></p>
                         </div>
-                        
+
                         <div class="history_talk_tag" v-if="item.taglist">
                             <el-button type="primary" style="background-color:#ECF2FF;border-color:#7496F2;color:#7496F2;" size="mini" v-for="(_item,index) in item.taglist" :key="index">{{_item}}</el-button>
                         </div>
                         <p class="grey" v-if="item.desc">详情备注&#12288;<span class="black">{{item.desc}}</span></p>
-                        
+
                         <p class="grey" :style="{'width':'100%'}" v-if="item.recordFilePath"><span style="float:left;margin-top:2px;">通话录音</span>&#12288;
                             <a-player class="Aplay history_aplay" :music_url="baseUrl+item.recordFilePath+'?callSessionId='+item.callSeesionId+'&sessionId='+session" :name='"music_hitory"+index' size='mini'></a-player>
                         </p>
@@ -64,7 +64,7 @@
         font-size: 14px;
     }
     div{
-        
+
         font-size: 13px;
     }
     .container{
@@ -205,6 +205,9 @@ export default {
     },
     props:['head','details','taskMes'],
     methods:{
+        enter(){
+          this.$emit('enter')
+        },
         close(){
             this.$emit('close')
         }
@@ -218,7 +221,13 @@ export default {
         });
         //监听滚动
         this.$refs.record.addEventListener('scroll', () => {
-            console.log(this.$refs.record.scrollTop)
+          var scrollTop = this.$refs.record.scrollTop;
+          var scrollHeight = this.$refs.record.scrollHeight;
+          var divHeight = this.$refs.record.offsetHeight
+          //判断是否到底
+          if(scrollTop >= (scrollHeight - divHeight)){
+            this.enter();
+          }
         }, false)
     }
 }
