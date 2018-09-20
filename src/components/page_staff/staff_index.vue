@@ -122,7 +122,7 @@
                 <p class="grey" style="margin:0px">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
-            <div class="svg_empty" v-show="callTaskList&&callTaskList.length==0">
+            <div class="svg_empty" v-show="callTaskList.length==0">
                 <p class="black">未选择</p>
                 <router-link :to="{path:'/staff/follow'}">
                     <div>
