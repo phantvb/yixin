@@ -122,12 +122,20 @@
                 <p class="grey" style="margin:0px">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;">
+            <div class="svg_empty" v-show="callTaskList&&callTaskList.length==0">
+                <p class="black">未选择</p>
+                <router-link :to="{path:'/staff/follow'}">
+                    <div>
+                        查看完整数据
+                    </div>
+                </router-link>
+            </div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;" v-show="callTaskList&&callTaskList.length>0">
         </div>
     </div>
 </template>
@@ -238,7 +246,8 @@ export default {
                 "failureNum" : 0,
                 "progressingNum" : 0,
                 "successNum" : 0
-            }
+            },
+            callTaskList:null
         }
     },
     methods:{
@@ -328,12 +337,12 @@ export default {
         ).then( res=>{
         if(res.data.code==200){
                 _this.datas=res.data.info;
-                console.log(res.data.info)
             }
         });
         this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat',[]
         ).then( res=>{
             if(res.data.code==200){
+                _this.callTaskList=res.data.info;
                 _this.mission_init(res.data.info);
             }
         });

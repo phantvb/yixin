@@ -612,10 +612,9 @@ form{
   height: 144px;
   border:2px solid #eee;
   border-radius: 100%;
+  font-size: 14px;
+  line-height: 144px;
 }
 .svg_empty p{
   font-size: 14px;
-}
-.svg_empty>div>p{
-  margin-top: 
 }

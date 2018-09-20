@@ -21,12 +21,18 @@
                 <p class="grey">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <div class="svg"></div>
-            <img src="../../../static/icon/legend_manager.png" alt="" style="height:1vw;">
+            <div class="svg_empty" v-show="callTaskList&&callTaskList.length==0">
+                <p class="black">未选择</p>
+                <div>
+                    请先导入客户
+                </div>
+            </div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
+            <img src="../../../static/icon/legend_manager.png" alt="" style="height:1vw;" v-show="callTaskList&&callTaskList.length>0">
         </div>
         <div class="part3">
             <div class="p3_tit">
@@ -119,7 +125,8 @@ export default {
             worker:{num:'8',all:'10'},
             mission_data:[],
             worker_data:[],
-            time_past:2
+            time_past:2,
+            callTaskList:null
         }
     },
     mounted() {
@@ -134,6 +141,7 @@ export default {
         this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList',[]
         ).then( res=>{
             if(res.data.code==200){
+                this.callTaskList=res.data.info;
                 this.mission_init(res.data.info)
             }
         });
