@@ -122,7 +122,7 @@
                 <p class="grey" style="margin:0px">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
-            <div class="svg_empty" v-show="callTaskList.length==0">
+            <div class="svg_empty" v-show="callTaskCode==500002">
                 <p class="black">未选择</p>
                 <router-link :to="{path:'/staff/follow'}">
                     <div>
@@ -130,12 +130,12 @@
                     </div>
                 </router-link>
             </div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;" v-show="callTaskList&&callTaskList.length>0">
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;" v-show="callTaskCode!=500002">
         </div>
     </div>
 </template>
@@ -247,7 +247,7 @@ export default {
                 "progressingNum" : 0,
                 "successNum" : 0
             },
-            callTaskList:[,]
+            callTaskCode:null
         }
     },
     methods:{
@@ -342,7 +342,7 @@ export default {
         this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat',[]
         ).then( res=>{
             if(res.data.code==200){
-                _this.callTaskList=res.data.info;
+                _this.callTaskCode=res.data.code;
                 _this.mission_init(res.data.info);
             }
         });

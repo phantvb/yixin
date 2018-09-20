@@ -21,7 +21,7 @@
                 <p class="grey">查看完整数据<i class="el-icon-d-arrow-right"></i></p>
                 </router-link>
             </div>
-            <div class="svg_empty" v-show="callTaskList.length==0">
+            <div class="svg_empty" v-show="callTaskCode==500002">
                 <p class="black">未选择</p>
                 <router-link :to="{path:'/manager/follow'}">
                 <div>
@@ -29,12 +29,12 @@
                 </div>
                 </router-link>
             </div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <div class="svg" v-show="callTaskList&&callTaskList.length>0"></div>
-            <img src="../../../static/icon/legend_manager.png" alt="" style="height:1vw;" v-show="callTaskList&&callTaskList.length>0">
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <div class="svg" v-show="callTaskCode!=500002"></div>
+            <img src="../../../static/icon/legend_manager.png" alt="" style="height:1vw;" v-show="callTaskCode!=500002">
         </div>
         <div class="part3">
             <div class="p3_tit">
@@ -128,7 +128,7 @@ export default {
             mission_data:[],
             worker_data:[],
             time_past:2,
-            callTaskList:[,]
+            callTaskCode:null
         }
     },
     mounted() {
@@ -140,10 +140,10 @@ export default {
                 this.worker.all=res.data.info.companySituationDto.seatNum;
             }
         });
-        this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList',[]
+        this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskCode',[]
         ).then( res=>{
             if(res.data.code==200){
-                this.callTaskList=res.data.info;
+                this.callTaskCode=res.data.code;
                 this.mission_init(res.data.info)
             }
         });
