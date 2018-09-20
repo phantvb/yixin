@@ -128,7 +128,7 @@ export default {
             mission_data:[],
             worker_data:[],
             time_past:2,
-            callTaskList:null
+            callTaskList:[,]
         }
     },
     mounted() {

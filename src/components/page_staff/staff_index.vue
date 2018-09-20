@@ -247,7 +247,7 @@ export default {
                 "progressingNum" : 0,
                 "successNum" : 0
             },
-            callTaskList:null
+            callTaskList:[,]
         }
     },
     methods:{
