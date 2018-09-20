@@ -235,10 +235,6 @@
         font-size: 12px;
         margin: 0 14px;
     }
-    .worker_active{
-        background-color: rgba(153, 153, 153, 1);
-        color: #fff;
-    }
     .tag{
         background-color: rgba(153, 153, 153, 1);
         color: #fff;

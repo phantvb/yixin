@@ -196,7 +196,7 @@
                 <div>
                     <div class="state">
                         <p class="grey">跟进状态</p>
-                        <p class="grey see" v-for=" item in worker_list" :key="item.key" :class="{see_active:worker_state==item.key}" @click="worker_change(item.key)">{{item.value}}</p>
+                        <p class="grey see" v-for=" item in worker_list" :key="item.key" :class="{see_actived:worker_state==item.key}" @click="worker_change(item.key)">{{item.value}}</p>
                         <div class="grey">下次联系时间：<el-date-picker v-model="time_next" type="datetime" placeholder="无" size="mini" prefix-icon="date_icon el-icon-date" class="date_picker" value-format="yyyy-MM-dd HH:mm:ss"> </el-date-picker></div>
                     </div>
                 </div>
@@ -570,7 +570,7 @@
         border:1px solid #D8D8D8;
         cursor: pointer;
     }
-    .see_active{
+    .see_actived{
         background-color: #7496F2;
         border-color:#7496F2;
         color:#fff;
