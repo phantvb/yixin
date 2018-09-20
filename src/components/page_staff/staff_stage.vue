@@ -1221,7 +1221,7 @@ export default {
                     this.$refs[item.taskClientId+item.taskId].style.color='#333';
                 }else{
                     this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#f4f4f4';
-                    this.$refs[item.taskClientId+item.taskId].style.borderRight='1px solid #7496F2';
+                    this.$refs[item.taskClientId+item.taskId].style.borderRight='2px solid #7496F2';
                     this.$refs[item.taskClientId+item.taskId].style.color='#7496F2';
                 }
                 this.left.taskListId=null;
@@ -1233,7 +1233,7 @@ export default {
                     this.$refs[item.taskClientId+item.id].style.color='#333';
                 }else{
                     this.$refs[item.taskClientId+item.id].style.backgroundColor='#f4f4f4';
-                    this.$refs[item.taskClientId+item.id].style.borderRight='1px solid #7496F2';
+                    this.$refs[item.taskClientId+item.id].style.borderRight='2px solid #7496F2';
                     this.$refs[item.taskClientId+item.id].style.color='#7496F2';
                 }
                 this.left.taskId=null;
@@ -1245,7 +1245,7 @@ export default {
                     this.$refs[item.taskClientId+item.taskId][0].style.color='#333';
                 }else{
                     this.$refs[item.taskClientId+item.taskId][0].style.backgroundColor='#f4f4f4';
-                    this.$refs[item.taskClientId+item.taskId][0].style.borderRight='1px solid #7496F2';
+                    this.$refs[item.taskClientId+item.taskId][0].style.borderRight='2px solid #7496F2';
                     this.$refs[item.taskClientId+item.taskId][0].style.color='#7496F2';
                 }
                 this.left.taskListId=null;
