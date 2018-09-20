@@ -242,8 +242,7 @@ export default {
             lead_data:null,
             blank:false,
             allTagList:[],
-            upTagTimer:null,
-            myChart:[]
+            upTagTimer:null
         }
     },
     components:{
@@ -257,6 +256,7 @@ export default {
         },
         //画饼图
         drawPie:function(item,clear){
+            var myChart = echarts.init(document.getElementsByClassName('svg')[item.id_num]);
             var option = {
                 tooltip: {
                     trigger: 'item',
@@ -310,15 +310,10 @@ export default {
                     }
                 ]
             };
-            this.myChart[item.id_num].setOption(option);
-            clear==true?this.myChart[item.id_num].clear():'';
+            myChart.setOption(option);
         },
         //初始化饼图数据
         missoin_init:function(item){
-            this.myChart.map((item,index)=>{
-                item.clear();
-                console.log(item);
-            })
             for(let i=0;i<5;i++){
                 if(i<item.length){
                     var process=item[i].numberTotal!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].numberTotal):0;
@@ -483,9 +478,6 @@ export default {
         }
     },
     mounted:function(){
-        for(var i=0;i<document.getElementsByClassName('svg').length;i++){
-            this.myChart.push(echarts.init(document.getElementsByClassName('svg')[i]))
-        }
         //标签数据
         this.$ajax.post(this.$preix+'/new/tag/findTagList')
           .then( (res) => {
