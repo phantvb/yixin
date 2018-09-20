@@ -254,7 +254,7 @@ export default {
             ).then( res=>{
                 if(res.status==200){
                     this.show = true;
-                    this.history_detail=res.data.info.details;
+                    this.history_detail=res.data.info;
                 }
             });
             this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':row.taskClientId})
