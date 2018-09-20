@@ -110,6 +110,7 @@ require('echarts/lib/chart/bar')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/title')
+  require('echarts/lib/component/graphic')
 export default {
     name:'manager_index',
     data:function(){
@@ -156,15 +157,21 @@ export default {
                     trigger: 'item',
                     formatter: "{a} <br/>{b}: {c} ({d}%)"
                 },
-                // legend: {
-                //     x: 'left',
-                //     data:['发展成功','发展失败','未分配','继续跟进'],
-                //     show:item.showLegend,
-                //     orient:'vertical',
-                //     top:'14%',
-                //     icon:'circle'
-                // },
-                 
+                graphic:{  
+                    type:'text',  
+                    left:'center',  
+                    top:'center',  
+                    z:2,  
+                    zlevel:100,  
+                    style: {              
+                        x: 0,  
+                        y: 0, 
+                        text: item.process!==undefined?(item.process+'%'):null,  
+                        textAlign: 'center',   
+                        textFont : '14px Arial'  ,
+                        fill:'#666'
+                    }  
+                },
                 title:{
                     text:item.id,
                     top:'0px',
@@ -191,19 +198,6 @@ export default {
                 ]
             };
             myChart.setOption(option);
-            var _zr = myChart.getZr();  
-            _zr.add(new echarts.graphic.Text({
-                style: {              
-                    x: _zr.getWidth() / 2,  
-                    y: _zr.getHeight() / 2-7,  
-                    color:'red',  
-                    text: item.process!==undefined?item.process+'%':'',  
-                    textAlign: 'center',   
-                    textFont : '14px Arial'  ,
-                    fill:'#666'
-                }  
-                }    
-            )); 
         },
         //画第一张柱图
         drawLine:function(item){
@@ -425,7 +419,6 @@ export default {
         },
         //处理饼图数据
         mission_init:function(item){
-            console.log(item);
             for(let i=0;i<5;i++){
                 if(i<item.length){
                     var process=item[i].numberTotal!=0?Math.floor((item[i].failureNum+item[i].successNum)*100/item[i].numberTotal):0;
