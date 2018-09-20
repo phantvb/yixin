@@ -171,7 +171,7 @@ export default {
                         textFont : '14px Arial'  ,
                         fill:'#666'
                     }  
-                },
+                },  
                 title:{
                     text:item.id,
                     top:'0px',
