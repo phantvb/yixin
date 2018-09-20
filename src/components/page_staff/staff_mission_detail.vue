@@ -92,9 +92,9 @@
             </el-pagination>
         </div>
         <transition name="slide">
-            <history id="history" v-if="show" :head='true' :details='history_detail' @close="history_close" :taskMes="history_taskId"></history>
+            <history id="history" v-if="show" :head='true' :details='history_detail' @enter="handlexx" @close="history_close" :taskMes="history_taskId"></history>
         </transition>
-        
+
     </div>
 </template>
 <style scoped>
@@ -223,13 +223,16 @@ export default {
                 children: 'children',
                 label: 'label'
             },
-            history_detail:[],
+            history_detail:{},
             label_list:[],
             tags:[],
             pageNum:1,
             orderWay:null,
             orderField:null,
-            history_taskId:null
+            history_taskId:{},
+            history_page_num : 1,
+            history_has_next_page : true,
+            current_task_client_id:''//当前查询记录的taskClientId
         }
     },
     components:{history},
@@ -249,20 +252,46 @@ export default {
         },
         //打开历史记录
         handlexx:function(index,row){
-            console.log(row)
-            this.$ajax.post(this.$preix+'/new/seatWorkbench/queryResultHistoryEntity',{'taskID':this.$route.query.id,'taskClientId':row.taskClientId}
-            ).then( res=>{
-                if(res.status==200){
-                    this.show = true;
-                    this.history_detail=res.data.info.details;
-                }
-            });
-            this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':row.taskClientId})
-            .then( (res) => {
-                if(res.data.code==200){
-                    this.history_taskId=res.data.info;
-                }
-            });
+          this.show = true;
+          if(row != null){
+              this.current_task_client_id = row.taskClientId;
+              this.history_page_num = 1;
+              this.history_detail = {};
+              this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':this.current_task_client_id})
+                  .then( (res) => {
+                      if(res.data.code==200){
+                        this.history_taskId=res.data.info;
+                      }
+              });
+          }else{//判断是否有下一页
+            if(this.history_detail.totalContactNum <= this.history_page_num * 10){
+              return;
+            }else{
+              this.history_page_num++;
+            }
+          }
+          this.$ajax.post(this.$preix+'/new/seatWorkbench/queryResultHistoryEntity',
+            {'taskID':this.$route.query.id,'taskClientId':this.current_task_client_id,"pageNum":this.history_page_num,"requireTotalCount":true}
+          ).then( res=>{
+              if(res.status==200 && res.data.info!=null){
+                  var info = res.data.info;
+                  info.details.map(item=>{
+                  item.taglist=[];
+                  for(var key in item){
+                    if(key.indexOf('customTag')!=-1){
+                      item.taglist.push(item[key]);
+                    }
+                  }
+                });
+                  if(this.history_page_num == 1){
+                    this.history_detail = info;
+                  }else{
+                    info.details.map(item=>{
+                      this.history_detail.details.push(item);
+                    });
+                  }
+              }
+          });
         },
         //关闭历史记录
         history_close(){

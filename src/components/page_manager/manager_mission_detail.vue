@@ -108,7 +108,7 @@
             </el-pagination>
         </div>
         <transition name="slide">
-            <history id="history" v-if="show" :head='true' :details='history_detail' @close="history_close" :taskMes="history_taskId"></history>
+            <history id="history" v-if="show" :head='true' :details='history_detail' @enter="handlexx" @close="history_close" :taskMes="history_taskId"></history>
         </transition>
         <el-dialog title="分配客户" :visible.sync="assign" center>
             <div class="con">
@@ -266,7 +266,7 @@ export default {
     name:'mission_detail',
     data:function(){
         return {
-            history_detail:[],
+            history_detail:{},
             show:false,
             search:'',
             search_state:false,
@@ -292,7 +292,11 @@ export default {
             pageNum:1,
             orderWay:null,
             orderField:null,
-            history_taskId:null,
+            history_taskId:{},
+            history_page_num : 1,
+            history_has_next_page : true,
+            current_task_client_id:'',//当前查询记录的taskClientId
+            current_task_id: '',
             taskIdsTmp:null,
             mission_more:false
         }
@@ -341,29 +345,46 @@ export default {
         },
         //打开历史记录
         handlexx:function(index,row){
-            this.$ajax.post(this.$preix+'/new/seatWorkbench/queryResultHistoryEntity',{'taskID':row.taskId,'taskClientId':row.taskClientId}
-            ).then( res=>{
-                if(res.status==200){
-                    this.show = true;
-                    res.data.info.details.map(item=>{
-                        item.taglist=[];
-                        for(var key in item){
-                            if(key.indexOf('customTag')!=-1){
-                                item.taglist.push(item[key]);
-                            }
-                        }
-                    });
-                    console.log(res.data.info.details);
-                    this.history_detail=res.data.info;
-                    this.show=true;
-                }
-            });
-            this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':row.taskClientId})
-            .then( (res) => {
+          this.show=true;
+          if(row != null){
+            this.current_task_client_id = row.taskClientId;
+            this.current_task_id = row.taskId;
+            this.history_page_num = 1;
+            this.history_detail = {};
+            this.$ajax.post(this.$preix+'/new/seatWorkbench/getCallTaskClientDetail',{'taskClientId':this.current_task_client_id})
+              .then( (res) => {
                 if(res.data.code==200){
-                    this.history_taskId=res.data.info;
+                  this.history_taskId=res.data.info;
                 }
-            });
+              });
+          }else{//判断是否有下一页
+            if(this.history_detail.totalContactNum <= this.history_page_num * 10){
+              return;
+            }else{
+              this.history_page_num++;
+            }
+          }
+          this.$ajax.post(this.$preix+'/new/seatWorkbench/queryResultHistoryEntity',{'taskID':this.current_task_id,'taskClientId':this.current_task_client_id,"pageNum":this.history_page_num,"requireTotalCount":true}
+          ).then( res=>{
+              if(res.status==200 && res.data.info!=null){
+                  var info = res.data.info;
+                  info.details.map(item=>{
+                    item.taglist=[];
+                    for(var key in item){
+                      if(key.indexOf('customTag')!=-1){
+                        item.taglist.push(item[key]);
+                      }
+                    }
+                  });
+                  if(this.history_page_num == 1){
+                    this.history_detail = info;
+                  }else{
+                    info.details.map(item=>{
+                      this.history_detail.details.push(item);
+                    });
+                  }
+              }
+          });
         },
         //关闭历史记录
         history_close(){
