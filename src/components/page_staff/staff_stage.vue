@@ -47,7 +47,7 @@
                 <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId+data.taskId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                        <p><span>{{ node.label }}</span><span v-show="data.userNumber">{{'('+data.userNumber+')'}}</span></p>
+                        <p>{{ node.label+'('+data.userNumber+')'}}</p>
                         <span>{{data.lastCalledTime}}</span>
                         <span>{{data.callResult==0?'':''}}</span>
                         <span>{{data.callResult==10?'通话':''}}</span>
@@ -60,7 +60,7 @@
                 <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)' :ref="data.taskClientId+data.id">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                        <p><span>{{ node.label }}</span><span v-show="data.userNumber">{{'('+data.userNumber+')'}}</span></p>
+                        <p>{{ node.label+'('+data.userNumber+')'}}</p>
                         <span>{{data.lastCalledTime}}</span>
                         <span>{{data.callResult==0?'':''}}</span>
                         <span>{{data.callResult==10?'通话':''}}</span>
@@ -350,9 +350,6 @@
     }
     .custom-tree-node{
         text-align: left;
-    }
-    .custom-tree-node p span{
-        color:#333;
     }
     .custom-tree-node span{
         color: #999;
