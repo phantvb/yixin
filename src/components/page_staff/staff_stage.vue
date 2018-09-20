@@ -252,6 +252,9 @@
         <transition name="slide">
             <history id="history" v-if="show" :head='false' :details='history_detail' @enter="enter" @close="history_close" :taskMes="history_taskId"></history>
         </transition>
+        <div>
+          <audio id="audioView" width="420px" height="320px" autoplay ></audio>
+        </div>
     </div>
 </template>
 <style scoped>
