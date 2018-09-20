@@ -602,3 +602,20 @@ form{
   padding:2px 6px;
   color:#7496F2;
 }
+.svg_empty{
+    width: 20%;
+    height: 230px;
+    margin: 0 auto;
+}
+.svg_empty>div{
+  width: 144px;
+  height: 144px;
+  border:2px solid #eee;
+  border-radius: 100%;
+}
+.svg_empty p{
+  font-size: 14px;
+}
+.svg_empty>div>p{
+  margin-top: 
+}
