@@ -92,7 +92,7 @@
             <div id="hidden" v-show="call_hidden">
                 <div>
                     <i class="el-icon-share" :style="{'font-size':'80px'}"></i>
-                    <p>{{call_hidden_time==0?'未选择客户':'当前外呼任务自动呼叫已完成，请重新选择'}}</p>
+                    <p>{{call_hidden_time==0?'未选择客户':'当前外呼任务呼叫已完成，请重新选择'}}</p>
                 </div>
             </div>
             <div class="head">
@@ -351,8 +351,8 @@
     .custom-tree-node{
         text-align: left;
     }
-    .custom-tree-node p{
-
+    .custom-tree-node p span{
+        color:#333;
     }
     .custom-tree-node span{
         color: #999;
