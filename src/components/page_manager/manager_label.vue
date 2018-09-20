@@ -52,7 +52,7 @@
                     <div>
                         <div class="state">
                             <p class="grey">跟进状态</p>
-                            <p class="black see see_active">发展成功</p>
+                            <p class="black see see_actived">发展成功</p>
                             <p class="black see">持续跟进</p>
                             <p class="black see">发展失败</p>
                         </div>
@@ -159,8 +159,10 @@
         border-radius: 3px;
         padding: 0 4px;
     }
-    .see_active{
-        background: #7496F2;
+    .see_actived{
+        background-color: #7496F2;
+        border-color:#7496F2;
+        color:#fff;
     }
 </style>
 

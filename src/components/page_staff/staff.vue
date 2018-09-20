@@ -120,9 +120,6 @@
   margin: 0px 8px;
   line-height: 60px;
 }
-#title i.el-icon-toggle{
-  transform: translateY(4px);
-}
 #title_nex{
   overflow: hidden;
   float: left;
