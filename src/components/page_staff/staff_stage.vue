@@ -47,7 +47,7 @@
                 <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId+data.taskId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                        <p>{{ node.label}}</p>
+                        <p>{{ node.label+'('+data.userName+')'}}</p>
                         <span>{{data.lastCalledTime}}</span>
                         <span>{{data.callResult==0?'':''}}</span>
                         <span>{{data.callResult==10?'通话':''}}</span>
@@ -60,7 +60,7 @@
                 <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" node-key="id">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)' :ref="data.taskClientId+data.id">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                        <p>{{ node.label}}</p>
+                        <p>{{ node.label+'('+data.userName+')'}}</p>
                         <span>{{data.lastCalledTime}}</span>
                         <span>{{data.callResult==0?'':''}}</span>
                         <span>{{data.callResult==10?'通话':''}}</span>
@@ -76,7 +76,7 @@
                         <span :style="{'display':'block'}">暂无数据</span>
                     </p>
                     <div class="custom-tree-node node" v-show="task_state==1&&item.taskClientId" v-for="(item,index) in booklist" :key="index" @click="detail_init(item,3)" :ref="item.taskClientId+item.taskId">
-                        <p>{{item.userName}}</p>
+                        <p>{{item.userName+'('+item.userName+')'}}</p>
                         <span>{{item.lastCalledTime}}</span>
                         <span :class="(new Date(item.nextContactTime).getTime()-30*60*1000)<new Date().getTime()?'red':''">{{item.nextContactTime_str}}</span>
                         <span>{{item.depName}}{{item.areaName}}</span>
