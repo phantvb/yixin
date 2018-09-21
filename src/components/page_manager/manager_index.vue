@@ -140,10 +140,10 @@ export default {
                 this.worker.all=res.data.info.companySituationDto.seatNum;
             }
         });
-        this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskCode',[]
+        this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList',[]
         ).then( res=>{
+            this.callTaskCode=res.data.code;
             if(res.data.code==200){
-                this.callTaskCode=res.data.code;
                 this.mission_init(res.data.info)
             }
         });

@@ -607,7 +607,7 @@ form{
     height: 230px;
     margin: 0 auto;
 }
-.svg_empty>div{
+.svg_empty div{
   width: 144px;
   height: 144px;
   border:2px solid #7496F2;

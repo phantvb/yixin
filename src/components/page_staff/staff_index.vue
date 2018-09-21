@@ -341,8 +341,8 @@ export default {
         });
         this.$ajax.post(this.$preix+'/new/calltask/queryTaskOnwallChartBySeat',[]
         ).then( res=>{
+            _this.callTaskCode=res.data.code;
             if(res.data.code==200){
-                _this.callTaskCode=res.data.code;
                 _this.mission_init(res.data.info);
             }
         });
