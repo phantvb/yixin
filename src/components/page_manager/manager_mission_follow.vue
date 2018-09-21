@@ -10,16 +10,21 @@
             </div>
             <div class="part1">
             <div class="part1_show">
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;">
+                <div class="svg_empty_right" v-show="checkedlist.length==0">
+                    <div>
+                        选择右侧任务
+                    </div>
+                </div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;" v-show="checkedlist.length>0">
             </div>
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
-                <el-checkbox-group v-model="checkedlist" :min="1" class="ul" :style="{'text-align':'left','padding':'0 8px','background-color':'#FBFBFB'}" @change="show_mission">
+                <el-checkbox-group v-model="checkedlist" :min="0" class="ul" :style="{'text-align':'left','padding':'0 8px','background-color':'#FBFBFB'}" @change="show_mission">
                     <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li">{{item.taskName}}</el-checkbox>
                 </el-checkbox-group>
             </div>
@@ -225,7 +230,7 @@ export default {
         return {
             missoin_data:[],
             position:[],
-            checkedlist:[],
+            checkedlist:[,],
             search:'',
             search_state:false,
             see_state:'',
@@ -402,7 +407,7 @@ export default {
             this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList',
                 this.checkedlist
             ).then((res)=>{
-                this.missoin_init(res.data.info);
+                this.missoin_init(res.data.info?res.data.info:[]);
             })
         },
         //页码改变

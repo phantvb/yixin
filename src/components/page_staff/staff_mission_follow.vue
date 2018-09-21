@@ -3,16 +3,21 @@
         <div class="nav">外呼任务跟踪</div>
         <div class="part1">
             <div class="part1_show">
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <div class="svg"></div>
-                <img src="../../../static/icon/legend_staff.png" alt="" style="height:12px;">
+                <div class="svg_empty_right" v-show="checkedlist.length==0">
+                    <div>
+                        选择右侧任务
+                    </div>
+                </div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <div class="svg" v-show="checkedlist.length>0"></div>
+                <img src="../../../static/icon/legend_staff.png" alt="" style="height:12px;" v-show="checkedlist.length>0">
             </div>
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
-                <el-checkbox-group v-model="checkedlist" :min="1" class="ul" :style="{'text-align':'left','margin':'10px auto','padding':'0 8px','overflow-x': 'hidden'}" @change="show_mission">
+                <el-checkbox-group v-model="checkedlist" :min="0" class="ul" :style="{'text-align':'left','margin':'10px auto','padding':'0 8px','overflow-x': 'hidden'}" @change="show_mission">
                     <el-checkbox v-for="(item) in position" :label="item.taskId" :key="item.taskId" class="li">{{item.taskName}}</el-checkbox>
                 </el-checkbox-group>
             </div>
@@ -153,7 +158,7 @@ export default {
         return {
             missoin_data:[],
             position:[],
-            checkedlist:[],
+            checkedlist:[,],
             search:'',
             search_state:false,
             search_date:null,
