@@ -230,7 +230,7 @@ export default {
         return {
             missoin_data:[],
             position:[],
-            checkedlist:[],
+            checkedlist:[,],
             search:'',
             search_state:false,
             see_state:'',

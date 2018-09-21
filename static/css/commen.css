@@ -605,7 +605,7 @@ form{
 .svg_empty{
     width: 20%;
     height: 230px;
-    margin: 0 20px;
+    margin: 20px;
 }
 .svg_empty div{
   width: 144px;
@@ -618,7 +618,7 @@ form{
 .svg_empty_right{
   width: 20%;
   height: 230px;
-  margin: 0 20px;
+  margin: 20px;
 }
 .svg_empty_right div{
   width: 124px;
@@ -627,5 +627,5 @@ form{
   color: #666;
   border-radius: 100%;
   font-size: 14px;
-  line-height: 144px;
+  line-height: 124px;
 }
