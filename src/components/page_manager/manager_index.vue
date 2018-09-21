@@ -22,7 +22,6 @@
                 </router-link>
             </div>
             <div class="svg_empty" v-show="callTaskCode==500002">
-                <p class="black">未选择</p>
                 <router-link :to="{path:'/manager/follow'}">
                 <div>
                     请先导入客户

@@ -605,17 +605,27 @@ form{
 .svg_empty{
     width: 20%;
     height: 230px;
-    margin: 0 auto;
+    margin: 0 20px;
 }
 .svg_empty div{
   width: 144px;
   height: 144px;
-  border:2px solid #7496F2;
+  border:2px solid #409EFF;
   border-radius: 100%;
   font-size: 14px;
   line-height: 144px;
 }
-.svg_empty p{
+.svg_empty_right{
+  width: 20%;
+  height: 230px;
+  margin: 0 20px;
+}
+.svg_empty_right div{
+  width: 124px;
+  height: 124px;
+  border:2px solid #666;
+  color: #666;
+  border-radius: 100%;
   font-size: 14px;
-  width: 144px;
+  line-height: 144px;
 }
