@@ -125,7 +125,7 @@
             <div class="svg_empty" v-show="callTaskCode==500002">
                 <router-link :to="{path:'/staff/follow'}">
                     <div>
-                        请选择任务
+                        选择展示任务
                     </div>
                 </router-link>
             </div>

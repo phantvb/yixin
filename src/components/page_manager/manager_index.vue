@@ -24,7 +24,7 @@
             <div class="svg_empty" v-show="callTaskCode==500002">
                 <router-link :to="{path:'/manager/follow'}">
                 <div>
-                    请先导入客户
+                    选择展示任务
                 </div>
                 </router-link>
             </div>
