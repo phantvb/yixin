@@ -120,6 +120,9 @@
         overflow: hidden;
         padding: 8px 0;
     }
+    .summary_tag{
+        overflow: hidden;
+    }
     .state p {
         float: left;
         line-height: 28px;
