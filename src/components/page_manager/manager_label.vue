@@ -57,7 +57,7 @@
                             <p class="black see">发展失败</p>
                         </div>
                     </div>
-                    <div class="tag">
+                    <div class="summary_tag">
                         <p class="grey" :style="{'float':'left','margin':'0 7px','line-height':'26px'}">客户标签组</p>
                         <el-dropdown :hide-on-click="false" v-for="(item,index) in tableData" :key="index" :style="{'float':'left','line-height':'26px','margin': '0 6px'}">
                             <span class="el-dropdown-link">
