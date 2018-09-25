@@ -2,7 +2,7 @@
     <div id="mask">
         <div>
             <p><i class="el-icon-noMission"></i></p>
-            <el-button size="mini" type="primary" class="button" @click="add">新增客户标签组</el-button>
+            <el-button size="mini" type="primary" class="button">清除筛选条件</el-button>
         </div>
     </div>
 </template>
@@ -12,7 +12,7 @@
         left:0;
         top:0;
         width:100%;
-        height: 200px;
+        height: 400px;
         z-index:99;
         background-color: #fff;
         pointer-events: all;
