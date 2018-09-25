@@ -1396,6 +1396,7 @@ export default {
         hide(){
             this.contextmenu.state=false;
             this.call_set=false;
+            this.show=false;
         },
         //删除呼叫任务
         remove(){
