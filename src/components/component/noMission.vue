@@ -2,7 +2,7 @@
     <div id="mask">
         <div>
             <p><i class="el-icon-noMission"></i></p>
-            <el-button size="mini" type="primary" class="button">清除筛选条件</el-button>
+            <el-button size="mini" type="primary" class="button" @click="my_mounter">清除筛选条件</el-button>
         </div>
     </div>
 </template>
@@ -26,6 +26,11 @@
 </style>
 <script>
 export default {
-    name:'noMission'
+    name:'noMission',
+    methods:{
+      my_mounter(){
+        this.$emit('my_mounter')
+      }
+    }
 }
 </script>
