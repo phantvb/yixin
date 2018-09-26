@@ -1,5 +1,5 @@
 <template>
-    <div class="container" @click="hiddenSel">
+    <div class="container" @click.capture="hiddenSel">
         <div class="nav">外呼任务跟踪</div>
         <div :style="{'position':'relative'}">
             <div v-show="blank" id="mask">
@@ -20,7 +20,7 @@
                 <div class="svg" v-show="checkedlist.length>0"></div>
                 <div class="svg" v-show="checkedlist.length>0"></div>
                 <div class="svg" v-show="checkedlist.length>0"></div>
-                <img src="../../../static/icon/legend_staff.png" alt="" style="height:1vw;" v-show="checkedlist.length>0">
+                <img src="../../../static/icon/legend_manager.png" alt="" style="height:1vw;" v-show="checkedlist.length>0">
             </div>
             <div class="part1_nav">
                 <p class="grey">选择展示任务</p>
@@ -84,7 +84,7 @@
                 <el-table-column prop="processingNum" label="跟进" class-name="line7" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
                 <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="160">
                     <template slot-scope="scope">
-                        <p><span v-for="(item,index) in scope.row.tags" :key="index" v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel">{{item.tagName?item.tagName:item}};</span></p>
+                        <p style="margin:0"><span v-for="(item,index) in scope.row.tags" :key="index" v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel">{{item.tagName?item.tagName:item}};</span></p>
                         <span v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel" v-if="scope.row.tags.length==0">暂无关联标签，点击修改</span>
                         <el-select  size="mini" v-model="scope.row.tags" multiple collapse-tags placeholder="请选择" v-show="scope.row.showSel" @change="updateSel(scope.$index, scope.row)" popper-class="sel" @focus="scope.row.tags=[]">
                             <el-option v-for="item in allTagList" :key="item.id" :label="item.tagName" :value="item.tagName">
@@ -255,9 +255,9 @@ export default {
     },
     methods:{
         hiddenSel(){
-            // this.tableData.map(item=>{
-            //     item.showSel=false;
-            // })
+            this.tableData.map(item=>{
+                item.showSel=false;
+            })
         },
         //画饼图
         drawPie:function(item,clear){
@@ -389,7 +389,6 @@ export default {
         },
         //导入客户给指定任务
         handlefr:function(index,row){
-            console.log(index,row);
             this.lead_data=row;
             this.leading = true;
             this.assign=false;

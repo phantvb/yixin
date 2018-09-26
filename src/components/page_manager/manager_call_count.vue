@@ -22,29 +22,31 @@
                 </div>
             </div>
             <div style="position:relative">
-                <noMission></noMission>
+                <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
                 <el-table :data="tableData" style="width: 100%;" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
-                    <el-table-column prop="shortName" label="坐席昵称" class-name="line2"  :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                    <el-table-column prop="loginName" label="坐席帐号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                    <el-table-column prop="callTotal" label="总呼叫次数" class-name="line4" :show-overflow-tooltip=true min-width="110"> </el-table-column>
-                    <el-table-column prop="callTalkedTotal" label="总呼通次数" class-name="line5" :show-overflow-tooltip=true min-width="110"> </el-table-column>
-                    <el-table-column prop="callNumTotal" label="总呼叫人数" class-name="line6" :show-overflow-tooltip=true min-width="110"> </el-table-column>
-                    <el-table-column prop="callTalkedNumTotal" label="总呼通人数" class-name="line7" :show-overflow-tooltip=true min-width="110"> </el-table-column>
-                    <el-table-column prop="callDurationTotal" label="总呼叫时长(min)" class-name="line8" :show-overflow-tooltip=true min-width="130"> </el-table-column>
-                    <el-table-column prop="callTalkedDurationTotal" label="平均呼叫时长(min)" class-name="line8" :show-overflow-tooltip=true min-width="150"> </el-table-column>
-                    <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="60">
-                        <template slot-scope="scope">
-                            <router-link :to="{path:'./call_detail', query: { id: scope.row.seatAccountId,days:leading_record }}">
-                            <el-button
-                            size="mini" type="text">呼叫详单</el-button>
-                            </router-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
-                </el-pagination>
+                <el-table-column prop="shortName" label="坐席昵称" class-name="line2"  :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                <el-table-column prop="loginName" label="坐席帐号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                <el-table-column prop="callTotal" label="总呼叫次数" class-name="line4" :show-overflow-tooltip=true min-width="110"> </el-table-column>
+                <el-table-column prop="callTalkedTotal" label="总呼通次数" class-name="line5" :show-overflow-tooltip=true min-width="110"> </el-table-column>
+                <el-table-column prop="callNumTotal" label="总呼叫人数" class-name="line6" :show-overflow-tooltip=true min-width="110"> </el-table-column>
+                <el-table-column prop="callTalkedNumTotal" label="总呼通人数" class-name="line7" :show-overflow-tooltip=true min-width="110"> </el-table-column>
+                <el-table-column prop="callDurationTotal" label="总呼叫时长(min)" class-name="line8" :show-overflow-tooltip=true min-width="130"> </el-table-column>
+                <el-table-column prop="callTalkedDurationTotal" label="平均呼叫时长(min)" class-name="line8" :show-overflow-tooltip=true min-width="150"> </el-table-column>
+                <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="60">
+                    <template slot-scope="scope">
+                        <router-link :to="{path:'./call_detail', query: { id: scope.row.seatAccountId,days:leading_record }}">
+                        <el-button
+                        size="mini" type="text">呼叫详单</el-button>
+                        </router-link>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+            </el-pagination>
             </div>
+
         </div>
+
     </div>
 </template>
 <style scoped>
@@ -89,7 +91,7 @@
     .date_picker{
         position: relative;
     }
-    
+
     .table{
         font-size: 14px;
         margin-bottom: 10px;
@@ -205,17 +207,22 @@ export default {
                 }
             }
             this.init(data);
+        },
+        my_mounter(){
+          this.search = '';
+          this.leading_date = null;
+          this.leading_record=[this.date_init_ymd(new Date()),this.date_init_ymd(new Date())];
+          var data={'pageSize':10,beginDay:this.date_init(new Date()),endDay:this.date_init(new Date()),'requireTotalCount':true,'shortOrLoginName':this.search};
+          for (let key in data){
+            if(data[key]==''){
+              delete data[key];
+            }
+          }
+          this.init(data);
         }
     },
     mounted(){
-        this.leading_record=[this.date_init_ymd(new Date()),this.date_init_ymd(new Date())];
-        var data={'pageSize':10,beginDay:this.date_init(new Date()),endDay:this.date_init(new Date()),'requireTotalCount':true,'shortOrLoginName':this.search};
-        for (let key in data){
-            if(data[key]==''){
-                delete data[key];
-            }
-        }
-        this.init(data);
+        this.my_mounter();
     }
 }
 </script>

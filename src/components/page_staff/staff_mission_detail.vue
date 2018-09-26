@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" @click.capture="show=false">
         <div class="part1">
             <router-link :to="{path:'./follow'}">
                 外呼任务跟踪

@@ -221,7 +221,7 @@ export default {
                 } else {
                     return 0;
                 }            
-            } 
+            }
             item.sort(compare);
             var arr_person=[];
             var arr_time=[];
@@ -459,13 +459,13 @@ export default {
             this.$ajax.post(this.$preix+'/new/callstatistics/querySeatsTalkedDurationChart',{'pageSize':10,beginTime:beginTime,endTime:endTime,'requireTotalCount':true}
             ).then( res=>{
                 if(res.data.code==200){
-                    this.worker_time_init(res.data.rows);
+                    this.worker_time_init(res.data.rows.length>0?res.data.rows:[{"shortName":"请选择", "talkedDuration":0}]);
                 }
             });
             this.$ajax.post(this.$preix+'/new/callstatistics/querySeatsCalledNumTotalChart',{'pageSize':10,beginTime:beginTime,endTime:endTime,'requireTotalCount':true}
             ).then( res=>{
                 if(res.data.code==200){
-                    this.worker_person_init(res.data.rows);
+                    this.worker_person_init(res.data.rows.length>0?res.data.rows:[{"shortName":"请选择", "progressingNum":0}]);
                 }
             });
         }
