@@ -33,7 +33,7 @@
             </div>
             <div class="zhankai" v-if="search_state==false">
                 <el-button class="button" @click="search_change(true)">收起</el-button>
-               
+
                 <div>
                     <p class="grey">创建时间</p>
                     <el-date-picker v-model="search_date" @change="date_change" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"  prefix-icon="date_icon el-icon-date" class="date_picker" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
@@ -47,28 +47,31 @@
                     <el-tag type="info" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
                 </div>
             </div>
-            <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
-                <el-table-column label="任务名称" class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="120">
-                    <template slot-scope="scope">
-                        <router-link :to="{path:'./detail', query: { id: scope.row.taskId , taskName : scope.row.name }}">
-                            {{scope.row.name}}
-                        </router-link>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="allocatedNum" label="总客户" class-name="line2" sortable='custom'  :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="calledNum" label="已呼" class-name="line4" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="successNum" label="成功" class-name="line5" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="failureNum" label="失败" class-name="line6" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="processingNum" label="跟进" class-name="line7" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
-                    <template slot-scope="scope">
-                        <span v-for="(item,index) in scope.row.tags" :key="index">{{item.tagName}};</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="create" label="创建时间" class-name="line9" sortable='custom' :show-overflow-tooltip=true min-width="120"> </el-table-column>
-            </el-table>
-            <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
-            </el-pagination>
+            <div style="position:relative">
+              <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
+              <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
+                  <el-table-column label="任务名称" class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="120">
+                      <template slot-scope="scope">
+                          <router-link :to="{path:'./detail', query: { id: scope.row.taskId , taskName : scope.row.name }}">
+                              {{scope.row.name}}
+                          </router-link>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="allocatedNum" label="总客户" class-name="line2" sortable='custom'  :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="calledNum" label="已呼" class-name="line4" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="successNum" label="成功" class-name="line5" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="failureNum" label="失败" class-name="line6" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="processingNum" label="跟进" class-name="line7" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
+                      <template slot-scope="scope">
+                          <span v-for="(item,index) in scope.row.tags" :key="index">{{item.tagName}};</span>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="create" label="创建时间" class-name="line9" sortable='custom' :show-overflow-tooltip=true min-width="120"> </el-table-column>
+              </el-table>
+              <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+              </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -86,7 +89,7 @@
         border-bottom: 1px solid #eee;
         overflow: hidden;
     }
-    .part1>div{     
+    .part1>div{
         float: left;
     }
     .part1_show{
@@ -106,7 +109,7 @@
     }
     .part1_nav{
         width: 20%;
-        float: left; 
+        float: left;
         box-sizing: border-box;
         border: 1px solid #d4d4d4;
     }
@@ -144,6 +147,7 @@
 </style>
 
 <script>
+  import noMission from '../component/noMission.vue'
 let echarts = require('echarts/lib/echarts')
   // 引入饼图组件
   require('echarts/lib/chart/pie')
@@ -170,7 +174,7 @@ export default {
             indexlist:[]
         }
     },
-
+    components:{noMission},
     methods:{
         //画饼图
         drawPie:function(item){
@@ -188,20 +192,20 @@ export default {
                     top:'14%',
                     icon:'circle'
                 },
-                graphic:{  
-                    type:'text',  
-                    left:'center',  
-                    top:'center',  
-                    z:2,  
-                    zlevel:100,  
-                    style: {              
-                        x: 0,  
-                        y: 0, 
-                        text: item.process!==undefined?(item.process+'%'):null,  
-                        textAlign: 'center',   
+                graphic:{
+                    type:'text',
+                    left:'center',
+                    top:'center',
+                    z:2,
+                    zlevel:100,
+                    style: {
+                        x: 0,
+                        y: 0,
+                        text: item.process!==undefined?(item.process+'%'):null,
+                        textAlign: 'center',
                         textFont : '14px Arial'  ,
                         fill:'#666'
-                    }  
+                    }
                 },
                 title:{
                     text:item.id,
@@ -241,7 +245,7 @@ export default {
                     let obj={'id_num':i};
                     this.drawPie(obj);
                 }
-                
+
             }
         },
         search_change:function(value){
@@ -312,6 +316,12 @@ export default {
                     this.tableData=res.data.rows;
                 }
             })
+        },
+        my_mounter(){
+          this.search = '';
+          this.search_date = null;
+            //下方任务列表
+            this.seat_init({requireTotalCount:true,'pageNum':1});
         }
     },
     mounted:function(){
@@ -335,8 +345,7 @@ export default {
                 _this.missoin_init(res.data.info);
             }
         });
-        //下方任务列表
-        this.seat_init({requireTotalCount:true,'pageNum':1});
+        this.my_mounter();
     }
 }
 </script>

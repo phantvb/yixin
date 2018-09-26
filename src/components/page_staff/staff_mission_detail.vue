@@ -51,45 +51,48 @@
                     <p class="black see_active" v-if="tags.length>0">客户标签：<span  v-for="(item,index) in tags" :key="index" v-if="item!=undefined" >{{item.value}}&#12288;</span></p>
                 </div>
             </div>
-            <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
-                <el-table-column prop="userName" label="客户姓名" class-name="line2"  :show-overflow-tooltip=true min-width="80"> </el-table-column>
-                <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                <el-table-column prop="create" label="导入时间" class-name="line4" :show-overflow-tooltip=true min-width="130"> </el-table-column>
-                <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
-                <el-table-column label="客户状态" class-name="line5" :show-overflow-tooltip=true min-width="80">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.userResult==0">预留</span>
-                        <span v-if="scope.row.userResult==1">继续跟进</span>
-                        <span v-if="scope.row.userResult==2">发展成功</span>
-                        <span v-if="scope.row.userResult==3">发展失败</span>
-                    </template>
-                </el-table-column>
-                <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                <el-table-column label="最近通话" class-name="line7" :show-overflow-tooltip=true min-width="80">
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.callResult==0">未开始</span>
-                        <span v-if="scope.row.callResult==10">正常通话</span>
-                        <span v-if="scope.row.callResult==11">转给其他坐席</span>
-                        <span v-if="scope.row.callResult==12">转值班电话</span>
-                        <span v-if="scope.row.callResult==21">没坐席接听</span>
-                        <span v-if="scope.row.callResult==22">未接通</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
-                    <template slot-scope="scope">
-                        {{scope.row.tagList.join(';')}}
-                    </template>
-                </el-table-column>
-                 <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="130">
-                    <template slot-scope="scope">
-                        <el-button
-                        size="mini" type="text"
-                        @click="handlexx(scope.$index, scope.row)">详细记录</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
-            </el-pagination>
+            <div style="position:relative">
+                <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
+                <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+                    <el-table-column prop="userName" label="客户姓名" class-name="line2"  :show-overflow-tooltip=true min-width="80"> </el-table-column>
+                    <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                    <el-table-column prop="create" label="导入时间" class-name="line4" :show-overflow-tooltip=true min-width="130"> </el-table-column>
+                    <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
+                    <el-table-column label="客户状态" class-name="line5" :show-overflow-tooltip=true min-width="80">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.userResult==0">预留</span>
+                            <span v-if="scope.row.userResult==1">继续跟进</span>
+                            <span v-if="scope.row.userResult==2">发展成功</span>
+                            <span v-if="scope.row.userResult==3">发展失败</span>
+                        </template>
+                    </el-table-column>
+                    <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
+                    <el-table-column label="最近通话" class-name="line7" :show-overflow-tooltip=true min-width="80">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.callResult==0">未开始</span>
+                            <span v-if="scope.row.callResult==10">正常通话</span>
+                            <span v-if="scope.row.callResult==11">转给其他坐席</span>
+                            <span v-if="scope.row.callResult==12">转值班电话</span>
+                            <span v-if="scope.row.callResult==21">没坐席接听</span>
+                            <span v-if="scope.row.callResult==22">未接通</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
+                        <template slot-scope="scope">
+                            {{scope.row.tagList.join(';')}}
+                        </template>
+                    </el-table-column>
+                     <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="130">
+                        <template slot-scope="scope">
+                            <el-button
+                            size="mini" type="text"
+                            @click="handlexx(scope.$index, scope.row)">详细记录</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+                </el-pagination>
+            </div>
         </div>
         <transition name="slide">
             <history id="history" v-if="show" :head='true' :details='history_detail' @enter="handlexx" @close="history_close" :taskMes="history_taskId"></history>
@@ -203,6 +206,7 @@ font-size: 12px;
 
 <script>
 import history from '../component/history_talk.vue'
+import noMission from '../component/noMission.vue'
 export default {
     name:'staff_detail',
     data:function(){
@@ -235,7 +239,7 @@ export default {
             current_task_client_id:''//当前查询记录的taskClientId
         }
     },
-    components:{history},
+    components:{history,noMission},
     methods:{
         search_change:function(value){
             this.search_state=value;
@@ -320,7 +324,7 @@ export default {
         //页码改变
         page_change(val){
             this.pageNum=val;
-            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ '23:59:59':'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ ' 23:59:59':'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+this.tags[i].order;
@@ -338,7 +342,7 @@ export default {
         sort_change({column, prop, order} ){
             this.orderWay=order.split('ending')[0];
             this.orderField=prop;
-            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ '23:59:59':'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
+            var data={'taskId':this.$route.query.id,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ ' 23:59:59':'',nameOrNumber:this.search,'pageNum':this.pageNum,"orderWay":this.orderWay,'orderField':this.orderField};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+this.tags[i].order;
@@ -354,7 +358,7 @@ export default {
         },
         //条件搜索
         missoin_search:function(){
-            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ '23:59:59':'',nameOrNumber:this.search};
+            var data={'taskId':this.$route.query.id,"requireTotalCount" : true,userResults:this.custom_state,createBeginTime:this.leading_date!=null?this.leading_date[0]+' 00:00:00':'',createEndTime:this.leading_date!=null?this.leading_date[1]+ ' 23:59:59':'',nameOrNumber:this.search};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
                     var str='customTag'+this.tags[i].order;
@@ -379,12 +383,22 @@ export default {
             }
             console.log(this.tags);
             this.missoin_search();
+        },
+        my_mounter(){
+          this.search = '';
+          this.custom_state = 0;
+          this.leading_date = null;
+          this.tags.map((item,index) =>{
+            item.value= '';
+//            this.$set(item,'value',null)
+          });
+          var data={'taskId':this.$route.query.id,"requireTotalCount" : true,"pageNum" : 1,"pageSize" : 10};
+          this.mission_init(data);
         }
     },
     //页面初始化数据
     mounted(){
-        var data={'taskId':this.$route.query.id,"requireTotalCount" : true,"pageNum" : 1,"pageSize" : 10};
-        this.mission_init(data);
+        this.my_mounter();
         this.$ajax.post(this.$preix+'/new/tag/findTagList')
         .then( (res) => {
             if(res.data.code==200){
