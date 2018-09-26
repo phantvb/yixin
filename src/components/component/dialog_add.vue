@@ -77,8 +77,13 @@
                     </div>
                 </div>
                 <div style="position:relative">
+<<<<<<< HEAD
                   <noMission v-show="tableData.length == 0" @my_mounter="open" size="mini"></noMission>
                   <el-table :data="tableData" style="width: 100%;min-height: 125px;" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+=======
+                  <noMission v-show="tableData.length == 0" @my_mounter="my_mounter" size="mini"></noMission>
+                  <el-table :data="tableData" style="width: 100%;min-height: 370px;" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+>>>>>>> 309157faf010e05426007f6fb36156a65dbf8470
                       <el-table-column prop="userName" label="客户姓名" class-name="line2"  :show-overflow-tooltip=true min-width="80"> </el-table-column>
                       <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
                       <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
@@ -190,7 +195,6 @@ export default {
 
         },
         open(){
-            this.search = '';
             this.$ajax.post(this.$preix+'/new/tag/findTagList')
             .then( (res) => {
                 if(res.data.code==200){
@@ -210,8 +214,20 @@ export default {
                     this.mission_list=res.data.rows;
                 }
             });
-            var data={"requireTotalCount" : true};
-            this.mission_init(data);
+            this.my_mounter();
+        },
+        my_mounter(){
+          this.search = '';
+          this.mission_state=[0];
+          this.taskIdsTmp = [];
+          this.custom_state = [0];
+          this.call_state = [0];
+          this.link_state = 0;
+          this.tags.map((item,index) =>{
+            this.$set(this.tags, index,[])
+          });
+          var data={"requireTotalCount" : true};
+          this.mission_init(data);
         },
         mission_change2:function () {
             this.pageNum=1;
