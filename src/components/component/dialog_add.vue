@@ -76,33 +76,36 @@
                         <!-- <p class="black see_active" v-if="tags.length>0">客户标签：<span  v-for="item in tags" :key="item">{{item}}&#12288;</span></p> -->
                     </div>
                 </div>
-                <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
-                    <el-table-column prop="userName" label="客户姓名" class-name="line2"  :show-overflow-tooltip=true min-width="80"> </el-table-column>
-                    <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                    <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
-                    <el-table-column label="客户状态" class-name="line5" :show-overflow-tooltip=true min-width="80">
-                        <template slot-scope="scope">
-                            <span v-if="scope.row.userResult==0">预留</span>
-                            <span v-if="scope.row.userResult==1">继续跟进</span>
-                            <span v-if="scope.row.userResult==2">发展成功</span>
-                            <span v-if="scope.row.userResult==3">发展失败</span>
-                        </template>
-                    </el-table-column>
-                    <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                    <el-table-column label="最近通话" class-name="line7" :show-overflow-tooltip=true min-width="80">
-                        <template slot-scope="scope">
-                            <span v-if="scope.row.callResult==10">正常通话</span>
-                            <span v-if="scope.row.callResult==22">未接通</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
-                        <template slot-scope="scope">
-                            {{scope.row.tagList.join(';')}}
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination background layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
-                </el-pagination>
+                <div style="position:relative">
+                  <noMission v-show="tableData.length == 0" @my_mounter="open" size="mini"></noMission>
+                  <el-table :data="tableData" style="width: 100%;min-height: 370px;" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+                      <el-table-column prop="userName" label="客户姓名" class-name="line2"  :show-overflow-tooltip=true min-width="80"> </el-table-column>
+                      <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                      <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
+                      <el-table-column label="客户状态" class-name="line5" :show-overflow-tooltip=true min-width="80">
+                          <template slot-scope="scope">
+                              <span v-if="scope.row.userResult==0">预留</span>
+                              <span v-if="scope.row.userResult==1">继续跟进</span>
+                              <span v-if="scope.row.userResult==2">发展成功</span>
+                              <span v-if="scope.row.userResult==3">发展失败</span>
+                          </template>
+                      </el-table-column>
+                      <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
+                      <el-table-column label="最近通话" class-name="line7" :show-overflow-tooltip=true min-width="80">
+                          <template slot-scope="scope">
+                              <span v-if="scope.row.callResult==10">正常通话</span>
+                              <span v-if="scope.row.callResult==22">未接通</span>
+                          </template>
+                      </el-table-column>
+                      <el-table-column label="客户标签" class-name="line8" :show-overflow-tooltip=true min-width="150">
+                          <template slot-scope="scope">
+                              {{scope.row.tagList.join(';')}}
+                          </template>
+                      </el-table-column>
+                  </el-table>
+                  <el-pagination background layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+                  </el-pagination>
+                </div>
             </div>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -151,6 +154,7 @@
     }
 </style>
 <script>
+  import noMission from '../component/noMission.vue'
 export default {
     name:'dialog-add',
     data:function(){
@@ -162,7 +166,7 @@ export default {
             //0：预留 1：继续跟进 2：发展成功 3：发展失败
             custom_list:[{'key':'','value':'全部'},{'key':'1','value':'持续跟进'},{'key':'2','value':'发展成功'},{'key':'3','value':'发展失败'}],
             search_state:false,
-            //呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 
+            //呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通
             call_list:[{'key':'','value':'全部'},{'key':'10','value':'正常通话'},{'key':'22','value':'未接通'}],
             call_state:[0],
             //全部：0；今日未联系：1；
@@ -179,12 +183,14 @@ export default {
         }
     },
     props:['see'],
+    components:{noMission},
     methods:{
         close:function(){
             this.$emit("reset");
-            
+
         },
         open(){
+            this.search = '';
             this.$ajax.post(this.$preix+'/new/tag/findTagList')
             .then( (res) => {
                 if(res.data.code==200){
@@ -236,7 +242,7 @@ export default {
             let userResults=this.custom_state.map((item)=>this.custom_list[item].key);
             let callResults=this.call_state.map((item)=>this.call_list[item].key);
             //let tags=this.tags.map((item)=>tags.push(item.value));
-            
+
             var data={'userResults':userResults,'nameOrNumber':this.search,'taskIds':taskIds,'callResults':callResults,'whetherCalledToday':this.link_list[this.link_state].key,"requireTotalCount" : true,'pageNum':this.pageNum};
             for(let i=0;i<this.tags.length;i++){
                 if(this.tags[i]!=null||this.tags[i]!=undefined){
