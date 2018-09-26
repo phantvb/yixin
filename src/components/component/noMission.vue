@@ -1,5 +1,5 @@
 <template>
-    <div id="mask" :style="{'height':size=='mini'?'200px':'400px'}">
+    <div id="mask" :style="{'height':size=='mini'?'15vw':'400px'}">
         <div>
             <p style="text-align:center"><i :class="size=='mini'?'el-icon-noMission':'el-icon-noMission-mini'"></i></p>
             <el-button size="mini" type="primary" class="button" @click="my_mounter">清除筛选条件</el-button>
