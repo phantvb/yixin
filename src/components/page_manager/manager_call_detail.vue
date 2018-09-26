@@ -12,7 +12,7 @@
                 <el-button plain class="button" @click="search_change(true)">收起</el-button>
                 <div>
                     <p class="grey">任务名称&#12288;&#12288;</p>
-                    <p class="black" v-if="index < 10" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:taskIds==item.taskId}" @click="mission_change(index)">{{item.taskName}}</p>
+                    <p class="black" v-if="index < 10" v-for=" (item,index) in mission_list" :key="index" :class="{see_active:mission_state==index}" @click="mission_change(index)">{{item.taskName}}</p>
                     <p class="black item_more" v-if="mission_list.length > 10" @click="mission_more=!mission_more">更多</p>
                     <el-select v-show="mission_more" id="taskId" v-if="mission_list.length > 10" v-model="taskIdsTmp" @change="mission_change2" filterable size='mini' placeholder="请选择">
                       <el-option
@@ -56,49 +56,52 @@
                     <el-tag type="info" class="tag" v-if="close_date!=null&&close_date.length>0">{{'最近通话： '+close_date[0]+'~'+close_date[1]}}</el-tag>
                 </div>
             </div>
-            <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
-                <el-table-column prop="userName" label="客户姓名" class-name="line2" sortable='custom'  :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="110"> </el-table-column>
-                <el-table-column prop="taskName" label="所属任务" class-name="line4" sortable='custom' :show-overflow-tooltip=true min-width="100"> </el-table-column>
-                <el-table-column label="客户状态" class-name="line5" :show-overflow-tooltip=true min-width="80">
-                    <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.userResult==0">预留</span>
-                        <span v-if="scope.row.userResult==1">继续跟进</span>
-                        <span v-if="scope.row.userResult==2">发展成功</span>
-                        <span v-if="scope.row.userResult==3">发展失败</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="最近通话情况" class-name="line6" :show-overflow-tooltip=true min-width="100">
-                    <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                    <template slot-scope="scope">
-                        <span v-if="scope.row.callResult==0">未开始</span>
-                        <span v-if="scope.row.callResult==10">正常通话</span>
-                        <span v-if="scope.row.callResult==11">转给其他坐席</span>
-                        <span v-if="scope.row.callResult==12">转值班电话</span>
-                        <span v-if="scope.row.callResult==21">没坐席接听</span>
-                        <span v-if="scope.row.callResult==22">未接通</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="hangupTime" label="最近通话时间" class-name="line7" :show-overflow-tooltip=true min-width="130"> </el-table-column>
-                <el-table-column prop="callDurationDesc" label="通话时长" class-name="line8" :show-overflow-tooltip=true min-width="80"> </el-table-column>
-                <el-table-column prop="nextContactTime" label="下次联系时间" class-name="line8" :show-overflow-tooltip=true min-width="130">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.nextContactTime?scope.row.nextContactTime:'无'}}</span>
-                    </template>
-                </el-table-column>
-                 <el-table-column prop="recordFilePath" class-name="line11" label="通话录音"  min-width="180">
-                    <template slot-scope="scope">
-                        <a-player class="Aplay" v-if="scope.row.recordFilePath&&Aplay" :music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session" name="scope.row.recordFilePath"></a-player>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination
-              layout="prev, pager, next"
-              :page-size="10"
-              @current-change='page_change'
-              :total="page_count">
-            </el-pagination>
+            <div style="position:relative">
+                <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
+                <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
+                    <el-table-column prop="userName" label="客户姓名" class-name="line2" sortable='custom'  :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                    <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="110"> </el-table-column>
+                    <el-table-column prop="taskName" label="所属任务" class-name="line4" sortable='custom' :show-overflow-tooltip=true min-width="100"> </el-table-column>
+                    <el-table-column label="客户状态" class-name="line5" :show-overflow-tooltip=true min-width="80">
+                        <!-- 0：预留 1：继续跟进 2：发展成功 3：发展失败 -->
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.userResult==0">预留</span>
+                            <span v-if="scope.row.userResult==1">继续跟进</span>
+                            <span v-if="scope.row.userResult==2">发展成功</span>
+                            <span v-if="scope.row.userResult==3">发展失败</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="最近通话情况" class-name="line6" :show-overflow-tooltip=true min-width="100">
+                        <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.callResult==0">未开始</span>
+                            <span v-if="scope.row.callResult==10">正常通话</span>
+                            <span v-if="scope.row.callResult==11">转给其他坐席</span>
+                            <span v-if="scope.row.callResult==12">转值班电话</span>
+                            <span v-if="scope.row.callResult==21">没坐席接听</span>
+                            <span v-if="scope.row.callResult==22">未接通</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="hangupTime" label="最近通话时间" class-name="line7" :show-overflow-tooltip=true min-width="130"> </el-table-column>
+                    <el-table-column prop="callDurationDesc" label="通话时长" class-name="line8" :show-overflow-tooltip=true min-width="80"> </el-table-column>
+                    <el-table-column prop="nextContactTime" label="下次联系时间" class-name="line8" :show-overflow-tooltip=true min-width="130">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.nextContactTime?scope.row.nextContactTime:'无'}}</span>
+                        </template>
+                    </el-table-column>
+                     <el-table-column prop="recordFilePath" class-name="line11" label="通话录音"  min-width="180">
+                        <template slot-scope="scope">
+                            <a-player class="Aplay" v-if="scope.row.recordFilePath&&Aplay" :music_url="baseUrl+scope.row.recordFilePath+'?callSessionId='+scope.row.callSessionId+'&sessionId='+session" name="scope.row.recordFilePath"></a-player>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                  layout="prev, pager, next"
+                  :page-size="10"
+                  @current-change='page_change'
+                  :total="page_count">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -171,6 +174,7 @@
 
 <script>
 import VueAplayer from '../component/a_player.vue'
+import noMission from '../component/noMission.vue'
 export default {
     name:'call_detail',
     data:function(){
@@ -209,7 +213,8 @@ export default {
         }
     },
     components: {
-        'a-player': VueAplayer
+        'a-player': VueAplayer,
+        'noMission' : noMission
     },
     methods:{
         //时间改变
@@ -255,6 +260,7 @@ export default {
         //任务名称更多
         mission_change2:function () {
           this.taskIds = this.taskIdsTmp;
+          this.mission_state = -1;
           this.mission_search();
         },
         //初始化任务列表
@@ -335,18 +341,27 @@ export default {
                 }
             }
             this.mission_init(data);
+        },
+        my_mounter(){
+            this.mission_state = 0;
+            this.taskIdsTmp = null;
+            this.mission_more = false;
+            this.custom_state = 0;
+            this.call_state = 0;
+            this.close_date = null;
+            this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
+              if(res.data.code){
+                this.baseUrl=res.data.info.iccStaticContextPath;
+                this.session=res.data.info.sessionId;
+              }
+            })
+            var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0]+' 00:00:00',endDay:this.$route.query.days[1]+' 23:59:59'};
+            this.task_init();
+            this.mission_init(data);
         }
     },
     mounted(){
-        this.$ajax.post(this.$preix+'/new/callstatistics/getIccStaticContextPath').then(res=>{
-            if(res.data.code){
-                this.baseUrl=res.data.info.iccStaticContextPath;
-                this.session=res.data.info.sessionId;
-            }
-        })
-        var data={'seatAccountId':this.$route.query.id,"requireTotalCount" : true,beginDay:this.$route.query.days[0]+' 00:00:00',endDay:this.$route.query.days[1]+' 23:59:59'};
-        this.task_init();
-        this.mission_init(data);
+        this.my_mounter();
     }
 }
 </script>

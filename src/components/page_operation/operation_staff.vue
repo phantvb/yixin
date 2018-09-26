@@ -45,65 +45,68 @@
                     <p size="mini" type="primary" class="worker_active black" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</p>
                 </div>
             </div>
-            <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
-                <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="loginName" label="坐席帐号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
-                    <template slot-scope="scope">
-                        <p :style="{'color':'#3399ff'}" @click="handleDetail(scope.$index, scope.row)">
-                            {{scope.row.loginName}}
-                        </p>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="shortName" label="坐席昵称" class-name="line2" sortable='custom' :show-overflow-tooltip=true min-width="100">
-                    <template slot-scope="scope">
-                        <div class="father">
-                            <p>{{scope.row.shortName}}</p>
-                            <input type="text" @blur="upSeat(scope.$index, scope.row,'shortName')" v-model="scope.row.shortName">
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="state" label="坐席状态" class-name="line3" sortable='custom' :show-overflow-tooltip=true min-width="100">
-                    <template slot-scope="scope">
-                        <div class="father">
-                            <p v-show="scope.row.state==1">已激活</p>
-                            <p v-show="scope.row.state==2">已冻结</p>
-                            <p v-show="scope.row.state==3">已停用</p>
-                            <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="scope.row.state==3 && accountType==2">
+            <div style="position:relative">
+              <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
+              <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
+                  <el-table-column type="selection" width="55"></el-table-column>
+                  <el-table-column prop="loginName" label="坐席帐号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
+                      <template slot-scope="scope">
+                          <p :style="{'color':'#3399ff'}" @click="handleDetail(scope.$index, scope.row)">
+                              {{scope.row.loginName}}
+                          </p>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="shortName" label="坐席昵称" class-name="line2" sortable='custom' :show-overflow-tooltip=true min-width="100">
+                      <template slot-scope="scope">
+                          <div class="father">
+                              <p>{{scope.row.shortName}}</p>
+                              <input type="text" @blur="upSeat(scope.$index, scope.row,'shortName')" v-model="scope.row.shortName">
+                          </div>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="state" label="坐席状态" class-name="line3" sortable='custom' :show-overflow-tooltip=true min-width="100">
+                      <template slot-scope="scope">
+                          <div class="father">
+                              <p v-show="scope.row.state==1">已激活</p>
+                              <p v-show="scope.row.state==2">已冻结</p>
+                              <p v-show="scope.row.state==3">已停用</p>
+                              <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="scope.row.state==3 && accountType==2">
+                                  <option value="3">停用</option>
+                              </select>
+                              <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="scope.row.state!=3 && accountType==2">
+                                <option value="2">冻结</option>
+                                <option value="1">激活</option>
+                              </select>
+                              <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="accountType!=2">
                                 <option value="3">停用</option>
-                            </select>
-                            <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="scope.row.state!=3 && accountType==2">
-                              <option value="2">冻结</option>
-                              <option value="1">激活</option>
-                            </select>
-                            <select v-model="scope.row.state" @change="state_select(scope.row,scope.row.state)" v-if="accountType!=2">
-                              <option value="3">停用</option>
-                              <option value="2">冻结</option>
-                              <option value="1">激活</option>
-                            </select>
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="create" label="创建时间" class-name="line4" sortable='custom' :show-overflow-tooltip=true  min-width="120"> </el-table-column>
-                <el-table-column prop="recentCallTime" label="最近通话" class-name="line5" :show-overflow-tooltip=true  min-width="120"> </el-table-column>
-                <el-table-column prop="desc" label="备注" class-name="line6" :show-overflow-tooltip=true>
-                    <template slot-scope="scope">
-                        <div class="father">
-                            <p>{{scope.row.desc}}</p>
-                            <input type="text" @blur="upSeat(scope.$index, scope.row,'desc')" v-model="scope.row.desc">
-                        </div>
-                    </template>
-                </el-table-column>
+                                <option value="2">冻结</option>
+                                <option value="1">激活</option>
+                              </select>
+                          </div>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="create" label="创建时间" class-name="line4" sortable='custom' :show-overflow-tooltip=true  min-width="120"> </el-table-column>
+                  <el-table-column prop="recentCallTime" label="最近通话" class-name="line5" :show-overflow-tooltip=true  min-width="120"> </el-table-column>
+                  <el-table-column prop="desc" label="备注" class-name="line6" :show-overflow-tooltip=true>
+                      <template slot-scope="scope">
+                          <div class="father">
+                              <p>{{scope.row.desc}}</p>
+                              <input type="text" @blur="upSeat(scope.$index, scope.row,'desc')" v-model="scope.row.desc">
+                          </div>
+                      </template>
+                  </el-table-column>
 
-                <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="160">
-                    <template slot-scope="scope">
-                        <el-button
-                        size="mini" type="text"
-                        @click="handlereset(scope.$index, scope.row)">重置密码</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
-            </el-pagination>
+                  <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="160">
+                      <template slot-scope="scope">
+                          <el-button
+                          size="mini" type="text"
+                          @click="handlereset(scope.$index, scope.row)">重置密码</el-button>
+                      </template>
+                  </el-table-column>
+              </el-table>
+              <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+              </el-pagination>
+            </div>
             <Dialog :message='message' :type='dialog_type' :show="dialog_show" :checkall="checkbox" @close='close'></Dialog>
             <el-dialog title="详情" :visible.sync="see" center>
                 <div class="con">
@@ -238,6 +241,7 @@
 <script>
 import Dialog from "../component/dialog_worker.vue"
 import jsonfy from "../jsonfy.js"
+import noMission from '../component/noMission.vue'
 export default {
     name:'operation_staff',
     data:function(){
@@ -436,22 +440,27 @@ export default {
                     return false;
                 }
             });
-        }
-    },
-    components:{
-        Dialog
-    },
-    mounted:function(){
-        var partnerAccountId=this.$route.query.partnerAccountId;
-        if(partnerAccountId){
+        },
+        my_mounter(){
+          this.worker_state = '';
+          this.search_date = null;
+          var partnerAccountId=this.$route.query.partnerAccountId;
+          if(partnerAccountId){
             this.seat_init({requireTotalCount:true,orderField:'create',orderWay:'desc',partnerAccountId:partnerAccountId});
-        }else{
+          }else{
             this.orderWay='desc';
             this.orderField='create';
             this.seat_init({requireTotalCount:true,orderField:'create',orderWay:'desc'});
+          }
+          this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;
         }
-        this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;
-
+    },
+    components:{
+        Dialog,
+        noMission
+    },
+    mounted:function(){
+        this.my_mounter();
     },
     inject:['reload']
 }
