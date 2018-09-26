@@ -377,7 +377,6 @@ export default {
             }else{
                 this.tags[command.index].value=command.value;
             }
-            console.log(this.tags);
             this.missoin_search();
         }
     },

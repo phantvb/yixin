@@ -44,7 +44,7 @@
                     <i class="el-icon-noMission"></i>
                     <span :style="{'display':'block'}">暂无数据</span>
                 </p>
-                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id">
+                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id" ref="tree">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId+data.taskId">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label+(data.userNumber?'('+data.userNumber+')':'')}}</p>
@@ -1178,6 +1178,7 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
+            console.log(this.$refs.tree,this.$refs.tree.getCheckedKeys(),this.$refs.tree.getCheckedNodes())
             //初始化状态
             if(this.active_data&&this.active_data.type==2){
                 if(this.$refs[this.active_data.taskClientId+this.active_data.id]&&this.$refs[this.active_data.taskClientId+this.active_data.id].style&&this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor=='rgb(244, 244, 244)'){
