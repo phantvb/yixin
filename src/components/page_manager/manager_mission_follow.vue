@@ -64,61 +64,64 @@
                     <el-tag type="info" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
                 </div>
             </div>
-            <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
-                <el-table-column label="任务名称" class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="120">
-                    <template slot-scope="scope">
-                        <router-link :to="{path:'./detail', query: { id: scope.row.id , taskName : scope.row.name }}">
-                            {{scope.row.name}}
-                        </router-link>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="numberTotal" label="总客户" class-name="line2" sortable='custom'  :show-overflow-tooltip=true min-width="85"> </el-table-column>
-                <el-table-column label="已分配" class-name="line3" :show-overflow-tooltip=true >
-                    <template slot-scope="scope">
-                        {{scope.row.numberTotal-scope.row.unallocatedNum}}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="calledNum" label="已呼" class-name="line4" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="successNum" label="成功" class-name="line5" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="failureNum" label="失败" class-name="line6" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="processingNum" label="跟进" class-name="line7" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
-                <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="160">
-                    <template slot-scope="scope">
-                        <p><span v-for="(item,index) in scope.row.tags" :key="index" v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel">{{item.tagName?item.tagName:item}};</span></p>
-                        <span v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel" v-if="scope.row.tags.length==0">暂无关联标签，点击修改</span>
-                        <el-select  size="mini" v-model="scope.row.tags" multiple collapse-tags placeholder="请选择" v-show="scope.row.showSel" @change="updateSel(scope.$index, scope.row)" popper-class="sel" @focus="scope.row.tags=[]">
-                            <el-option v-for="item in allTagList" :key="item.id" :label="item.tagName" :value="item.tagName">
-                            </el-option>
-                        </el-select>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="create" label="创建时间" class-name="line9" :show-overflow-tooltip=true min-width="120" sortable='custom'> </el-table-column>
-                <el-table-column prop="visibleState" label="可见状态" class-name="line10" :show-overflow-tooltip=true min-width="100">
-                    <template slot-scope="scope">
-                        <div class="father">
-                            <p v-show="scope.row.visibleState==0">仅管理员可见</p>
-                            <p v-show="scope.row.visibleState==1">所有人可见</p>
-                            <select v-model="scope.row.visibleState" @change="state_select(scope.row,scope.row.visibleState)">
-                                <option value="1">所有人可见</option>
-                                <option value="0">仅管理员可见</option>
-                            </select>
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="160">
-                    <template slot-scope="scope">
-                        <el-button
-                        size="mini" type="text"
-                        @click="handlefp(scope.$index, scope.row)" :disabled="scope.row.unallocatedNum==0">分配客户</el-button>&#12288;|
-                        <el-button
-                        size="mini"
-                        type="text"
-                        @click="handlefr(scope.$index, scope.row)">导入客户</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
-            </el-pagination>
+          <div style="position:relative">
+              <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
+              <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
+                  <el-table-column label="任务名称" class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="120">
+                      <template slot-scope="scope">
+                          <router-link :to="{path:'./detail', query: { id: scope.row.id , taskName : scope.row.name }}">
+                              {{scope.row.name}}
+                          </router-link>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="numberTotal" label="总客户" class-name="line2" sortable='custom'  :show-overflow-tooltip=true min-width="85"> </el-table-column>
+                  <el-table-column label="已分配" class-name="line3" :show-overflow-tooltip=true >
+                      <template slot-scope="scope">
+                          {{scope.row.numberTotal-scope.row.unallocatedNum}}
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="calledNum" label="已呼" class-name="line4" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="successNum" label="成功" class-name="line5" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="failureNum" label="失败" class-name="line6" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="processingNum" label="跟进" class-name="line7" sortable='custom' :show-overflow-tooltip=true> </el-table-column>
+                  <el-table-column prop="tags" label="关联客户标签" class-name="line8" :show-overflow-tooltip=true min-width="160">
+                      <template slot-scope="scope">
+                          <p><span v-for="(item,index) in scope.row.tags" :key="index" v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel">{{item.tagName?item.tagName:item}};</span></p>
+                          <span v-show="!scope.row.showSel" @click="scope.row.showSel=!scope.row.showSel" v-if="scope.row.tags.length==0">暂无关联标签，点击修改</span>
+                          <el-select  size="mini" v-model="scope.row.tags" multiple collapse-tags placeholder="请选择" v-show="scope.row.showSel" @change="updateSel(scope.$index, scope.row)" popper-class="sel" @focus="scope.row.tags=[]">
+                              <el-option v-for="item in allTagList" :key="item.id" :label="item.tagName" :value="item.tagName">
+                              </el-option>
+                          </el-select>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="create" label="创建时间" class-name="line9" :show-overflow-tooltip=true min-width="120" sortable='custom'> </el-table-column>
+                  <el-table-column prop="visibleState" label="可见状态" class-name="line10" :show-overflow-tooltip=true min-width="100">
+                      <template slot-scope="scope">
+                          <div class="father">
+                              <p v-show="scope.row.visibleState==0">仅管理员可见</p>
+                              <p v-show="scope.row.visibleState==1">所有人可见</p>
+                              <select v-model="scope.row.visibleState" @change="state_select(scope.row,scope.row.visibleState)">
+                                  <option value="1">所有人可见</option>
+                                  <option value="0">仅管理员可见</option>
+                              </select>
+                          </div>
+                      </template>
+                  </el-table-column>
+                  <el-table-column prop="p_caozuo" class-name="line11" label="操作"  min-width="160">
+                      <template slot-scope="scope">
+                          <el-button
+                          size="mini" type="text"
+                          @click="handlefp(scope.$index, scope.row)" :disabled="scope.row.unallocatedNum==0">分配客户</el-button>&#12288;|
+                          <el-button
+                          size="mini"
+                          type="text"
+                          @click="handlefr(scope.$index, scope.row)">导入客户</el-button>
+                      </template>
+                  </el-table-column>
+              </el-table>
+              <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+              </el-pagination>
+          </div>
         </div>
         </div>
 
@@ -224,6 +227,7 @@ let echarts = require('echarts/lib/echarts')
   require('echarts/lib/component/graphic')
   import Dialog from "../component/dialog.vue"
   import assign from "../component/dialog_assign.vue"
+  import noMission from '../component/noMission.vue'
 export default {
     name:'missoin_follow',
     data:function(){
@@ -251,7 +255,7 @@ export default {
         }
     },
     components:{
-      Dialog,assign
+      Dialog,assign,noMission
     },
     methods:{
         hiddenSel(){
@@ -275,20 +279,20 @@ export default {
                     top:'14%',
                     icon:'circle'
                 },
-                graphic:{  
-                    type:'text',  
-                    left:'center',  
-                    top:'center',  
-                    z:2,  
-                    zlevel:100,  
-                    style: {              
-                        x: 0,  
-                        y: 0, 
-                        text: item.process!==undefined?(item.process+'%'):null,  
-                        textAlign: 'center',   
+                graphic:{
+                    type:'text',
+                    left:'center',
+                    top:'center',
+                    z:2,
+                    zlevel:100,
+                    style: {
+                        x: 0,
+                        y: 0,
+                        text: item.process!==undefined?(item.process+'%'):null,
+                        textAlign: 'center',
                         textFont : '14px Arial'  ,
                         fill:'#666'
-                    }  
+                    }
                 },
                 title:{
                     text:item.id,
@@ -480,6 +484,24 @@ export default {
                     type: 'warning'
                 });
             })
+        },
+        my_mounter(){
+          this.see_state = '';
+          this.search_date = null;
+          //下方任务列表
+          this.orderWay='desc';
+          this.orderField='create';
+          this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',{requireTotalCount:true,"orderField":'create',"orderWay":'desc'})
+            .then( (res) => {
+              if(res.data.code==200){
+                this.page_count=res.data.totalCount;
+                res.data.rows.map(item=>item.showSel=false);
+                this.tableData=res.data.rows;
+                if(res.data.rows.length<1){
+                  this.blank=true;
+                }
+              }
+            })
         }
     },
     mounted:function(){
@@ -489,41 +511,28 @@ export default {
             if(res.data.code==200){
               console.log(res);
               this.allTagList=res.data.info;
-          }
-        });
+            }
+          });
         //左侧饼图数据
         this.$ajax.post(this.$preix+'/new/calltask/queryIndexCallTaskList')
-        .then( (res) => {
+          .then( (res) => {
             if(res.data.code==200){
-                var arr=[];
-                res.data.info.map(item=>{
-                    arr.push(item.taskId);
-                })
-                this.checkedlist=arr;
-                this.missoin_init(res.data.info);
+              var arr=[];
+              res.data.info.map(item=>{
+                arr.push(item.taskId);
+              })
+              this.checkedlist=arr;
+              this.missoin_init(res.data.info);
             }
-        });
+          });
         //右侧任务多选列表
         this.$ajax.post(this.$preix+'/new/calltask/queryRightCallTaskList',{'pageSize':200})
-        .then( (res) => {
+          .then( (res) => {
             if(res.data.code==200){
-                this.position=res.data.rows;
+              this.position=res.data.rows;
             }
-        });
-        //下方任务列表
-        this.orderWay='desc';
-        this.orderField='create';
-        this.$ajax.post(this.$preix+'/new/calltask/queryCallTaskList',{requireTotalCount:true,"orderField":'create',"orderWay":'desc'})
-        .then( (res) => {
-            if(res.data.code==200){
-                this.page_count=res.data.totalCount;
-                res.data.rows.map(item=>item.showSel=false);
-                this.tableData=res.data.rows;
-                if(res.data.rows.length<1){
-                    this.blank=true;
-                }
-            }
-        })
+          });
+        this.my_mounter();
     }
 }
 </script>
