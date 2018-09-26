@@ -1,5 +1,5 @@
 <template>
-    <div id="mask">
+    <div id="mask" :style="{'height':size=='mini'?'200px':'400px'}">
         <div>
             <p><i class="el-icon-noMission"></i></p>
             <el-button size="mini" type="primary" class="button" @click="my_mounter">清除筛选条件</el-button>
@@ -12,7 +12,6 @@
         left:0;
         top:0;
         width:100%;
-        height: 400px;
         z-index:99;
         background-color: #fff;
         pointer-events: all;
@@ -31,6 +30,7 @@ export default {
       my_mounter(){
         this.$emit('my_mounter')
       }
-    }
+    },
+    props:['size']
 }
 </script>
