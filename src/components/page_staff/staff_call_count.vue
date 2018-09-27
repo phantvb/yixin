@@ -85,8 +85,8 @@
             </div>
         </div>
         <div style="position:relative">
-          <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
-          <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+          <noMission v-show="tableData != null && tableData.length == 0" @my_mounter="my_mounter"></noMission>
+          <el-table :data="tableData" style="width: 100%" empty-text=" " :default-sort = "{prop: 'date', order: 'descending'}" class="table">
               <el-table-column prop="userName" label="客户姓名" class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="80">
                   <template slot-scope="scope">
                       {{scope.row.userName}}
@@ -211,7 +211,7 @@ export default {
             custom_active:0,
             call_list:[{'key':'','value':'全部'},{'key':'10','value':'正常通话'},{'key':'22','value':'未接通'}],
             call_active:0,
-            tableData:[],
+            tableData:null,
             infos:{
                 "callTalkedDuration":0,
                 "callTalkedNumToal" : 0,

@@ -46,8 +46,8 @@
                 </div>
             </div>
             <div style="position:relative">
-              <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
-              <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
+              <noMission v-show="tableData != null && tableData.length == 0" @my_mounter="my_mounter"></noMission>
+              <el-table :data="tableData" style="width: 100%" empty-text=" " @sort-change="sort_change" class="table" @selection-change="handleSelectionChange" header-row-class-name="table_head">
                   <el-table-column type="selection" width="55"></el-table-column>
                   <el-table-column prop="loginName" label="坐席帐号" class-name="line1" label-class-name="line1_tit" sortable='custom' :show-overflow-tooltip=true min-width="120">
                       <template slot-scope="scope">
@@ -250,7 +250,7 @@ export default {
             search_state:false,
             search_date:null,
             search:'',
-            tableData:[],
+            tableData:null,
             multipleSelection: [],
             message:[],
             dialog_type:'0',
