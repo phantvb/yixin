@@ -71,18 +71,10 @@ export default {
   },
 };
 </script>
-<style>
+<style scopp scoped>
 .outnote{
   position: relative;
   display: inline;
-}
-.note{
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: aqua;
-  width: 50px;
-  height: 100px;
 }
 div#bookTextarea{
   text-align: left;
