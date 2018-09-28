@@ -52,8 +52,8 @@
                 </div>
             </div>
             <div style="position:relative">
-                <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
-                <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+                <noMission v-show="tableData != null && tableData.length == 0" @my_mounter="my_mounter"></noMission>
+                <el-table :data="tableData" style="width: 100%" empty-text=" " :default-sort = "{prop: 'date', order: 'descending'}" class="table">
                     <el-table-column prop="userName" label="客户姓名" class-name="line2"  :show-overflow-tooltip=true min-width="80"> </el-table-column>
                     <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
                     <el-table-column prop="create" label="导入时间" class-name="line4" :show-overflow-tooltip=true min-width="130"> </el-table-column>
@@ -221,7 +221,7 @@ export default {
             //0：预留 1：继续跟进 2：发展成功 3：发展失败
             custom_list:[{'key':'','value':'全部'},{'key':'1','value':'持续跟进'},{'key':'2','value':'发展成功'},{'key':'3','value':'发展失败'}],
             worker_list:[],
-            tableData: [],
+            tableData: null,
             data: [],
             defaultProps: {
                 children: 'children',

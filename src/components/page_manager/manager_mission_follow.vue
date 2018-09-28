@@ -65,8 +65,8 @@
                 </div>
             </div>
           <div style="position:relative">
-              <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
-              <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
+              <noMission v-show="tableData != null && tableData.length == 0" @my_mounter="my_mounter"></noMission>
+              <el-table :data="tableData" style="width: 100%" empty-text=" " :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
                   <el-table-column label="任务名称" class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="120">
                       <template slot-scope="scope">
                           <router-link :to="{path:'./detail', query: { id: scope.row.id , taskName : scope.row.name }}">
@@ -242,7 +242,7 @@ export default {
             leading:false,
             assign:false,
             p_assign:'',
-            tableData: [],
+            tableData: null,
             page_count:1,
             taskId:null,
             pageNum:1,

@@ -48,48 +48,51 @@
                     <el-tag type="primary" class="tag" v-if="search_date!=null&&search_date.length>0">{{'创建时间： '+search_date[0]+'~'+search_date[1]}}</el-tag>
                 </div>
             </div>
-            <el-table :data="tableData" style="width: 100%" @sort-change="sort_change" class="table" header-row-class-name="table_head">
-                <el-table-column prop="loginName" label="管理帐号" sortable='custom' class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="100">
-                    <template slot-scope="scope">
-                        <router-link :to="{path:'/operation/staff',query:{partnerAccountId:scope.row.id}}">
-                            <span>{{scope.row.loginName}}</span>
-                        </router-link>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="fullName" label="企业名称" class-name="line2" :show-overflow-tooltip=true min-width="100"></el-table-column>
-                <el-table-column prop="email" label="邮箱" class-name="line3" :show-overflow-tooltip=true min-width="120">
-                </el-table-column>
-                <el-table-column prop="seatAccountPrefix" label="坐席帐号前缀" class-name="line4" :show-overflow-tooltip=true  min-width="120"> </el-table-column>
-                <el-table-column prop="callCredit" label="信用资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
-                <el-table-column prop="callRemaining" label="实时资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
-                <el-table-column prop="create" label="创建日期" sortable='custom' class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
-                <el-table-column prop="state" label="状态" class-name="line5" :show-overflow-tooltip=true  min-width="100">
-                    <template slot-scope="scope">
-                        <p class="black" v-show="scope.row.state==3">停用</p>
-                        <p class="black" v-show="scope.row.state==2">冻结</p>
-                        <p class="black" v-show="scope.row.state==1">激活</p>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="numOfSeat" label="坐席数量上限" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
-                <el-table-column min-width="210" prop="desc" label="备注" class-name="line6" :show-overflow-tooltip=true>
-                    <template slot-scope="scope">
-                        <el-button
-                        size="mini" type="text"
-                        @click="handleDetail(scope.$index, scope.row)">详情</el-button>&#12288;|
-                        <el-button
-                        size="mini"
-                        type="text"
-                        @click="handlereset(scope.$index, scope.row)">重置密码</el-button>&#12288;|
-                        <el-button
-                          v-if="scope.row.type == 2"
-                        size="mini"
-                        type="text"
-                        @click="handleAdd(scope.$index, scope.row)">生成坐席</el-button>
-                    </template>
-                </el-table-column>
+            <div style="position:relative">
+              <noMission v-show="tableData != null && tableData.length == 0" @my_mounter="my_mounter"></noMission>
+              <el-table :data="tableData" style="width: 100%" empty-text=" " @sort-change="sort_change" class="table" header-row-class-name="table_head">
+              <el-table-column prop="loginName" label="管理帐号" sortable='custom' class-name="line1" label-class-name="line1_tit" :show-overflow-tooltip=true min-width="100">
+                <template slot-scope="scope">
+                  <router-link :to="{path:'/operation/staff',query:{partnerAccountId:scope.row.id}}">
+                    <span>{{scope.row.loginName}}</span>
+                  </router-link>
+                </template>
+              </el-table-column>
+              <el-table-column prop="fullName" label="企业名称" class-name="line2" :show-overflow-tooltip=true min-width="100"></el-table-column>
+              <el-table-column prop="email" label="邮箱" class-name="line3" :show-overflow-tooltip=true min-width="120">
+              </el-table-column>
+              <el-table-column prop="seatAccountPrefix" label="坐席帐号前缀" class-name="line4" :show-overflow-tooltip=true  min-width="120"> </el-table-column>
+              <el-table-column prop="callCredit" label="信用资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
+              <el-table-column prop="callRemaining" label="实时资源" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
+              <el-table-column prop="create" label="创建日期" sortable='custom' class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
+              <el-table-column prop="state" label="状态" class-name="line5" :show-overflow-tooltip=true  min-width="100">
+                <template slot-scope="scope">
+                  <p class="black" v-show="scope.row.state==3">停用</p>
+                  <p class="black" v-show="scope.row.state==2">冻结</p>
+                  <p class="black" v-show="scope.row.state==1">激活</p>
+                </template>
+              </el-table-column>
+              <el-table-column prop="numOfSeat" label="坐席数量上限" class-name="line5" :show-overflow-tooltip=true  min-width="100"> </el-table-column>
+              <el-table-column min-width="210" prop="desc" label="备注" class-name="line6" :show-overflow-tooltip=true>
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini" type="text"
+                    @click="handleDetail(scope.$index, scope.row)">详情</el-button>&#12288;|
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click="handlereset(scope.$index, scope.row)">重置密码</el-button>&#12288;|
+                  <el-button
+                    v-if="scope.row.type == 2"
+                    size="mini"
+                    type="text"
+                    @click="handleAdd(scope.$index, scope.row)">生成坐席</el-button>
+                </template>
+              </el-table-column>
             </el-table>
-            <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
-            </el-pagination>
+              <el-pagination layout="prev, pager, next" :page-size="10" :total="page_count" @current-change='page_change'>
+              </el-pagination>
+            </div>
             <Dialog :message='message' :type='dialog_type' :show="dialog_show" :checkall="checkbox" @close='close'></Dialog>
             <el-dialog :title="detail_type==0?'详情':'新增企业'" :visible.sync="see" center>
                 <div class="con">
@@ -255,6 +258,7 @@
 <script>
 import Dialog from "../component/dialog_worker.vue"
 import jsonfy from "../jsonfy.js"
+import noMission from '../component/noMission.vue'
 export default {
     name:'operation_manager',
     data:function(){
@@ -275,7 +279,7 @@ export default {
             search_state:false,
             search_date:null,
             search:'',
-            tableData:[],
+            tableData:null,
             message:[],
             checkbox:false,
             dialog_show:false,
@@ -341,7 +345,7 @@ export default {
             active_data:null
         }
     },
-    components:{Dialog},
+    components:{Dialog,noMission},
     methods:{
         type_change : function (value) {
           this.type = value;
@@ -496,6 +500,20 @@ export default {
                 }
             })
 
+        },
+        my_mounter(){
+            this.search = null;
+            this.type = null;
+            this.worker_state = '';
+            this.search_date = null;
+            if(this.nameornum){
+              this.search=this.nameornum;
+              this.manager_init({fullNameOrEmail:this.nameornum,requireTotalCount:true});
+            }else{
+              this.orderWay='desc';
+              this.orderField='create';
+              this.manager_init({requireTotalCount:true,orderWay:'desc',orderField:'create'});
+            }
         }
     },
     computed:{
@@ -509,14 +527,7 @@ export default {
         }
     },
     mounted:function(){
-        if(this.nameornum){
-            this.search=this.nameornum;
-            this.manager_init({fullNameOrEmail:this.nameornum,requireTotalCount:true});
-        }else{
-            this.orderWay='desc';
-            this.orderField='create';
-            this.manager_init({requireTotalCount:true,orderWay:'desc',orderField:'create'});
-        }
+        this.my_mounter();
         this.accountType = JSON.parse(window.sessionStorage.getItem("userInfoLst"))[0].type;
     },
     inject:['reload']

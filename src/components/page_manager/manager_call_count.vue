@@ -22,8 +22,8 @@
                 </div>
             </div>
             <div style="position:relative">
-                <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
-                <el-table :data="tableData" style="width: 100%;" :default-sort = "{prop: 'date', order: 'descending'}" class="table">
+                <noMission v-show="tableData != null && tableData.length == 0" @my_mounter="my_mounter"></noMission>
+                <el-table :data="tableData" style="width: 100%;" empty-text=" " :default-sort = "{prop: 'date', order: 'descending'}" class="table">
                 <el-table-column prop="shortName" label="坐席昵称" class-name="line2"  :show-overflow-tooltip=true min-width="100"> </el-table-column>
                 <el-table-column prop="loginName" label="坐席帐号" class-name="line3" :show-overflow-tooltip=true min-width="100"> </el-table-column>
                 <el-table-column prop="callTotal" label="总呼叫次数" class-name="line4" :show-overflow-tooltip=true min-width="110"> </el-table-column>
@@ -120,7 +120,7 @@ export default {
         return {
             search:'',
             leading_date:null,
-            tableData: [],
+            tableData: null,
             label_list:[],
             tag_list:[],
             page_count:1,

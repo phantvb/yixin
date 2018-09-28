@@ -57,8 +57,8 @@
                 </div>
             </div>
             <div style="position:relative">
-                <noMission v-show="tableData.length == 0" @my_mounter="my_mounter"></noMission>
-                <el-table :data="tableData" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
+                <noMission v-show="tableData != null && tableData.length == 0" @my_mounter="my_mounter"></noMission>
+                <el-table :data="tableData" style="width: 100%" empty-text=" " :default-sort = "{prop: 'date', order: 'descending'}" class="table" @sort-change="sort_change">
                     <el-table-column prop="userName" label="客户姓名" class-name="line2" sortable='custom'  :show-overflow-tooltip=true min-width="100"> </el-table-column>
                     <el-table-column prop="userNumber" label="手机号" class-name="line3" :show-overflow-tooltip=true min-width="110"> </el-table-column>
                     <el-table-column prop="taskName" label="所属任务" class-name="line4" sortable='custom' :show-overflow-tooltip=true min-width="100"> </el-table-column>
@@ -190,7 +190,7 @@ export default {
            //呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通
             call_list:[{'key':'','value':'全部'},{'key':'10','value':'正常通话'},{'key':'22','value':'未接通'}],
             call_state:0,
-            tableData: [],
+            tableData: null,
             label_list:[],
             tag_list:[],
             mission_list:[],
