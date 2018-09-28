@@ -1143,8 +1143,8 @@ export default {
         //初始化呼叫列表
         TaskList_init(data){
             if(this.booklist.length==0){
-                this.TaskBySeat_data=[];
-                this.DialPlanIntroWithPage_data=[];
+                this.TaskBySeat_data=[,];
+                this.DialPlanIntroWithPage_data=[,];
             }
             data.pageSize = 50;
             //初始化数据
@@ -1155,7 +1155,7 @@ export default {
         //初始化预约列表
         BookedList_init(data){
             if(this.TaskBySeat_data.length==0&&this.DialPlanIntroWithPage_data.length==0){
-                this.booklist=[];
+                this.booklist=[,];
             }
             this.booklist=[];
             this.call_auto=false;
