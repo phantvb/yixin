@@ -103,11 +103,11 @@
                         <el-row :gutter="12" style="margin:0">
                             <el-col :span="6" style="border-right:0.015625rem solid #ebeef5">  
                                 <i class="el-icon-fileProtect"></i>
-                            </el-col>  
-                            <el-col :span="12">
-                                <span class="black">成功率(成功/已呼)</span>
                             </el-col> 
-                            <el-col :span="6" style="text-align:left">  
+                            <el-col :span="9">
+                                <span class="black" style="display:inline-block;width:70px;white-space:nowrap;">成功率(成功/已呼)</span>
+                            </el-col> 
+                            <el-col :span="9" style="text-align:left">  
                                 <span class="blue">{{todayCompleteDto&&todayCompleteDto.calledNumTotal!=0?Math.ceil(todayCompleteDto.successNum/todayCompleteDto.calledNumTotal*100):0}}%</span> 
                             </el-col>  
                         </el-row>
