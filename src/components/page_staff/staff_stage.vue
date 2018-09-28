@@ -57,7 +57,7 @@
                         <span>{{data.depName}}{{data.areaName}}</span>
                     </div>
                 </el-tree>
-                <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" node-key="id">
+                <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" node-key="id" ref="tree2">
                     <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)' :ref="data.taskClientId+data.id">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label+(data.userNumber?'('+data.userNumber+')':'')}}</p>
@@ -712,6 +712,7 @@ export default {
             TaskBySeat_data: [],
             DialPlanIntroWithPage_data:[],
             defaultProps: {
+                id:'id',
                 children: 'children',
                 label: 'label'
             },
@@ -1178,8 +1179,7 @@ export default {
         },
         //获取客户详情
         detail_init(item,type,node){
-            console.log(this.$refs.tree,this.$refs.tree.getCheckedKeys(),this.$refs.tree.getCheckedNodes())
-            //初始化状态
+            //回退上一个选中节点的颜色
             if(this.active_data&&this.active_data.type==2){
                 if(this.$refs[this.active_data.taskClientId+this.active_data.id]&&this.$refs[this.active_data.taskClientId+this.active_data.id].style&&this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[this.active_data.taskClientId+this.active_data.id].style.backgroundColor='#fff';
@@ -1197,6 +1197,19 @@ export default {
                     this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.color='#333';
                 }
             }
+            //tree折叠
+            if(this.active_data.type!=type){
+                if(this.active_data.type==1){
+                    for(var i=0;i<this.$refs.tree.store._getAllNodes().length;i++){
+        　　　　　　　　this.$refs.tree.store._getAllNodes()[i].expanded=false;
+        　　　　　　}
+                }else{
+                   for(var i=0;i<this.$refs.tree2.store._getAllNodes().length;i++){
+        　　　　　　　　this.$refs.tree.store._getAllNodes()[i].expanded=false;
+        　　　　　　} 
+                }
+            }
+            //初始化状态
             var _this=this;
             this.a_play=false;
             this.tags=[];
@@ -1218,6 +1231,7 @@ export default {
             this.right.taskListId=item.id;
             this.right.taskId=item.taskId;
             this.left.taskClientId=item.taskClientId;
+            //设置选中节点的active样式
             if(type==1){
                 if(this.$refs[item.taskClientId+item.taskId].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#fff';
@@ -1307,7 +1321,6 @@ export default {
             ).then( res=>{
             if(res.data.code==200){
                     let _this=this;
-                    var arr=[]
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
                         let id=res.data.rows[i].taskId;
