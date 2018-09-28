@@ -175,7 +175,7 @@ export default {
                     style: {              
                         x: 0,  
                         y: 0, 
-                        text: item.process!==undefined?(item.process+'%'):null,  
+                        text: item.process!==undefined?('完成'+item.process+'%'):null,  
                         textAlign: 'center',   
                         textFont : '14px Arial'  ,
                         fill:'#666'

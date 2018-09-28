@@ -1,6 +1,5 @@
 <template>
-    <div class="container">
-        
+    <div class="container" id="manager_label">
         <div :style="{'position':'relative'}">
             <div id="mask" v-show="tableData.length===0">
                 <div>
@@ -82,7 +81,7 @@
                     </div>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="DialogVisible = false">关 闭</el-button>
+                    <el-button size="mini" style="width:165px;" @click="DialogVisible = false">关 闭</el-button>
                 </span>
             </el-dialog>
         </div>

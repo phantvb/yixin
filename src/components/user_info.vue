@@ -22,23 +22,22 @@
     <el-dialog
       title="修改密码"
       :visible.sync="dialogVisible"
-      width="30%"
       :before-close="handleClose" @open="open">
-      <el-form ref="form" :model="form" label-width="120px">
+      <el-form ref="form" :model="form" label-width="120px" style="width:30vw;margin:0 auto">
         <el-form-item label="原密码">
-          <el-input type="password" v-model="form.oldPassword" auto-complete="off"></el-input>
+          <el-input size="mini" type="password" v-model="form.oldPassword" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="新密码">
-          <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
+          <el-input size="mini" type="password" v-model="form.password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="再次输入新密码">
-          <el-input type="password" v-model="form.password2" auto-complete="off"></el-input>
+          <el-input size="mini" type="password" v-model="form.password2" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="updateAccountPassword()">确认修改</el-button>
-  </span>
+        <el-button size="mini" style="width:165px;margin-right:20px;" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="mini" style="width:165px;" type="primary" @click="updateAccountPassword()">确认修改</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>

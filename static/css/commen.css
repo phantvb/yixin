@@ -134,20 +134,20 @@ a{
 .ul .li{
   margin: 5px 0;
 }
-.ul::-webkit-scrollbar-track
+.ul::-webkit-scrollbar-track,#notify_drop::-webkit-scrollbar-track
 {
   background-color: #F5F5F5;
 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
 }
 /*定义滚动条高宽及背景*/
-.ul::-webkit-scrollbar
+.ul::-webkit-scrollbar,#notify_drop::-webkit-scrollbar
 {
-width: 3px;
+  width: 5px;
   background-color: #7496F2;
   opacity: 0.8;
 }
 /*定义滚动条*/
-.ul::-webkit-scrollbar-thumb
+.ul::-webkit-scrollbar-thumb,#notify_drop::-webkit-scrollbar-thumb
 {
 background-color: #7496F2;
 border-radius: 1px;
@@ -545,6 +545,33 @@ li{
   margin: 0 4px;
   cursor: pointer;
 }
+.el-icon-notify1:before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  display: block;
+  background: url('../icon/notify1.png');
+  background-size:32px 32px;
+  margin: 28px 0 18px;
+}
+.el-icon-notify2:before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  display: block;
+  background: url('../icon/notify2.png');
+  background-size:32px 32px;
+  margin: 28px 0 18px;
+}
+.el-icon-notify_drop{
+  content: '';
+  width: 16px;
+  height: 8px;
+  display: block;
+  background: url('../icon/notify_drop.png');
+  background-size:16px 8px;
+  margin: 6px auto 0;
+}
 #mask>div{
   position:absolute;
   left:50%;
@@ -636,4 +663,12 @@ form{
   border-radius: 100%;
   font-size: 14px;
   line-height: 124px;
+}
+#notify_drop{
+  max-height: 60vh;
+  overflow-y: auto;
+}
+#manager_label .el-dialog__body{
+  padding-top: 0;
+  padding-bottom: 0;
 }
