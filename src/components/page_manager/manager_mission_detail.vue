@@ -127,7 +127,7 @@
                 </el-select>
             </div>
             <span slot="footer" class="dialog-footer">
-                <button class="assign_button" @click="assign=false">&#12288;取消&#12288;</button>
+                <button class="assign_button" style="margin-right:20px;" @click="assign=false">&#12288;取消&#12288;</button>
                 <button class="assign_button" @click="assign_com" style="background-color:#7496F2;color:#fff;border-color:#7496F2;">完成分配</button>
             </span>
         </el-dialog>

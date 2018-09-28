@@ -672,3 +672,7 @@ form{
   padding-top: 0;
   padding-bottom: 0;
 }
+#manager_misssion_detail .el-dialog{
+  width: 400px;
+  min-width: unset;
+}
