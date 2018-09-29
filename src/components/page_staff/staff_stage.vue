@@ -44,21 +44,8 @@
                     <i class="el-icon-noMission"></i>
                     <span :style="{'display':'block'}">暂无数据</span>
                 </p>
-                <el-tree :highlight-current="true" class="staff" :data="TaskBySeat_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id" ref="tree">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId+data.taskId">
-                        <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
-                        <p>{{ node.label+(data.userNumber?'('+data.userNumber+')':'')}}</p>
-                        <span>{{data.lastCalledTime}}</span>
-                        <span>{{data.callResult==0?'':''}}</span>
-                        <span>{{data.callResult==10?'通话':''}}</span>
-                        <span>{{data.callResult==11?'被转移':''}}</span>
-                        <span>{{data.callResult==21?'未接听':''}}</span>
-                        <span>{{data.callResult==22?'未接通':''}}</span>
-                        <span>{{data.depName}}{{data.areaName}}</span>
-                    </div>
-                </el-tree>
-                <el-tree :highlight-current="true" class="staff" :data="DialPlanIntroWithPage_data" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&DialPlanIntroWithPage_data.length!=0" node-key="id" ref="tree2">
-                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,2,node)" @contextmenu='prevent($event,data)' :ref="data.taskClientId+data.id">
+                <el-tree :highlight-current="true" class="staff" :data="concatarr" :props="defaultProps" accordion @node-click="handleNodeClick" v-show="task_state==0&&TaskBySeat_data.length!=0" node-key="id" ref="tree">
+                    <div class="custom-tree-node detail_init" slot-scope="{ node, data }" @click="detail_init(data,1,node)" :ref="data.taskClientId+(data.type==1?data.taskId:data.id)">
                         <!-- 呼叫结果 默认值0：未开始 10：正常通话 11：转给其他坐席 12：转值班电话 21：没坐席接听 22：未接通 -->
                         <p>{{ node.label+(data.userNumber?'('+data.userNumber+')':'')}}</p>
                         <span>{{data.lastCalledTime}}</span>
@@ -864,6 +851,9 @@ export default {
                 }
             })
             return num;
+        },
+        concatarr:function(){
+            return this.TaskBySeat_data.concat(this.DialPlanIntroWithPage_data);
         }
     },
     methods:{
@@ -1197,18 +1187,6 @@ export default {
                     this.$refs[this.active_data.taskClientId+this.active_data.taskId].style.color='#333';
                 }
             }
-            //tree折叠
-            if(this.active_data.type!=type){
-                if(this.active_data.type==1){
-                    for(var i=0;i<this.$refs.tree.store._getAllNodes().length;i++){
-        　　　　　　　　this.$refs.tree.store._getAllNodes()[i].expanded=false;
-        　　　　　　}
-                }else{
-                   for(var i=0;i<this.$refs.tree2.store._getAllNodes().length;i++){
-        　　　　　　　　this.$refs.tree.store._getAllNodes()[i].expanded=false;
-        　　　　　　} 
-                }
-            }
             //初始化状态
             var _this=this;
             this.a_play=false;
@@ -1227,12 +1205,11 @@ export default {
             this.call_hidden=false;
             this.call_hidden_time=1;
             this.active_data=item;
-            this.active_data.type=type;
             this.right.taskListId=item.id;
             this.right.taskId=item.taskId;
             this.left.taskClientId=item.taskClientId;
             //设置选中节点的active样式
-            if(type==1){
+            if(item.type==1){
                 if(this.$refs[item.taskClientId+item.taskId].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[item.taskClientId+item.taskId].style.backgroundColor='#fff';
                     this.$refs[item.taskClientId+item.taskId].style.borderRight='1px solid #fff';
@@ -1244,7 +1221,7 @@ export default {
                 }
                 this.left.taskListId=null;
                 this.left.taskId=item.taskId;
-            }else if(type==2){
+            }else if(item.type==2){
                 if(this.$refs[item.taskClientId+item.id].style.backgroundColor=='rgb(244, 244, 244)'){
                     this.$refs[item.taskClientId+item.id].style.backgroundColor='#fff';
                     this.$refs[item.taskClientId+item.id].style.borderRight='1px solid #fff';
@@ -1325,6 +1302,7 @@ export default {
                         let obj={};
                         let id=res.data.rows[i].taskId;
                         obj.taskId=res.data.rows[i].taskId;
+                        obj.type=1;
                         obj.processingNum=res.data.rows[i].processingNum
                         obj.taskName=res.data.rows[i].taskName;
                         obj.label=res.data.rows[i].taskName+'('+obj.processingNum+')';
@@ -1334,7 +1312,7 @@ export default {
                         this.$ajax.post(this.$preix+'/new/seatWorkbench/queryProcClientWithTaskBySeat',param
                         ).then( res=>{
                             if(res.data.code==200&&res.data.rows[0]!=null){
-                                res.data.rows.map(item=>{item.label=item.userName;item.taskId=id;item.id=item.taskClientId});
+                                res.data.rows.map(item=>{item.label=item.userName;item.taskId=id;item.id=item.taskClientId;item.type=1});
                                 //res.data.rows.map(item=>item.taskId=id);
                                 obj.children=res.data.rows;
                                 //_this.TaskBySeat_data[i]=obj;
@@ -1356,6 +1334,7 @@ export default {
                     for(let i=0;i<res.data.rows.length;i++){
                         let obj={};
                         obj.taskName=res.data.rows[i].name;
+                        obj.type=2;
                         obj.processingNum=res.data.rows[i].numberTotal;
                         obj.label=res.data.rows[i].name+'('+obj.processingNum+')';
                         obj.id=res.data.rows[i].id;
@@ -1369,6 +1348,7 @@ export default {
                                 res.data.rows.map(item=>{
                                     item.label=item.userName;
                                     item.id=item.id;
+                                    item.type=2;
                                 });
                                 obj.children=res.data.rows;
                                 _this.$set(arr,i,obj);
