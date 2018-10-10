@@ -1497,6 +1497,7 @@ export default {
                     }else{
                         console.log('提交小结');
                         _this.call_state=0;
+                        _this.timestr2 = '';
                         _this.update_TaskBySeat_data();
                         _this.update_DialPlanIntroWithPage_data();
                         if(this.booklist.length>0&&this.booklist[0].taskClientId!='string'){
