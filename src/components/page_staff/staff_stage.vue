@@ -1051,6 +1051,7 @@ export default {
             console.log("Disconnected");
         },
         showResponse:function (result) {
+            console.log("showResponse:",result);
             if(result.channelType == 2 && result.directType == 3003){
                 //$("#currentCallState").val(3);
                 this.call_state=3;
